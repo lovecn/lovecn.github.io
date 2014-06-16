@@ -431,9 +431,3 @@ http://www.w3.org/TR/REC-xml/#sec-physical-struct
 </xmp>
 <a href="http://vdisk.weibo.com/s/dEOYMQaMA7tHM">下载编码转换工具</a>
 <script src="markdown.js"></script>
-<?php
-
-$request= "abc%2527 or 1=%2527";//模拟注入
-$request= urldecode("abc%2527 or 1=%2527");
-echo "<a href='?name={$request}'>click me</a>";
-echo $_GET['name'];//单引号被 urlencode 两次以后是 %2527，字符串%2527提交到后台，php首先进行一次自动解码，%25编码后是%，因此我们收到的字符串是%27，而如果这时我们调用了urldecode的话，会再次进行解码，%27变为'
