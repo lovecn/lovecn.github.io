@@ -1,0 +1,66 @@
+<script src="http://www.vhall.com/assets/js/jquery-1.10.2.min.js"></script>
+<div><select id="demo16" name="demo16"></select></div>
+          <input type ='submit' value='commit' id='go'>      
+                
+                <script>
+                //http://linkagesel.xiaozhong.biz/
+                    $(document).ready(function(){
+                        var data16 = {
+                            1: {gid: 1, value: 'IBM', 
+                                sub: { 
+                                    10: {gid: 10, value: 'X3650'}, 
+                                    11: {gid: 11, value: 'X3860'} 
+                                }
+                            },
+                            3: {gid: 3, value: 'HP', 
+                                sub: { 
+                                    20: {gid: 20, value: '360'} ,
+                                    21: {gid: 21, value: '380'}
+                                }
+                            },
+                            9: {gid: 9, value: 'DELL', 
+                                sub: { 
+                                    29: {gid: 29, value: 'R710'} ,
+                                    30: {gid: 30, value: 'R720'} 
+                                }
+                            }
+                        };
+                        var opts = {
+                                data: data16,
+                                select: "[name='demo16']",
+                                dataReader: {id: 'gid', name: 'value', cell: 'sub'}
+                        };
+                        var ls16 = new LinkageSel(opts);
+                        $('#go').click(function(){
+                            console.log($('select').eq(1).val());
+                        });
+                    });
+                    /*
+ ajax.about from jQuery validation plug-in 1.5.5
+ http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+ http://docs.jquery.com/Plugins/Validation 
+ */
+//ajax mode: abort
+//usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
+//if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort() 
+
+;(function($) {
+	var ajax = $.ajax;
+	var pendingRequests = {};
+	$.ajax = function(settings) {
+		// create settings for compatibility with ajaxSetup
+		settings = $.extend(settings, $.extend({}, $.ajaxSettings, settings));
+		var port = settings.port;
+		if (settings.mode == "abort") {
+			if ( pendingRequests[port] ) {
+				pendingRequests[port].abort();
+			}
+			return (pendingRequests[port] = ajax.apply(this, arguments));
+		}
+		return ajax.apply(this, arguments);
+	};
+})(jQuery);
+                </script>
+
+<script src="http://linkagesel.xiaozhong.biz/js/comm.js"></script>
+<script src="http://linkagesel.xiaozhong.biz/js/linkagesel-min.js"></script>
