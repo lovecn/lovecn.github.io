@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>HTML5 Page Visibility API 演示</title>
+	<link rel="shortcut icon" href="Favicon.ico" />
+
+</head>
+<script>
+	    (function() {
+        'use strict';
+        var RelTitle= document.title;
+        //http://jeff2ma.github.io/Demo/201503/VisibilityTitle.html
+        // Set the name of the "hidden" property and the change event for visibility
+        var hidden, visibilityChange; 
+        if (typeof document.hidden !== "undefined") {
+          hidden = "hidden";
+          visibilityChange = "visibilitychange";
+        } else if (typeof document.mozHidden !== "undefined") { // Firefox up to v17
+          hidden = "mozHidden";
+          visibilityChange = "mozvisibilitychange";
+        } else if (typeof document.webkitHidden !== "undefined") { // Chrome up to v32, Android up to v4.4, Blackberry up to v10
+          hidden = "webkitHidden";
+          visibilityChange = "webkitvisibilitychange";
+        }
+        
+
+        function handleVisibilityChange() {
+          if (document[hidden]) {
+            document.title = '(●––●) 你好我是大白';
+          } else {
+            document.title = '(⊙o⊙)？';
+          }
+        }
+
+        // Warn if the browser doesn't support addEventListener or the Page Visibility API
+        if (typeof document.addEventListener === "undefined" || typeof document[hidden] === "undefined") {
+          alert("This demo requires a modern browser that supports the Page Visibility API.");
+        } else {
+          // Handle page visibility change   
+          document.addEventListener(visibilityChange, handleVisibilityChange, false);
+        }
+
+    })();
+</script>
+<body>
+  <div style="margin:20px auto;">
+	<p style="font-size:2em">切换浏览器Tab 然后注意下标题栏？</p>
+	<p>DeveWork.com</p>
+  <p><a href="http://devework.com/html5-page-visibility-api.html">点击查看相关文章</a></p>
+   <p>类似的效果图：</p>
+  <p><img src="http://2.devework.com/2015/03/634091677120150326.png" alt="效果图"></p>
+</div>
+</body>
+</html>
