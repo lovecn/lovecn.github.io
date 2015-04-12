@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Page Visibility API http://www.alloyteam.com/wp-content/uploads/2012/11/page-visibility.html</title>
+	<style type="text/css">
+	html, body, p, ul, ol, li, h1, h2, h3, h4, h5, h6 {
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		font-family: 'Lucida Console', Verdana, Arial, Helvetica, sans-serif;
+		color: teal;
+		background-color: #000;
+	}
+
+	.main {
+		width: 1240px;
+		height: 600px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-left: -620px;
+		margin-top: -300px;
+		background-color: #DDD;
+		
+		-webkit-box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.3);
+		-moz-box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.3);
+		-ms-box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.3);
+		-o-box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.3);
+		box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.3);
+	}
+	h1 {
+		text-align: center;
+		height: 100px;
+		line-height: 100px;
+	}
+	h1 em {
+		color: #C3325F;
+		font-size: 14px;
+	}
+
+	canvas {
+		display: block;
+		/*border: 1px solid teal;*/
+		width: 300px;
+		height: 300px;
+		margin: 0 auto;
+		background-color: #FFF;
+		cursor: pointer;
+		
+		-webkit-border-radius: 250px;
+		-moz-border-radius: 250px;
+		-ms-border-radius: 250px;
+		-o-border-radius: 250px;
+		border-radius: 250px;
+	}
+	.tips {
+		text-align: center;
+		margin-top: 50px;
+		opacity: 1;
+		font-size: 24px;
+		
+		-webkit-transition: opacity 1s linear;
+	}
+	.tips.hidden {
+		opacity: 0;
+	}
+	</style>
+</head>
+
+<body>
+	<div class="main">
+		<h1>HTML5 Page Visibility demo<em> 切换tab再回来看下^_^</em></h1>
+		
+		<canvas id="canvas" width="300px" height="300px" title="click to stop.">Your browser is not support canvas!</canvas>
+		<p id="tips" class="tips"></p>
+	</div>
+</body>
+<script>
+//see http://www.w3.org/TR/page-visibility/
+
+;(function($Win) {
+
+var canvas,
+	ctx,
+	width,
+	height,
+	radius,
+	FOCUSCOLOR = '#44A3AA',
+	HIDDENCOLOE = '#999',
+	color = FOCUSCOLOR,
+	FOCUSFPS = 30,
+	HIDDENFPS = 10,
+	fps = FOCUSFPS,
+	PI = Math.PI,
+	startAngle = 0,
+	hiddenProp,
+	bPrefix,
+	intervalTimer,
+	timeoutTimer,
+	tips,
+	getHiddenProp = function() {
+		return 'hidden' in document ? 'hidden' : function() {
+			var r = null;
+			
+			['webkit', 'moz', 'ms', 'o'].forEach(function(prefix) {
+				if((prefix + 'Hidden') in document) {
+					return r = prefix + 'Hidden';
+				}
+			});
+			
+			return r;
+		}();
+	},
+	isHidden = function() {
+		return !!hiddenProp && !document[hiddenProp];
+	},
+	getVisibilityState = function() {
+		return hiddenProp ? document[bPrefix + 'VisibilityState'] : hiddenProp;
+	},
+	canvasInit = function() {
+		canvas = document.querySelector('#canvas');
+		ctx = canvas.getContext('2d');
+		width = canvas.width;
+		height = canvas.height;
+		radius = width / 2;
+		
+		ctx.translate(width / 2, height / 2);
+		
+		canvas.addEventListener('click', function onCanvasClick(e) {
+			if(intervalTimer) {
+				return stop();
+			}
+			
+			return run();
+		});
+	},
+	clear = function() {
+		ctx.clearRect(-width / 2, -height / 2, width, height);
+	},
+	draw = function() {
+		if(startAngle >= 359) {
+			clear();
+		}
+		
+		ctx.save();
+		ctx.beginPath();
+		ctx.arc(0, 0, radius, (startAngle/180)*PI, (++startAngle/180)*PI, false);
+		ctx.lineTo(0, 0);
+		ctx.closePath();
+		ctx.fillStyle = color;
+		ctx.fill();
+		ctx.restore();
+		
+		startAngle %= 360;
+		console.log(startAngle)
+	},
+	run = function() {
+		intervalTimer = setInterval(draw, 1000/fps);
+	},
+	stop = function() {
+		intervalTimer && clearInterval(intervalTimer);
+		intervalTimer = null;
+	},
+	onVisibilityChange = function(e) {
+		var state = getVisibilityState();
+		//state can be one of 'hidden, visible, prerender, unloaded'
+		
+		if(state === 'hidden') {
+			color = HIDDENCOLOE;
+			fps = HIDDENFPS;
+			
+			timeoutTimer && clearTimeout(timeoutTimer);
+			timeoutTimer = null;
+		}
+		
+		if(state === 'visible') {
+			color = FOCUSCOLOR;
+			fps = FOCUSFPS;
+			
+			showTips();
+		}
+		
+		/*if(!isHidden()) {
+			color = FOCUSCOLOR;
+			fps = FOCUSFPS;
+		} else {
+			color = HIDDENCOLOE;
+			fps = HIDDENFPS;
+		}*/
+	},
+	showTips = function() {
+		tips.innerHTML = 'Welcome back!';
+		
+		tips.classList.remove('hidden');
+		timeoutTimer = setTimeout(function() {
+			tips.classList.add('hidden');
+		}, 1000);
+	},
+	init = function() {
+		canvasInit();
+		hiddenProp = getHiddenProp();
+		tips = document.querySelector('#tips');
+		
+		if(hiddenProp) {
+			bPrefix = hiddenProp.substring(0, hiddenProp.length - 6);
+
+			document.addEventListener(bPrefix + 'visibilitychange', onVisibilityChange);
+			
+			run();
+			//document.addEventListener('click', draw);
+		} else {
+			tips.innerHTML = '<em style="color: red;">Your browser is not support Page Visibility API yet!</em>';
+		}
+	};
+// http://jeff2ma.github.io/Demo/201503/VisibilityViedo.html
+$Win.addEventListener('load', init);
+
+}(this));
+</script>
+</html>
