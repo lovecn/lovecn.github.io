@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>HTML5实现摄像头拍照并上传</title>
+
+     <script type="text/javascript">
+//<![CDATA[
+try{if (!window.CloudFlare) {var CloudFlare=[{verbose:0,p:0,byc:0,owlid:"cf",bag2:1,mirage2:0,oracle:0,paths:{cloudflare:"/cdn-cgi/nexp/dok3v=1613a3a185/"},atok:"a74c5759df8d75bda0f38db475b66aa0",petok:"3bfc6abc3974ee91b49b1c9436e238d4eb104df8-1428802275-1800",zone:"lty0311.com",rocket:"a",apps:{}}];document.write('<script type="text/javascript" src="//edge.yunjiasu.com/cdn-cgi/nexp/dok3v=7e13c32551/cloudflare.min.js"><'+'\/script>');}}catch(e){};
+//]]>
+</script>
+<script data-rocketsrc="http://libs.baidu.com/jquery/1.7.0/jquery.js" type="text/rocketscript"></script>
+    <style>
+	video#myVideo{width:300px;}
+    #result{width:100px; height:100px; background:#CCC;}
+	#result canvas{width:300px;}
+    </style>
+</head>
+<body>
+    <video id="myVideo" autoplay="autoplay"></video>
+    <br />
+    <input type="button" value="拍照" /><br />
+    拍照結果：
+    <div id="result">
+    </div>
+    <script type="text/rocketscript">
+        $(document).ready(init);
+
+        function init() {
+			if(!$.browser.safari&&!$.browser.mozilla) {
+			   alert("请使用Chrome或Firefox浏览器！");
+			   return false;
+			}
+          	//为了便于使用这个接口，先做一下兼容性处理
+			navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+            //Google Chrome用webkitGetUserMedia，Firefox用mozGetUserMedia
+            navigator.getUserMedia({video:true}, success, error);  //显示影像
+
+            //定义button点击后要做什麼
+            $("input[type='button']").click(function () {
+                shoot(); //执行拍照
+            });
+        }
+        function success(stream) {
+            $("#myVideo").attr("src", window.webkitURL.createObjectURL(stream));
+			$("#myVideo").play();
+        }
+		function error(error) {
+			alert(error.name || error);
+		}
+        //拍照
+        function shoot() {
+            var video = $("#myVideo")[0];
+            var canvas = capture(video);
+
+            $("#result").empty();
+            $("#result").append(canvas); //呈现图像(拍照結果)
+            var imgData = canvas.toDataURL("image/jpg");
+            var base64String = imgData.substr(22); //取得base64字串
+
+            //上传，储存图片
+            $.ajax({
+                url: "vod/avatar.php",
+                type: "post",
+                data: { data: base64String },
+                async: true,
+                success: function (htmlVal) {
+                    alert("另存图片成功！");
+                }, error: function (e) {
+                    alert(e.responseText); //alert错误信息
+                }
+
+            });
+        }
+
+        //从video元素抓取图像到canvas
+        function capture(video) {
+
+            var canvas = document.createElement('canvas'); //建立canvas js DOM元素
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);		 
+            return canvas;
+        }
+    </script>
+</body>
+</html>
