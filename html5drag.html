@@ -1,0 +1,74 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>实现拖拽上传预览图片</title>
+    <style type="text/css">
+        #div1{
+            margin: 0 auto;
+            width:200px;
+            height:200px;
+            background:#ccc;
+            color: white;}
+        #div1 p{
+            position: relative;
+            top: 90px;
+            left: 50px;
+        }
+        li{ width:200px; height:200px; margin:5px; float:left; list-style:none;}
+        li img{ width:500px;height: auto}
+    </style>
+    <script type="text/javascript">
+// 实现拖拽上传预览图片
+        window.onload = function(){
+
+            var oUl = document.getElementById('ul1');
+            var oDiv = document.getElementById('div1');
+
+            oDiv.ondragenter = function(){
+                this.innerHTML = '可以释放';
+            };
+
+            oDiv.ondragover = function(ev){
+                ev.preventDefault();
+            };
+
+            oDiv.ondragleave = function(){
+                this.innerHTML = '请拖拽到此区域';
+            };
+
+            oDiv.ondrop = function(ev){
+
+                ev.preventDefault();
+
+                var fs = ev.dataTransfer.files;
+                console.log(fs);
+                for(var i=0;i<fs.length;i++){
+
+                    var fr = new FileReader();
+                    console.log(fr);
+                    if( fs[i].type.indexOf('image')!=-1 ){
+
+                        fr.readAsDataURL( fs[i] );
+
+                        fr.onload = function(){
+                            var oLi = document.createElement('li');
+                            var oImg = document.createElement('img');
+                            oImg.src = this.result;
+                            oLi.appendChild( oImg );
+                            oUl.appendChild( oLi );
+                        };
+                    }
+                    else{
+                        alert('亲,请拖拽图片格式');
+                    }
+
+                }
+
+            };
+
+        };
+    </script>
+</head>
+<body>
+<div id="div1"><p>请拖拽到此区域</p></div>
+<ul id="ul1"></ul>
+</body>
