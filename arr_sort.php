@@ -80,3 +80,104 @@ array_sort($array,'id','asc');
 $trans = array ("a" => 1, "b" => 1, "c" => 2);
 $trans = array_flip (array_flip($trans));
 print_r($trans);
+
+$arr = array( 
+array('id' => 1,'name' => 'aaa'), 
+array('id' => 2,'name' => 'bbb'), 
+array('id' => 3,'name' => 'ccc'), 
+array('id' => 4,'name' => 'ddd'), 
+array('id' => 5,'name' => 'ccc'), 
+array('id' => 6,'name' => 'aaa'), 
+array('id' => 7,'name' => 'bbb'), 
+); 
+function assoc_unique(&$arr, $key) 
+{ 
+$rAr=array(); 
+for($i=0;$i<count($arr);$i++) 
+{ 
+if(!isset($rAr[$arr[$i][$key]])) 
+{ 
+$rAr[$arr[$i][$key]]=$arr[$i]; 
+} 
+} 
+$arr=array_values($rAr); 
+} 
+assoc_unique($arr,'name'); 
+print_r($arr); 
+
+function array_sort($arr,$keys,$type='asc'){ 
+$keysvalue= $new_array= array(); 
+foreach($arras$k=>$v){ 
+$keysvalue[$k] = $v[$keys]; 
+} 
+if($type== 'asc'){ 
+asort($keysvalue); 
+}else{ 
+arsort($keysvalue); 
+} 
+reset($keysvalue); 
+foreach($keysvalueas$k=>$v){ 
+$new_array[$k] = $arr[$k]; 
+} 
+return$new_array; 
+} 
+
+$newArray= array_sort($array,'price'); 
+
+function hasort($arr) {
+    $a = $b = array();
+    foreach($arr as $v => $k) $a[$k][] = $v;
+    ksort($a);
+    print_r($a);
+    foreach($a as $v => $i) 
+        foreach($i as $k) $b[$k] = $v;
+    return $b;
+}
+$a = array('a' => 10, 'z' => 10, 'c' => 10, 'b' => 11, 'd' => 10);
+$a = hasort($a);
+print_r($a);
+
+
+$a = array('a' => 10, 'z' => 10, 'c' => 10, 'b' => 11, 'd' => 10);
+asort($a, SORT_NUMERIC);
+
+/**  
+ * @param array $weight 权重  例如array('a'=>10,'b'=>20,'c'=>50)  
+ * @return string key   键名   
+ */  
+function roll($weight = array()) {   
+ $roll = rand ( 1, array_sum ( $weight ) );   
+ $_tmpW = 0;   
+ $rollnum = 0;   
+  foreach ( $weight as $k => $v ) {   
+  $min = $_tmpW;   
+   $_tmpW += $v;   
+   $max = $_tmpW;   
+   if ($roll > $min && $roll <= $max) {   
+    $rollnum = $k;   
+    break;   
+   }   
+ }   
+  return $rollnum;   
+}   
+ 
+$row=roll(array('a'=>10,'b'=>20,'c'=>50));   
+echo $row;   
+
+ function utf8_array_asort(&$array) {
+  if(!isset($array) || !is_array($array)) {
+   return false;
+  }
+  foreach($array as $k=>$v) {
+   $array[$k] = iconv('UTF-8', 'GBK//IGNORE',$v);
+  }
+  asort($array);
+  foreach($array as $k=>$v) {
+   $array[$k] = iconv('GBK', 'UTF-8//IGNORE', $v);
+  }
+  return true;
+}
+
+$abc = array('a'=>'猜', 'b'=>'我','c'=>'哦','d'=>'棍','e'=>'f','f'=>'爸','z'=>'州');
+utf8_array_asort($abc);
+print_r($abc);
