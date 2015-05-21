@@ -1,0 +1,136 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>程序员也有浪漫的时候</title>
+
+<style type="text/css">
+body{margin:0;padding:0;background:#ffe;font-size:12px;overflow:auto}
+#mainDiv{width:100%;height:100%}
+#loveHeart{float:left;width:670px;height:625px}
+#garden{width:100%;height:100%}
+#elapseClock{text-align:right;font-size:18px;margin-top:10px;margin-bottom:10px}
+#words{font-family:"sans-serif";width:500px;font-size:24px;color:#666}
+#messages{display:none}
+#elapseClock .digit{font-family:"digit";font-size:36px}
+#loveu{padding:5px;font-size:22px;margin-top:80px;margin-right:120px;text-align:right;display:none}
+#loveu .signature{margin-top:10px;font-size:20px;font-style:italic}
+#clickSound{display:none}
+#code{float:left;width:440px;height:400px;color:#333;font-family:"Consolas","Monaco","Bitstream Vera Sans Mono","Courier New","sans-serif";font-size:12px}
+#code .string{color:#2a36ff}
+#code .keyword{color:#7f0055;font-weight:bold}
+#code .placeholder{margin-left:15px}#code .space{margin-left:7px}
+#code .comments{color:#3f7f5f}
+#copyright{margin-top:10px;text-align:center;width:100%;color:#666}
+#errorMsg{width:100%;text-align:center;font-size:24px;position:absolute;top:100px;left:0}
+#copyright a{color:#666}
+@font-face {
+	font-family: digit;
+	src: url('digital-7_mono.ttf') format("truetype");
+}
+</style>
+
+<link href="css/default.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="http://itmyhome.com/love/js/jquery.js"></script>
+<script type="text/javascript" src="http://itmyhome.com/love/js/garden.js"></script>
+<script type="text/javascript" src="http://itmyhome.com/love/js/functions.js"></script>
+
+</head>
+
+<body>
+
+<div id="mainDiv">
+	<div id="content">
+		<div id="code">
+			
+			<span class="comments">/**</span><br />
+			<span class="space"/><span class="comments">* 2015—05-20</span><br />
+			<span class="space"/><span class="comments">* 爱你的人</span><br />
+			<span class="space"/><span class="comments">*/</span><br />
+				
+			我能抽象出整个世界．．． <br />
+			但是我不能抽象出你．．． <br />
+			因为你在我心中是那么的具体．．． <br />
+			所以我的世界并不完整．．． <br />
+			我可以重载甚至覆盖这个世界里的任何一种方法．．． <br />
+			但是我却不能重载对你的思念．．． <br />
+			也许命中注定了 你在我的世界里永远的烙上了静态的属性．．．<br /> 
+			而我不慎调用了爱你这个方法．．． <br />
+			当我义无返顾的把自己作为参数传进这个方法时．．． <br />
+			我才发现爱上你是一个死循环．．． <br />
+			它不停的返回对你的思念压入我心里的堆栈．．． <br />
+			在这无尽的黑夜中．．． <br />
+			我的内存里已经再也装不下别人．．． <br />
+			我不停的向系统申请空间．．． <br />
+			但却捕获一个异常－－－你爱的人不爱我．．． <br />
+			为了解决这个异常．．． <br />
+			我愿意虚拟出最后一点内存．．． <br />
+			把所有我能实现的方法地址压入堆栈．．． <br />
+			并且在栈尾压入最后一个方法－－ <br />
+			－将字符串＂我爱你，你爱我吗？＂传递给你．．． <br />
+			如果返回值为真－－我将用尽一生去爱你．．． <br />
+			否则－－我将释放掉所有系统资源<br />
+			
+			
+			<br>
+			<br>
+			I want to say:<br />
+			Baby, I love you forever;<br />
+		</div>
+		<div id="loveHeart">
+			<canvas id="garden"></canvas>
+			<div id="words">
+				<div id="messages">
+					亲爱的，我愿陪你度过每一分每一秒。
+					<div id="elapseClock"></div>
+				</div>
+				<div id="loveu">
+					爱你直到永永远远。<br/>
+					<div class="signature">- 爱你的人</div>
+				</div>
+			</div>
+		</div>
+		<div id="copyright">
+				
+				
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+var offsetX = $("#loveHeart").width() / 2;
+var offsetY = $("#loveHeart").height() / 2 - 55;
+var together = new Date();
+together.setFullYear(2015, 4, 20);
+together.setHours(0);
+together.setMinutes(0);
+together.setSeconds(0);
+together.setMilliseconds(0);
+
+if (!document.createElement('canvas').getContext) {
+	var msg = document.createElement("div");
+	msg.id = "errorMsg";
+	msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+	document.body.appendChild(msg);
+	$("#code").css("display", "none")
+	$("#copyright").css("position", "absolute");
+	$("#copyright").css("bottom", "10px");
+	document.execCommand("stop");
+} else {
+	setTimeout(function () {
+		startHeartAnimation();
+	}, 5000);
+
+	timeElapse(together);
+	setInterval(function () {
+		timeElapse(together);
+	}, 500);
+
+	adjustCodePosition();
+	$("#code").typewriter();
+}
+</script>
+
+</body>
+</html>
