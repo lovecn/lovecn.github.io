@@ -1,0 +1,50 @@
+<h1>文件上传效果</h1>
+<input type="file" name="file" onchange="send();">
+<div id="debug"></div>
+<style type="text/css">
+    
+    #progress {
+        width: 500px;
+        height: 20px;
+    }
+    #bar {
+        width: 0%;
+        height: 100%;
+        background: #5cb85c;
+    }
+</style>
+<h1>.</h1>
+<div id="progress">
+    <div id="bar"></div>
+</div>
+<!-- JS -->
+<script type="text/javascript">
+function send() {
+    var fd = new FormData();
+// http://rrylee.github.io/2015/08/16/HTML5-file-upload-one/
+    var file = document.getElementsByTagName('input')[0].files[0];
+
+    fd.append('file', file);
+
+    var xhr = new XMLHttpRequest;
+
+    xhr.open('POST', 'uploadfile.php', true);
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            document.getElementById('debug').innerHTML = this.responseText;
+        }
+    }
+    xhr.send(fd);
+    xhr.upload.onprogress = function(e) {
+        console.log(e);  // 注意这里，我们可以在 CHROME 中调试
+        if (e.lengthComputable) {
+            var percent = e.loaded/e.total * 100;
+            // console.log(percent);
+            document.getElementById('bar').style.width = percent + '%';
+            document.getElementById('bar').innerHTML = parseInt(percent) + '%';
+        }
+    }
+}
+
+</script>
