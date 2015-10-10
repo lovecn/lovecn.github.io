@@ -62,9 +62,8 @@ if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
 function heredoc(fn) {
     return fn.toString().split('\n').slice(1,-1).join('\n') + '\n'
 }
-// $(function(){
 
-if (agent == 'iPhone' || agent =="Android") {
+if (browser.versions.weixin) {
   html=heredoc(function(){/*
   <div class="container" data-toggle="modal" data-target="#myModal">
       <img class="img-responsive pull-left" src="http://www.vhall.com/static/images/myapp/phone.png" />
@@ -108,7 +107,6 @@ html=heredoc(function(){/*
 */});
 }
 document.write(html);
-// })
 </script>
 </body>
 </html>
