@@ -1,0 +1,121 @@
+<!-- camera.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>实时猫访问摄像头 Demo</title>
+
+    <!-- 非必须，本例中使用 jQuery -->
+    <script src="//dn-learning-tech.qbox.me/realtimecat/jquery.min.js"></script>
+
+    <!-- 实时猫 RealTimeCat JavaScript SDK -->
+    <script src="//dn-learning-tech.qbox.me/realtimecat/realtimecat-0.1.min.js"></script>
+
+</head>
+
+<body>
+
+    <!-- 定义一个视频容器，命名为"localMediaContainer" -->
+    <div id="localMediaContainer"></div>
+<h3>您浏览器的检测结果 <a class="btn btn-default btn-sm" id='download-results'>下载检测结果</a></h3><div id="results"></div>
+    <script>
+        $(document).ready(function(){
+            // 创建本地视频流
+            var config = {audio: true, video: true, videoSize: ['800px', '600px']};
+
+            // 定义本地视频流对象
+            var localStream = new RTCat.Stream(config);
+
+            // 监听已获得视频内容"access-accepted"事件
+            localStream.on("access-accepted", function () {
+                // 播放本地视频流到"localMediaContainer"
+                localStream.play("localMediaContainer");
+            });
+
+            // 初始化视频流
+            localStream.init();
+
+        });
+
+
+
+         (function ($) {
+    // 下载检测结果方法https://shishimao.com/playground/browser-capatibility-test
+    var JSDownloads = (function () {
+        var download = function (filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        };
+        return {
+            download: download
+        }
+    })();
+
+    var resultLines;
+
+    (function () {
+
+        // 检测结果
+        var browserDetect = new RTCat.Detect();
+
+        browserDetect.getInputDevices(function (err, devices) {
+            var beginLine = '===BEGIN OF REALTIMECAT BROWSER DETECT===';
+
+            var userAgentLine = 'User Agent 浏览设备\n' + navigator.userAgent;
+            var browserLine = '\nBrowser name 浏览器名称\n' + browserDetect.getBrowser();
+            var versionLine = '\nBrowser version 浏览器版本\n' + browserDetect.getVersion();
+
+            var isSupportedLine = '\nOfficially supported by RealTimeCat 已被官方支持\n' + browserDetect.isSupported();
+            var getUserMediaLine = '\nUploading my video/audio (getUserMedia) 是否支持音视频上传\n' + browserDetect.WebRtcSupport().getUserMedia;
+            var peerConnectionLine = '\nViewing video/audio of others (peerConnection) 是否支持查看他人音视频\n' + browserDetect.WebRtcSupport().peerConnection;
+            var dataChannelLine = '\nTransporting files and data(dataChannel) 是否支持传送文件和数据\n' + browserDetect.WebRtcSupport().dataChannel;
+
+            var devicesLine;
+
+            if (err) {
+                console.log(err);
+                devicesLine = '\nError with Input Devices Test 输入设备测试出错\n' + err
+            } else {
+                devicesLine = '\nInput Devices 输入设备\n' + devices.map(function (device) {
+                        return '\tLabel 名称\n' + device.label
+                            + '\n\tID\n' + device.id
+                            + '\n\tType 类型\n' + device.type;
+                    }).join('');
+            }
+
+            var endLine = '\n===END OF REALTIMECAT BROWSER DETECT===';
+
+            resultLines = [beginLine, '', userAgentLine, browserLine, versionLine, '',
+                isSupportedLine, getUserMediaLine, peerConnectionLine, dataChannelLine, '',
+                devicesLine, endLine].join('\n');
+
+            document.querySelector('#results').innerHTML =
+                '<pre class="prettyprint">{resultLines}</pre>'.replace('{resultLines}', resultLines);
+
+            // prettyPrint();
+        });
+    })();
+
+console.log(resultLines);
+    // 下载检测结果
+    $('#download-results').click(function () {
+        JSDownloads.download('test-results.txt', resultLines)
+    });
+
+}).apply(this, [jQuery]);
+
+    </script>
+
+</body>
+
+</html>

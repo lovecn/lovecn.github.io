@@ -1,0 +1,5 @@
+#!/bin/sh
+for i in {1..1000}
+do
+   curl -X POST -d 'programid=367' http://m.kaolafm.com/meizuapi/act/program/like?_=1444888956034
+done
