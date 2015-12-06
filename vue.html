@@ -1,0 +1,346 @@
+<script src="https://cdn.jsdelivr.net/vue/latest/vue.js"></script>
+普通 HTML 模板中使用特殊的语法将 DOM “绑定”到底层数据。一旦创建了绑定，DOM 将与数据保持同步。每当修改了数据，DOM 便相应地更新。这样我们应用中的逻辑就几乎都是直接修改数据了，不必与 DOM 更新搅在一起  Vue.js 组件非常类似于自定义元素
+所有的 Vue.js 组件其实都是被扩展的 Vue 实例
+<div id="app1">
+  <app-nav></app-nav>
+  <app-view>
+    <app-sidebar></app-sidebar>
+    <app-content></app-content>
+  </app-view>
+</div>
+<div id="app">
+    {{ message }}<input v-model="message">
+    只处理单次插值，今后的数据变化就不会再引起插值更新了{{* message }}
+    双 Mustache 标签将数据解析为纯文本而不是 HTML。为了输出真的 HTML 字符串，需要用三 Mustache 标签{{{ message }}} {{ ok ? 'YES' : 'NO' }}{{ message.split('').reverse().join('') }}{{ message | capitalize }}注意管道语法不是 JavaScript 语法，因此不能在表达式内使用过滤器，只能添加到表达式的后面。
+    <!-- 这是一个语句，不是一个表达式： -->
+{{ var a = 1 }}
+<!-- 完整语法 -->
+<a v-on:click="doSomething"></a>
+指令的值限定为绑定表达式
+<!-- 缩写 -->
+<a @click="doSomething"></a>
+<!-- 完整语法 -->v-bind 指令用于响应地更新 HTML 特性 元素的 href 特性跟表达式 url 的值绑定href="{{url}}"
+<a v-bind:href="url"></a>
+
+<!-- 缩写 -->
+<a :href="url"></a>
+
+
+</div>
+<div id='demo'>
+<input  v-model='v' debounce="500" number>
+{{$data|json}}
+{{$data}}debounce 设置一个最小的延时，在每次敲击之后延时同步输入框的值与数据
+<!-- 当选中时，`picked` 为字符串 "a" -->
+<input type="radio" v-model="picked" value="a">
+
+<!-- `toggle` 为 true 或 false -->
+<input type="checkbox" v-model="toggle">
+
+<!-- 当选中时，`selected` 为字符串 "abc" -->
+<select v-model="selected">
+  <option value="abc">ABC</option>
+</select>
+</div>
+<div id="app2">
+  <ul>
+    <li v-for="todo in todos">
+      {{ todo.text }}
+    </li>
+  </ul>
+</div>
+<div id="app3">
+  <p>{{ message }}</p>
+  <button v-on:click="reverseMessage">Reverse Message</button>
+</div>
+<div id="app4">
+  <input v-model="newTodo" v-on:keyup.enter="addTodo">
+  <ul>
+    <li v-for="todo in todos">
+      <span>{{ todo.text }}</span>
+      <button v-on:click="removeTodo($index)">X</button>
+    </li>
+    <div v-for="(index, item) in todos" track-by="$index">
+  {{ index }} {{ item.text }}
+  <div>
+  <span v-for="n in 10">重复模板数次{{ n }} </span>
+</div>
+</div>
+  </ul>
+</div>
+<div id="example">
+  a={{ a }}, b={{ b }}
+  <div class="static" v-bind:class="{ 'class-a': isA, 'class-b': isB }"></div>
+  <div v-bind:class="[classA, classB]">
+  	<div v-bind:style="styleObject"></div>
+  	<h1 v-if="Math.random() > 0.5">Yes</h1>
+<h1 v-else>No v-else 元素必须立即跟在 v-if 或 v-show 元素的后面——否则它不能被识别。</h1>
+<template v-if="ok">
+  <h1>Title</h1>
+  <p>Paragraph 1</p>
+  <p>Paragraph 2</p>
+</template>
+<li v-for="value in styleObject">
+    {{ $key }} : {{ value }}
+  </li>
+<li v-for="(key, val) in styleObject">
+    {{ key }} : {{ val }}
+  </li>
+<button v-on:click="greet">Greet</button>
+<!-- 阻止单击事件冒泡 <a v-on:click.stop="doThis"></a>
+-->
+
+<!-- 提交事件不再重载页面 <form v-on:submit.prevent="onSubmit"></form>
+-->
+
+<!-- 修饰符可以串联 <a v-on:click.stop.prevent="doThat">-->
+
+
+	<!-- 只有在 keyCode 是 13 时调用 vm.submit() <input v-on:keyup.13="submit"><input v-on:keyup.enter="submit"><input @keyup.enter="submit">-->
+
+<input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+<label for="jack">Jack</label>
+<input type="checkbox" id="john" value="John" v-model="checkedNames">
+<label for="john">John</label>
+<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+<label for="mike">Mike</label>
+
+<span>Checked names: {{ checkedNames | json }}</span>
+
+<my-component></my-component>
+</div>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<style type="text/css">
+	[v-cloak]{
+		display: none;
+	}
+</style>
+ <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>Vue demo</h1>
+            <div id="appdemo">
+                <table class="table table-hover" v-cloak>
+                    <thead>
+                        <tr>
+                            <th class="text-right" @click="sortBy('id')">序号</th>
+                            <th class="text-right" @click="sortBy('name')">书名</th>
+                            <th class="text-right" @click="sortBy('author')">作者</th>
+                            <th class="text-right" @click="sortBy('price')">价格</th>
+                            <th class="text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="book in books | orderBy sortparam">
+                            <td class="text-right">{{book.id}}</td>
+                            <td class="text-right">{{book.name}}</td>
+                            <td class="text-right">{{book.author}}</td>
+                            <td class="text-right">{{book.price}}</td>
+                            <template v-if="book.id%2==0">
+                                <td class="text-right">
+                                    <button type="button" class="btn btn-success" @click="delBook(book)">删除</button>
+                                </td>
+                            </template>
+                            <template v-else>
+                                <td class="text-right">
+                                    <button type="button" class="btn btn-danger" @click="delBook(book)">删除</button>
+                                </td>
+                            </template>
+                        </tr>
+                        <tr>
+                            <td class="text-right" colspan="5">
+                                <h4>总价:{{sum}}</h4></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="add-book">
+                    <legend>添加书籍</legend>
+                    <div class="form-group">
+                        <label for="">书名</label>
+                        <input type="text" class="form-control" v-model="book.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="">作者</label>
+                        <input type="text" class="form-control" v-model="book.author" >
+                    </div>
+                    <div class="form-group">
+                        <label for="">价格</label>
+                        <input type="text" class="form-control" v-model="book.price">
+                    </div>
+                    <button class="btn btn-primary btn-block" v-on:click="addBook()">添加</button>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src='http://cdnjsnet.b0.upaiyun.com/vue-resource/0.1.9/vue-resource.min.js'></script>
+<script>
+// http://segmentfault.com/a/1190000003968020
+new Vue({
+    el: '#appdemo',
+    ready: function() {
+        this.$http.get('https://api.myjson.com/bins/r8mm', function(data) {
+            this.$set('books', data);
+        }).error(function(data, status, request) {
+            console.log('fail' + status + "," + request);
+        })
+    },
+    data: {
+        sortparam: '',
+        book: {
+            id: 0,
+            author: '',
+            name: '',
+            price: ''
+        },
+        books: ''
+    },
+    computed: {
+        sum: function() {
+            var result = 0;
+            for (var i = 0; i < this.books.length; i++) {
+                result = Number(this.books[i].price) + result;
+            };
+            return result;
+        }
+    },
+
+    methods: {
+        addBook: function() {
+            this.book.id = this.books.length + 1;
+            this.books.push(this.book);
+            this.book = '';
+        },
+        delBook: function(book) {
+            this.books.$remove(book);
+        },
+        sortBy: function(sortparam) {
+
+            this.sortparam = sortparam;
+        }
+    }
+});
+
+// 定义
+var MyComponent = Vue.extend({
+  template: '<div>A custom component!</div>'
+})
+
+// 注册
+Vue.component('my-component', MyComponent);
+var vm = new Vue({
+  el: '#example',
+  data: {
+  	checkedNames:[],
+    a: 1,
+    firstName: 'Foo',
+    lastName: 'Bar',
+     isA: true,
+	  isB: false,
+	   classA: 'class-a',
+	  classB: 'class-b',
+	    styleObject: {
+	    color: 'red',
+	    fontSize: '13px'
+	  }
+  },
+  // 在 `methods` 对象中定义方法
+  methods: {
+    greet: function (event) {
+      // 方法内 `this` 指向 vm
+      alert('Hello ' + this.name + '!')
+      // `event` 是原生 DOM 事件 // 也可以在 JavaScript 代码中调用方法vm.greet() // -> 'Hello Vue.js!'
+      alert(event.target.tagName)
+    }
+  },
+  computed: {
+    // 一个计算属性的 getter
+    b: function () {
+      // `this` 指向 vm 实例
+      return this.a + 1
+    },
+    fullName: function () {
+      return this.firstName + ' ' + this.lastName
+    }
+  }
+});
+vm.$set('b', 2)
+// `vm.b` 和 `data.b` 现在是响应的
+// Vue.set(data, 'c', 3)
+// `vm.c` 和 `data.c` 现在是响应的
+Vue.filter('reverse', function (value) {
+  return value.split('').reverse().join('')
+})
+new Vue({
+    el: '#app',
+    data: {
+        message: 'Hello Vue.js!开始学习双向绑定'
+    }
+});
+new Vue({
+    el: '#app2',
+    data: {
+         todos: [
+      { text: 'Learn JavaScript' },
+      { text: 'Learn Vue.js' },
+      { text: 'Build Something Awesome' }
+    ]
+    }
+});
+new Vue({
+  el: '#app3',
+  data: {
+    message: 'Hello Vue.js!'
+  },
+  methods: {
+    reverseMessage: function () {
+      this.message = this.message.split('').reverse().join('')
+    }
+  }
+})
+new Vue({
+  el: '#app4',
+  data: {
+    newTodo: '',
+    todos: [
+      { text: 'Add some todos' }
+    ]
+  },
+  methods: {
+    addTodo: function () {
+      var text = this.newTodo.trim()
+      if (text) {
+        this.todos.push({ text: text })
+        this.newTodo = ''
+      }
+    },
+    removeTodo: function (index) {
+      this.todos.splice(index, 1)
+    }
+  }
+})
+new Vue({  
+	el:'#demo',
+	data:{
+		v:'http://cn.vuejs.org/guide/overview.html'
+	}
+});
+// 每个 Vue 实例都会代理其 data 对象里所有的属性
+var data = { a: 1 }
+var vm = new Vue({
+  data: data
+})//vm.a === data.a // -> true
+
+// vm.$data === data // -> true
+// vm.$el === document.getElementById('example') // -> true
+var vm = new Vue({
+  data: {
+    a: 1
+  },
+  created: function () {
+    // `this` 指向 vm 实例 created 钩子在实例创建后调用
+    console.log('a is: ' + this.a)
+  }
+})
+// -> "a is: 1"
+</script>
