@@ -658,6 +658,965 @@ while($num++){
 echo $num.'<br>';echo $i;
 
 $bom = trim($bom, "\xEF\xBB\xBF");
+// http://www.thinkphp.cn/code/1423.html
+   function base64_upload($base64) {
+    $base64_image = str_replace(' ', '+', $base64);
+    //post的数据里面，加号会被替换为空格，需要重新替换回来，如果不是post的数据，则注释掉这一行
+    //PHP解析GET参数时，会经过过滤，即urldecode()处理，而urldecode会解码给出的已编码字符串中的任何 %##。 加号（'+'）被解码成一个空格字符。
+    //解决方法：传递参数时，对GET参数进行url编码，注意最好不使用urlencode()，否则会编码空格为+。应参考RFC 1738对url进行编码，使用rawurlencode()，将加号编码为 。这样上面例子中param=abc百分20百分2B，php接收到的param才会是abc +
+    //另外POST方式会 使用application/x-www-form-urlencoded此编码编码body中的数据，所以不会出现上述例子中的问题。
+    //字符串base64后传输之前可以先把“+”号替换掉，用“_”,“|”等等都可以，然后另一个页面接收的时候再替换过来即可（str_replace）。最后把替换之后的base64再解码。ok
+    //https://iyaozhen.com/post-get-urlcode.html
+    //重定向后的地址中加密后的name参数，其中包含“+”符号，而浏览器的地址栏中碰到“+”符号时会将加号转换为空格，于是要保证base64_decode进行正确的解码操作，我们可以先将参数中的空格替换成加号
+    ////在实际开发中，我们很多时候要构造这种URL，这是没有问题的
+$url_decode    ="jellybool.com?username=jelly&bool&password=jelly";
+/*注意上面两个变量的差别：第一个的username=jellybool，
+                        第二个为username=jelly&bool
+这种情况下用$_GET()来接受是会出问题的，这是可以用下面的方法解决 
+*/
+$username="jelly&bool";
+$url_decode    ="jellybool.com?username=".urlencode($username)."&password=jelly";
+//这是可以很好的解决问题
+    if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image, $result)){
+        //匹配成功
+        if($result[2] == 'jpeg'){
+            $image_name = uniqid().'.jpg';
+            //纯粹是看jpeg不爽才替换的
+        }else{
+            $image_name = uniqid().'.'.$result[2];
+        }
+
+        $image_file = "./upload/test/{$image_name}";
+        //服务器文件存储路径
+        if (file_put_contents($image_file, base64_decode(str_replace($result[1], '', $base64_image)))){
+            return $image_name;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+ }
+ /**
+ * 对象数组转为普通数组
+ * JSON字串经decode解码后为一个对象数组，
+ * 为此必须转为普通数组后才能进行后续处理
+ * 此函数支持多维数组处理。
+ *
+ * @param array
+ * return array
+ */
+ function objarray_to_array($obj){
+    $ret = array();
+    foreach ($obj as $key => $value) {
+        if (gettype($value) == "array" || gettype($value) == "object") {
+            $ret[$key] = objarray_to_array($value);
+        } else {
+            $ret[$key] = $value;
+        }
+    }
+    return $ret;
+ }
+ // php获取一个月的第一天和最后一天
+ $date = date('Y-m-d H:i:s'); //当前时间
+ function getthemonth($date)
+ {
+    $firstday = date('Y-m-01', strtotime($date));
+    $lastday = date('Y-m-d', strtotime("$firstday +1 month -1 day"));
+    return array($firstday, $lastday);
+ }
+$firstday= date('Y-m-d', mktime(0, 0, 0, date('m'), 1));
+$lastday =date('Y-m-d', mktime(0, 0, 0,date('m')+1,1)-1);
+echo cal_days_in_month(CAL_GREGORIAN,5,2016); //一个月天数,也就是最后一天 第一天 永远是1
+echo date('Y-m-t');//最后一天
+// ignore_user_abort();
+ //即使Client断开(如关掉浏览器)，PHP脚本也可以继续执行.
+set_time_limit(0);
+/*$interval=60*5;
+ do{
+$fp= fopen("test.txt","a");
+fwrite($fp,"rn".date('Y-m-d H:i:s',time())."rn");
+fclose($fp);
+sleep($interval);
+ }while(true);*/
+echo '<pre>';
+$prize_arr = array( 
+    '0' => array('id' => 1, 'prize' => '一等奖', 'v' => 5), 
+    '1' => array('id' => 2, 'prize' => '二等奖', 'v' => 5), 
+    '2' => array('id' => 3, 'prize' => '三等奖', 'v' => 5), 
+    '3' => array('id' => 4, 'prize' => '四等奖', 'v' => 5), 
+    '4' => array('id' => 5, 'prize' => '五等奖', 'v' => 5), 
+    '5' => array('id' => 6, 'prize' => '六等奖', 'v' => 5), 
+    '6' => array('id' => 7, 'prize' => '七等奖', 'v' => 5), 
+    '7' => array('id' => 8, 'prize' => '八等奖', 'v' => 5), 
+    '8' => array('id' => 9, 'prize' => '九等奖', 'v' => 5), 
+    '9' => array('id' => 10, 'prize' => '十等奖', 'v' => 5), 
+    '10' => array('id' => 11, 'prize' => '十一等奖', 'v' => 25), 
+    '11' => array('id' => 12, 'prize' => '十二等奖', 'v' => 25), 
+ );
+foreach ($prize_arr as $k=>$v) { 
+    $arr[$v['id']] = $v['v']; 
+ 
+ } 
+ 
+$prize_id = getRand($arr); //根据概率获取奖项id  
+ foreach($prize_arr as $k=>$v){ //获取前端奖项位置 
+    if($v['id'] == $prize_id){ 
+     $prize_site = $k; 
+     break; 
+    } 
+ } 
+$res = $prize_arr[$prize_id - 1]; //中奖项  http://www.thinkphp.cn/code/1240.html
+ 
+$data['prize_name'] = $res['prize']; 
+$data['prize_site'] = $prize_site;//前端奖项从-1开始 
+
+print_r($data);
+// echo getipinfo();
+if (get_magic_quotes_gpc()){//magic_quotes_gpc是否为ON
+        // $value = stripslashes($value);
+    }
+$week_this_monday =strtotime('last Monday'); //本周一
+$tomorrow =strtotime("+1 day");//明天
+echo $week_last_monday = strtotime('last Monday') - 3600 * 24 * 7; //上周一
+echo $week_last_sunday =strtotime('last Monday')- 3600 * 24; //上周日
+
+function getipinfo(){
+    header("Content-Type:text/html;   charset=utf-8");
+    $url = 'http://1111.ip138.com/ic.asp';  //这儿填页面地址
+    $info=file_get_contents($url);
+    $p = "%<center>(.*?)</center>%si";
+    preg_match_all($p, $info, $arr);
+    
+    $info=$arr[1];
+    $str1 = explode("[",iconv('GB2312', 'UTF-8',$info[0]));
+    $str2 = explode("]",$str1[1]);
+    $ip=$str2[0].'_'.substr($str2[1],10);
+    return $ip;
+ }
+
+// $pic = file_get_contents ( 'php://input' ) ? file_get_contents ( 'php://input' ) : gzuncompress ( $GLOBALS ['HTTP_RAW_POST_DATA'] );
+$imgName = time();
+$file_dir="images/".$imgName.".jpg";
+/*
+if($fp = fopen($file_dir,'w')){
+
+	if(fwrite($fp,$content)){
+	fclose($fp);
+	}
+}*/
+ // var_dump(validateIDCard(''));
+ //验证身份证是否有效
+function validateIDCard($IDCard) {
+    if (strlen($IDCard) == 18) {
+        return check18IDCard($IDCard);
+    } elseif ((strlen($IDCard) == 15)) {
+        $IDCard = convertIDCard15to18($IDCard);
+        return check18IDCard($IDCard);
+    } else {
+        return false;
+    }
+}
+/**
+ * 获取客户端IP地址
+ * @return string
+ */
+function get_client_ip() { 
+    if(getenv('HTTP_CLIENT_IP')){ 
+        $client_ip = getenv('HTTP_CLIENT_IP'); 
+    } elseif(getenv('HTTP_X_FORWARDED_FOR')) { 
+        $client_ip = getenv('HTTP_X_FORWARDED_FOR'); 
+    } elseif(getenv('REMOTE_ADDR')) {
+        $client_ip = getenv('REMOTE_ADDR'); 
+    } else {
+        $client_ip = $_SERVER['REMOTE_ADDR'];
+    } 
+    return $client_ip; 
+}   
+/**
+* 获取服务器端IP地址
+ * @return string
+ */
+function get_server_ip() { 
+    if (isset($_SERVER)) { 
+        if($_SERVER['SERVER_ADDR']) {
+            $server_ip = $_SERVER['SERVER_ADDR']; 
+        } else { 
+            $server_ip = $_SERVER['LOCAL_ADDR']; 
+        } 
+    } else { 
+        $server_ip = getenv('SERVER_ADDR');
+    } 
+    return $server_ip; 
+}
+//计算身份证的最后一位验证码,根据国家标准GB 11643-1999
+function calcIDCardCode($IDCardBody) {
+    if (strlen($IDCardBody) != 17) {
+        return false;
+    }
+
+    //加权因子 
+    $factor = array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);
+    //校验码对应值 
+    $code = array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
+    $checksum = 0;
+
+    for ($i = 0; $i < strlen($IDCardBody); $i++) {
+        $checksum += substr($IDCardBody, $i, 1) * $factor[$i];
+    }
+
+    return $code[$checksum % 11];
+}
+
+// 将15位身份证升级到18位 
+function convertIDCard15to18($IDCard) {
+    if (strlen($IDCard) != 15) {
+        return false;
+    } else {
+        // 如果身份证顺序码是996 997 998 999，这些是为百岁以上老人的特殊编码 
+        if (array_search(substr($IDCard, 12, 3), array('996', '997', '998', '999')) !== false) {
+            $IDCard = substr($IDCard, 0, 6) . '18' . substr($IDCard, 6, 9);
+        } else {
+            $IDCard = substr($IDCard, 0, 6) . '19' . substr($IDCard, 6, 9);
+        }
+    }
+    $IDCard = $IDCard . calcIDCardCode($IDCard);
+    return $IDCard;
+}
+
+// 18位身份证校验码有效性检查 
+function check18IDCard($IDCard) {
+    if (strlen($IDCard) != 18) {
+        return false;
+    }
+
+    $IDCardBody = substr($IDCard, 0, 17); //身份证主体
+    $IDCardCode = strtoupper(substr($IDCard, 17, 1)); //身份证最后一位的验证码
+
+    if (calcIDCardCode($IDCardBody) != $IDCardCode) {
+        return false;
+    } else {
+        return true;
+    }
+}
+// 下一篇文章$query = mysql_query("SELECT id,title FROM article WHERE id>'$id' ORDER BY id ASC LIMIT 1"); 
+// $next = mysql_fetch_array($query);
+    #TODO case:http://www.thinkphp.cn/code/1427.html
+    $aData = array(
+        array('id'=>1,'name'=>'名称1'),
+        array('id'=>2,'name'=>'名称2'),
+        array('id'=>3,'name'=>'名称3'),
+    );
+    $aTitle = array(
+        array('id','标记'),
+        array('name','名称'),
+    );
+    // exportCSV($aData, $aTitle);
+
+ function exportCSV($aData = [], $aTitle = [], $sFileName=false)
+ {
+    if (!is_array($aData) || !is_array($aTitle))
+        return false;
+    if (empty($aData) || empty($aTitle))
+        return false;
+    $sFileName = $sFileName ? mb_convert_encoding($sFileName, "GB2312", "UTF-8, GB2312") . ".csv": date("_YmdHis") . ".csv";
+    
+    header('Content-Type: text/csv; CHARSET=gb2312');
+    header('Content-Disposition: attachment; filename=' . $sFileName);
+    $output = fopen('php://output', 'w');
+    
+    for ($i=0;$i<count($aData);$i++) {
+        for($j=0;$j<count($aTitle);$j++){
+            $aList[$i][$j] = mb_convert_encoding($aData[$i][$aTitle[$j][0]], "GB2312", "UTF-8, GB2312");
+        }
+    }
+    for ($i=0;$i<count($aTitle);$i++) {
+        $aTitle[$i] = mb_convert_encoding($aTitle[$i][1], "GB2312", "UTF-8, GB2312");
+    }
+    fputcsv($output, $aTitle);
+    
+    foreach ($aList as $key) {
+        fputcsv($output, $key);
+    }
+    return true;
+ }
+ /**
+     * @name php获取中文字符拼音首字母
+     * @param $str
+     * @return null|string
+     * @author 潘军伟<panjunwei@ruiec.cn>
+     * @time 2015-09-14 17:58:14
+     */
+     function getFirstCharter($str)
+    {
+        if (empty($str)) {
+            return '';
+        }
+        $fchar = ord($str{0});
+        if ($fchar >= ord('A') && $fchar <= ord('z')) return strtoupper($str{0});
+        $s1 = iconv('UTF-8', 'gb2312', $str);
+        $s2 = iconv('gb2312', 'UTF-8', $s1);
+        $s = $s2 == $str ? $s1 : $str;
+        $asc = ord($s{0}) * 256 + ord($s{1}) - 65536;
+        if ($asc >= -20319 && $asc <= -20284) return 'A';
+        if ($asc >= -20283 && $asc <= -19776) return 'B';
+        if ($asc >= -19775 && $asc <= -19219) return 'C';
+        if ($asc >= -19218 && $asc <= -18711) return 'D';
+        if ($asc >= -18710 && $asc <= -18527) return 'E';
+        if ($asc >= -18526 && $asc <= -18240) return 'F';
+        if ($asc >= -18239 && $asc <= -17923) return 'G';
+        if ($asc >= -17922 && $asc <= -17418) return 'H';
+        if ($asc >= -17417 && $asc <= -16475) return 'J';
+        if ($asc >= -16474 && $asc <= -16213) return 'K';
+        if ($asc >= -16212 && $asc <= -15641) return 'L';
+        if ($asc >= -15640 && $asc <= -15166) return 'M';
+        if ($asc >= -15165 && $asc <= -14923) return 'N';
+        if ($asc >= -14922 && $asc <= -14915) return 'O';
+        if ($asc >= -14914 && $asc <= -14631) return 'P';
+        if ($asc >= -14630 && $asc <= -14150) return 'Q';
+        if ($asc >= -14149 && $asc <= -14091) return 'R';
+        if ($asc >= -14090 && $asc <= -13319) return 'S';
+        if ($asc >= -13318 && $asc <= -12839) return 'T';
+        if ($asc >= -12838 && $asc <= -12557) return 'W';
+        if ($asc >= -12556 && $asc <= -11848) return 'X';
+        if ($asc >= -11847 && $asc <= -11056) return 'Y';
+        if ($asc >= -11055 && $asc <= -10247) return 'Z';
+        return null;
+    }
+
+// $redis=new redis();
+
+// $redis->connect('127.0.0.1','6379');
+
+
+
+
+
+// print_r($redis->zRevRange('topward100', 0, 4, 'WITHSCORES'));
+
+ 
+// Route::get('posts/{post_id}', function ($postId) {
+    //
+// });
+
+require_once 'phpanalysis/phpanalysis.class.php';
+$str = "PHPAnalysis分词系统是基于字符串匹配的分词方法进行分词的，这种方法又叫做机械分词方法，它是按照一定的策略将待分析的汉字串与 一个“充分大的”机器词典中的词条进行配，若在词典中找到某个字符串，则匹配成功（识别出一个词）。按照扫描方向的不同，串匹配分词方法可以分为正向匹配 和逆向匹配；按照不同长度优先匹配的情况，可以分为最大（最长）匹配和最小（最短）匹配；按照是否与词性标注过程相结合，又可以分为单纯分词方法和分词与 标注相结合的一体化方法。常用的几种机械分词方法如下： ";
+  $pa=new PhpAnalysis();
+// http://www.cnblogs.com/xshang/p/3603037.html
+  $pa->SetSource($str);
+
+  $pa->resultType=2;
+
+  $pa->differMax=true;
+
+  $pa->StartAnalysis();
+
+  $arr=$pa->GetFinallyIndex();
+// print_r(count_chars($str,1));
+ function is_assoc_array($array)
+{
+    return array_keys($array) !== range(0, count($array) - 1);
+}
+var_dump("0x123" == "291");
+
+var_dump(is_numeric("0x123"));
+final class Product
+{
+
+    /**
+     * @var self
+     */
+    private static $instance;
+
+    /**
+     * @var mixed
+     */
+    public $mix;
+
+
+    /**
+     * Return self instance
+     *
+     * @return self
+     */
+    public static function getInstance() {
+        if (!(self::$instance instanceof self)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    private function __construct() {
+    }
+
+    private function __clone() {
+    }
+}
+
+$firstProduct = Product::getInstance();
+$secondProduct = Product::getInstance();
+
+$firstProduct->mix = 'test';
+$secondProduct->mix = 'example';
+
+print_r($firstProduct->mix);
+// example
+print_r($secondProduct->mix);
+// example
+$i = '100';
+$result = filter_var(
+    $i,
+
+    FILTER_VALIDATE_INT,
+    //设定校验的数值范围
+    array(
+      'options' => array('min_range' => 1, 'max_range' => 10)
+    )
+);
+var_dump($result);//bool(false)
+$str =2228282829299292;
+ //失败
+echo (string)$str;  //2.2282828292993E+15  失败
+echo '<br>';
+echo ' '.$str; //2.2282828292993E+15
+echo '<br>';
+echo strval($str); //2.2282828292993E+15
+echo '<br>';
+ //成功
+echo sprintf("%.0f", $str);
+echo '<br>';
+echo number_format($str);// 三位逗号分隔
+  // print_r($arr);
+/**
+     * 函数说明：验证身份证是否真实
+     * 注：加权因子和校验码串为互联网统计  尾数自己测试11次 任意身份证都可以通过
+     * 传递参数：
+     * $number身份证号码
+     * 返回参数：http://www.thinkphp.cn/code/1873.html
+     * true验证通过
+     * false验证失败
+     */
+    function isIdCard($number) {
+        $sigma = '';
+        //加权因子 
+        $wi = array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);
+        //校验码串 
+        $ai = array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');
+        //按顺序循环处理前17位 
+        for ($i = 0;$i < 17;$i++) { 
+            //提取前17位的其中一位，并将变量类型转为实数 
+            $b = (int) $number{$i}; 
+            //提取相应的加权因子 
+            $w = $wi[$i]; 
+            //把从身份证号码中提取的一位数字和加权因子相乘，并累加 得到身份证前17位的乘机的和 
+            $sigma += $b * $w;
+        }
+    //echo $sigma;die;
+        //计算序号  用得到的乘机模11 取余数
+        $snumber = $sigma % 11; 
+        //按照序号从校验码串中提取相应的余数来验证最后一位。 
+        $check_number = $ai[$snumber];
+        if ($number{17} == $check_number) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //eg
+    if (!isIdCard('000000000000000001')) {
+    echo "身份证号码不合法";
+    } else {
+    echo "身份证号码正确";
+    }
+/**
+ * 数字到字母列
+ * @author rainfer <81818832@qq.com>
+ */
+ function num2alpha($intNum, $isLower = false)
+ {
+    $num26 = base_convert($intNum, 10, 26);
+    $addcode = $isLower ? 49 : 17;
+    $result = '';
+    for ($i = 0; $i < strlen($num26); $i++) {
+        $code = ord($num26{$i});
+        if ($code < 58) {
+            $result .= chr($code + $addcode);
+        } else {
+            $result .= chr($code + $addcode - 39);
+        }
+    }
+    return $result;
+ }
+echo num2alpha(6546);
+$str =2228282829299292;
+ //失败
+echo (string)$str;  //2.2282828292993E+15  失败
+echo '<br>';
+echo ' '.$str; //2.2282828292993E+15
+echo '<br>';
+echo strval($str); //2.2282828292993E+15
+echo '<br>';
+ //成功
+echo sprintf("%.0f", $str);
+echo '<br>';
+echo number_format($str);// 三位逗号分隔
+
+$string="I Love 黑帽联盟www.heimaolianmeng.com";
+echo preg_replace("/([\x80-\xff]+)/","<font color=red>\\1</font>",$string);
+
+ /**
+     * 生成唯一订单号
+     */
+     function build_order_no()
+    {
+        $no = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+        //检测是否存在
+        $db = M('Order');
+        $info = $db->where(array('number'=>$no))->find();
+        (!empty($info)) && $no = $this->build_order_no();
+        return $no;
+        
+    }
+    // 获取远程文件的大小
+function remote_filesize($url, $user = "", $pw = "")
+{
+	ob_start();
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_HEADER, 1);
+	curl_setopt($ch, CURLOPT_NOBODY, 1);
+
+	if(!empty($user) && !empty($pw))
+	{
+	$headers = array('Authorization: Basic ' . base64_encode("$user:$pw"));
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	}
+
+	$ok = curl_exec($ch);
+	curl_close($ch);
+	$head = ob_get_contents();
+	ob_end_clean();
+
+	$regex = '/Content-Length:\s([0-9].+?)\s/';
+	$count = preg_match($regex, $head, $matches);
+
+	return isset($matches[1]) ? $matches[1] . " 字节" : "unknown";
+}
+/**
+ * 舍去法取整 版本的 number_format() 函数
+ * @author leeyi <leeyisoft@qq.com>
+ */
+ function number_format_floor($number, $decimals=0, $dec_point='.', $thousands_sep=',') {
+    $tmp = pow(10,$decimals);
+    return number_format(floor($tmp*($number))/$tmp, $decimals, $dec_point, $thousands_sep);
+ }
+ $url = 'https://api.weixin.qq.com/cgi-bin/message/mass/preview?access_token=xxxxx';
+parse_str(parse_url($url, PHP_URL_QUERY), $data);
+echo $data['access_token'];
+  function upload(){
+        $base64 = I('post.str');
+        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64, $result)){
+          $type = $result[2];
+          $new_file = "./Uploads/".time().".{$type}";
+          if (file_put_contents($new_file, base64_decode(str_replace($result[1], '', $base64)))){
+            echo '新文件保存成功：', $new_file;
+          }
+         }
+ }
+// 实例测试
+// echo remote_filesize("http://www.heimaolianmeng.com/luoyue/images/logo3.jpg");
+
+function login()
+{
+	$curl = curl_init();
+	// 在系统临时目录中生成一个文件，并返回其文件名
+	$cookie_jar = tempnam('./tmp','cookie');echo $cookie_jar;
+	curl_setopt($curl, CURLOPT_URL,'http://t.vhall.com/auth/login');//这里写上处理登录的界面
+	curl_setopt($curl, CURLOPT_POST, 1);
+	$request = 'account=lsp&password=123456';
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $request);//传 递数据
+	curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_jar);// 把返回来的cookie信息保存在$cookie_jar文件中
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);//设定返回 的数据是否自动显示
+	curl_setopt($curl, CURLOPT_HEADER, false);//设定是否显示头信 息
+	curl_setopt($curl, CURLOPT_NOBODY, false);//设定是否输出页面 内容
+	curl_exec($curl);//返回结果
+	curl_close($curl); //关闭
+	 
+	$curl2 = curl_init();
+	curl_setopt($curl2, CURLOPT_URL, 'http://t.vhall.com/user/message/?page=1');//登陆后要从哪个页面获取信息
+	curl_setopt($curl2, CURLOPT_HEADER, false);
+	curl_setopt($curl2, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($curl2, CURLOPT_COOKIEFILE, 'C:\Users\vhalllsp\AppData\Local\Temp\coo436E.tmp');
+	$content = curl_exec($curl2);
+	return $content;
+}
+function getImage($url,$save_dir='',$filename='',$type=0){
+            if(trim($url)==''){
+                return array('file_name'=>'','save_path'=>'','error'=>1);
+            }
+            if(trim($save_dir)==''){
+                $save_dir='./';
+            }
+            if(trim($filename)==''){//保存文件名
+                $ext=strrchr($url,'.');
+            if($ext!='.gif'&&$ext!='.jpg'&&$ext!='.png'&&$ext!='.jpeg'){
+                return array('file_name'=>'','save_path'=>'','error'=>3);
+            }
+                $filename=time().rand(0,10000).$ext;
+            }
+            if(0!==strrpos($save_dir,'/')){
+                $save_dir.='/';
+            }
+            //创建保存目录
+            if(!file_exists($save_dir)&&!mkdir($save_dir,0777,true)){
+                return array('file_name'=>'','save_path'=>'','error'=>5);
+            }
+            //获取远程文件所采用的方法
+            if($type){
+                $ch=curl_init();
+                $timeout=5;
+                curl_setopt($ch,CURLOPT_URL,$url);
+                curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+                curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);
+                //当请求https的数据时，会要求证书，加上下面这两个参数，规避ssl的证书检查
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE );
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+                $img=curl_exec($ch);
+                curl_close($ch);
+            }else{
+                ob_start();
+                readfile($url);
+                $img=ob_get_contents();
+                ob_end_clean();
+            }
+            //$size=strlen($img);
+            //文件大小
+            $fp2=@fopen($save_dir.$filename,'a');
+            fwrite($fp2,$img);
+            fclose($fp2);
+            unset($img,$url);
+            return array('file_name'=>$filename,'save_path'=>$save_dir.$filename,'error'=>0);
+        }
+// print_r(login());
+// http://www.thinkphp.cn/code/1761.html
+function hideStar($str) { //用户名、邮箱、手机账号中间字符串以*隐藏 
+    if (strpos($str, '@')) { 
+        $email_array = explode("@", $str); 
+        $prevfix = (strlen($email_array[0]) < 4) ? "" : substr($str, 0, 3); //邮箱前缀 
+        $count = 0; 
+        $str = preg_replace('/([\d\w+_-]{0,100})@/', '***@', $str, -1, $count); 
+        $rs = $prevfix . $str; 
+    } else { 
+        $pattern = '/(1[3458]{1}[0-9])[0-9]{4}([0-9]{4})/i'; 
+        if (preg_match($pattern, $str)) { 
+            $rs = preg_replace($pattern, '$1****$2', $str); // substr_replace($name,'****',3,4); 
+        } else { 
+            $rs = substr($str, 0, 3) . "***" . substr($str, -1); 
+        } 
+    } 
+    return $rs; 
+ }
+
+/** +----------------------------------------------------------
+ * 过滤用户昵称里面的emoji特殊字符 +----------------------------------------------------------
+ * @param string    $str   待输出的用户昵称 +----------------------------------------------------------
+ */
+ function jsonName($str) {
+    if($str){
+        $tmpStr = json_encode($str);
+        $tmpStr2 = preg_replace("#(\\\ud[0-9a-f]{3})#ie","",$tmpStr);
+        $return = json_decode($tmpStr2);
+        if(!$return){
+            return jsonName($return);
+        }
+    }else{
+        $return = '微信用户-'.time();
+    }    
+    return $return;
+ }
+  #修改数据库编码
+#ALTER DATABASE database_name CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+ 
+ #修改表
+#ALTER TABLE table_name CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+ 
+ #修改列
+#ALTER TABLE table_name CHANGE column_name column_name VARCHAR(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+// 微信红包算法
+print_r(getRand([4,7,2,8,1]));
+ function getRand($proArr) { //传入的为一维数字数组,此数组中数字即为相应概率 中奖概率问题应
+        $result = '';
+        //概率数组的总概率精度
+        $proSum = array_sum($proArr);
+        //概率数组循环
+        foreach ($proArr as $key => $proCur) {
+            $randNum = mt_rand(1, $proSum);
+            if ($randNum <= $proCur) {
+                $result = $key;
+                break;
+            } else {
+                $proSum -= $proCur;
+            }
+        }
+        unset ($proArr);
+        return $result;
+    }
+    //通过接口获取所在地址IP 根据IP查询经纬度
+         function is_where($getIp='106.2.187.202'){
+            // header("content-type:text/html;charset=utf8");
+            $content = file_get_contents("http://api.map.baidu.com/location/ip?ak=7IZ6fgGEGohCrRKUE9Rj4TSQ&ip={$getIp}&coor=bd09ll");
+            //echo $getIp;die;
+            $json = json_decode($content);
+            $arr = array($json->{'content'}->{'point'}->{'x'},$json->{'content'}->{'point'}->{'y'}, $json->{'content'}->{'address'});//按层级关系提取经度数据
+            return json_encode($arr);
+        } print_r(is_where());
+function actionDlresume(){
+        
+        //数据查询http://www.thinkphp.cn/code/1654.html  将内容放到word文档city_name
+            $re=['u_name'=>'php','g_sex'=>'na','school_type'=>1,'work_year'=>10,'g_school'=>'66','city_name'=>'ggg','work_email'=>'hhh','work_phone'=>'888','work_type'=>'555','edutation'=>'888','g_workj'=>'333','g_zuo'=>'000'];
+            // print_r($re);die;
+            $html ='<table width=800  align="center"  border="1" cellpadding="0" cellspacing="1" >
+    <tr height="50"> 
+      <td width=70 > 姓名</td> 
+      <td width=300 >  '.$re['u_name'].'</td> 
+      <td width=60 >性别</td> 
+      <td width=100 >'.$re['g_sex'].'</td> 
+      <td width=100 >学历</td> 
+      <td width=240 >'.$re['school_type'].'</td> 
+    </tr> 
+    <tr> 
+      <td width=70 >工作时间</td> 
+      <td width=40 >'.$re['work_year'].'</td> 
+      <td width=40 >毕业<br/>学校</td> 
+      <td width=150 >'.$re['g_school'].'</td> 
+      <td width=40 >所在<br/>城市</td> 
+      <td width=390 >'.$re['city_name'].'</td> 
+    </tr> 
+    <tr> 
+      <td width=110 >联系邮箱</td> 
+      <td width=200 >'.$re['work_email'].'</td> 
+      <td width=110 >联系<br/>电话</td> 
+      <td width=280 >'.$re['work_phone'].'</td>
+      <td width=110 >当前<br/>状态</td> 
+      <td width=280 >'.$re['work_type'].'</td>
+    </tr> 
+    <tr> 
+      <td width=120 ><br/><br/>教育<br/>背景<br/><br/></td> 
+      <td width=580 >'.$re['edutation'].'</td>     
+    </tr> 
+    <tr> 
+      <td width=120 ><br/><br/>工作<br/>经历<br/><br/></td> 
+      <td width=580 >'.$re['g_workj'].'</td>     
+    </tr> 
+    <tr> 
+      <td width=120 ><br/><br/><br/>作品<br/>展示<br/><br/><br/><br/></td> 
+      <td width=580 >'.$re['g_zuo'].'</td> 
+    </tr> 
+    </table> <br/><br/><br/><br/>
+';
+ 
+ // print_r($html);die;
+     // $word->start();
+     
+     ob_start();
+        echo "<html xmlns:o='urn:schemas-microsoft-com:office:office'
+        xmlns:w='urn:schemas-microsoft-com:office:word'
+        xmlns='http://www.w3.org/TR/REC-html40'>";
+     
+     echo $html;
+     echo "</html>";
+      // $word->save($filename);
+      $data = ob_get_contents();
+      // print_r($data);die;
+      // die;
+        ob_end_clean();
+        $filename = $re['u_name'].'.doc';
+        $fp=fopen($filename,"wb");
+        fwrite($fp,$data);
+        fclose($fp);
+      //文件的类型
+      header('Content-type: application/word');
+      header("Content-Disposition: attachment; filename=".$filename);
+      readfile($filename);
+      ob_flush();
+      flush();
+     exit();
+    
+    } 
+        $sum = 10;  //总价钱
+ 
+        $num = 8 ;  //人数
+ 
+        $min = 0.01;    //最少值
+ 
+        for($i=1;$i<$num;$i++){
+ 
+            $row = ($sum-($num-$i)*$min)/($num-$i);// 安全值
+ 
+            $money = mt_rand($min*100,$row*100)/100;
+ 
+            $sum -= $money;
+ 
+            echo '第'.$i.'人，领取'.$money.'元，剩下'.$sum.'元<br/>';
+ 
+        }
+ 
+        echo '第'.$num.'人，领取'.$sum.'元，剩下'.$sum.'元';
+
+function get_rand($arr){
+ 
+            $arr_sum = array_sum($arr);
+ 
+            $arr_rand = mt_rand(1,$arr_sum);
+ 
+            foreach($arr as $key => $arr_num){
+ 
+                $arr_sum -= $arr_num;
+ 
+                if($arr_rand>$arr_sum){
+ 
+                    return $key;
+ 
+                }
+ 
+            }
+ 
+        }
+ 
+        $p = array(
+ 
+            '0' => array('id'=>1,'info'=>'一等奖','v'=>1),
+ 
+            '1' => array('id'=>2,'info'=>'二等奖','v'=>5),
+ 
+            '2' => array('id'=>3,'info'=>'三等奖','v'=>10),
+ 
+            '3' => array('id'=>4,'info'=>'四等奖','v'=>34)
+ 
+            );
+ 
+        foreach($p as $key => $value){
+ 
+            $arr[$value['id']] = $value['v'];
+ 
+        }
+ 
+        $rid = get_rand($arr);
+ 
+        $res['yes'] = $p[$rid-1]['info'];
+ 
+        unset ($p[$rid-1]) ;
+ 
+        shuffle ($p);
+ 
+        for($i=0;$i<count($p);$i++){
+ 
+            $pr[]= $p[$i]['info'];
+ 
+        }
+ 
+        $res['no'] = $pr;
+ 
+        var_dump($res);
+class Curl {
+
+	private static $user_cookie = '_za=9940ad75-d123-421d-bba5-4';
+
+	/**
+	 * [request 执行一次curl请求]
+	 * @param  [string] $method     [请求方法]
+	 * @param  [string] $url        [请求的URL]
+	 * @param  array  $fields     [执行POST请求时的数据]
+	 * @return [stirng]             [请求结果]
+	 */
+	public static function request($method, $url, $fields = array())
+	{
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_COOKIE, self::$user_cookie);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+		if ($method === 'POST')
+		{
+			curl_setopt($ch, CURLOPT_POST, true );
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+		}
+		$result = curl_exec($ch);
+		return $result;
+	}
+
+	/**
+	 * [getMultiUser 多进程获取用户数据]
+	 * @param  [type] $user_list [description]
+	 * @return [type]            [description]
+	 */
+	public static function getMultiUser($user_list)
+	{
+		$ch_arr = array();
+		$text = array();
+		$len = count($user_list);
+		$max_size = ($len > 5) ? 5 : $len;
+		$requestMap = array();
+
+		$mh = curl_multi_init();
+		for ($i = 0; $i < $max_size; $i++)
+		{
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_URL, 'http://www.zhihu.com/people/' . $user_list[$i] . '/about');
+			curl_setopt($ch, CURLOPT_COOKIE, self::$user_cookie);
+			curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36');
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			$requestMap[$i] = $ch;
+			curl_multi_add_handle($mh, $ch);
+		}
+
+		$user_arr = array();
+		do {
+			while (($cme = curl_multi_exec($mh, $active)) == CURLM_CALL_MULTI_PERFORM);
+			
+			if ($cme != CURLM_OK) {break;}
+
+			while ($done = curl_multi_info_read($mh))
+			{
+				$info = curl_getinfo($done['handle']);
+				$tmp_result = curl_multi_getcontent($done['handle']);
+				$error = curl_error($done['handle']);
+
+				$user_arr[] = array_values(getUserInfo($tmp_result));
+
+				//保证同时有$max_size个请求在处理
+				if ($i < sizeof($user_list) && isset($user_list[$i]) && $i < count($user_list))
+                {
+                	$ch = curl_init();
+					curl_setopt($ch, CURLOPT_HEADER, 0);
+					curl_setopt($ch, CURLOPT_URL, 'http://www.zhihu.com/people/' . $user_list[$i] . '/about');
+					curl_setopt($ch, CURLOPT_COOKIE, self::$user_cookie);
+					curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36');
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+					$requestMap[$i] = $ch;
+					curl_multi_add_handle($mh, $ch);
+
+                    $i++;
+                }
+
+                curl_multi_remove_handle($mh, $done['handle']);
+			}
+
+			if ($active)
+                curl_multi_select($mh, 10);
+		} while ($active);
+
+		curl_multi_close($mh);
+		return $user_arr;
+	}
+
+}
+
+
 ?>
 <script type="text/javascript">
 function deepReverse(arr){
