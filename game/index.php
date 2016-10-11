@@ -1,19 +1,10 @@
 <?php 
-	
-	if (!$_SESSION) {
+	session_start();
+	if (empty($_SESSION['game'])) {
 		header('location:register.php');
 		die;
 	}
 
-	$db = new PDO('mysql:host=localhost;dbname=game', 'root', null);
-	$rs = $db->query("SELECT * FROM users");
-	if ($db->errorCode() !='00000'){
-		print_r($db->errorInfo());
-		exit;
-	}
-	$arr = $rs->fetchAll();
-	print_r($arr);
-	$db = null;
 ?>
 
 <!DOCTYPE html>
@@ -29,9 +20,15 @@ body{ background:#fff;}
 </head>
 
 <body>
-<div class="head"><a href="index.html" class="fanhi displayc"></a><p>乐享推广员平台</p><a href="login.php" class="tuichu"></a></div>
+<div class="head">
+<a href="index.php" class="fanhi displayc"></a>
+<p>乐享推广员平台</p>
+<button class="logout" style="float:right;">退出登录</button>
+</div>
+
 <div class="head_top">
- <div class="head_top_left"><p class="htl_name">欢迎回来 admin</p></div><img src="images/portrait.png" class="htad_tx">
+ <div class="head_top_left">
+ <p class="htl_name">欢迎回来 <?php echo $_SESSION['game'];?></p></div><img src="images/portrait.png" class="htad_tx">
  <div class="head_top_right">我的房卡：0张</div>
 </div>
 <!---->
@@ -62,7 +59,34 @@ body{ background:#fff;}
  
 
     
-<p class="botom">©2015-2016  乐享棋牌  客服微信：dasfdasf</p>
-<script type="text/javascript" src="//code.jquery.com/jquery.js"></script>
+<p class="botom">©2015-2016  乐享棋牌  客服微信：wechat</p>
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.1/jquery.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('.logout').click(function(){
+			$.ajax({
+				url: 'do_ajax.php',
+				type: 'post',
+				dataType: 'json',
+				data: {account: "<?php echo $_SESSION['game'];?>",type:'logout'},
+			})
+			.done(function(res) {
+				if (res.code === 1) {
+					alert(res.msg);
+					location.reload();
+				} else {
+					alert(res.msg);
+				}
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+		})
+	})
+</script>
 </body>
 </html>

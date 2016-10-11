@@ -1,28 +1,10 @@
 <?php 
-	
+	session_start();
 	if (isset($_SESSION) && !empty($_SESSION['game'])) {
 		header('location:index.php');
 		die;
 	}
-	if (isset($_POST['reg'])) {
-		// echo '<pre>';print_r($_POST);
-		$db = new PDO('mysql:host=localhost;dbname=game', 'root', null);
-		$db->exec('set names utf-8');
-		$rs = $db->prepare("SELECT id FROM manager where name=:name");
-		$rs->execute(array(':name'=>$_POST['account']));
-		$result = $rs->fetchAll(PDO::FETCH_ASSOC);
-		if (count($result)) {
-			header('location:register.php');
-			die;
-		}
-		$stmt = $db->prepare("INSERT INTO manager (name, password) VALUES (:name, :password)");
-		$stmt->execute(array(':name'=>$_POST['account'],':password'=>$_POST['pwd']));
-		$db = null;
-		session_start();
-		$_SESSION['game'] = $_POST['account'];
-		setCookie('');
-		header('location:register.php');
-	}
+	
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,7 +41,7 @@
 </div>
 
 <p class="botom">©2015-2016  乐享游戏  客服微信：wechat</p>
-<script type="text/javascript" src="//code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.1/jquery.js"></script>
 <script type="text/javascript">
 	$(function(){
 		$('.login_btn1').click(function(){
@@ -71,11 +53,7 @@
 				return false;
 			};
 			if (pwd.length < 1) {
-				alert('账号不能为空');
-				return false;
-			};
-			if (pwd.length < 1) {
-				alert('账号不能为空');
+				alert('密码不能为空');
 				return false;
 			};
 			if (pwd !== pwd_again) {
@@ -87,12 +65,18 @@
 				return false;
 			};
 			$.ajax({
-				url: 'do_register.php',
+				url: 'do_ajax.php',
 				type: 'post',
 				dataType: 'json',
-				data: {account: account,pwd:pwd},
+				data: {account: account,pwd:pwd,type:'reg'},
 			})
-			.done(function() {
+			.done(function(res) {
+				if (res.code === 1) {
+					alert(res.msg);
+					location.reload();
+				} else {
+					alert(res.msg);
+				}
 				console.log("success");
 			})
 			.fail(function() {
@@ -101,8 +85,12 @@
 			.always(function() {
 				console.log("complete");
 			});
+			return false;
 			
-		})
+		});
+		$('.Reset1').click(function(){
+			$('input').val('');
+		});
 	});
 </script>
 </body>
