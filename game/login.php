@@ -1,5 +1,6 @@
 <?php 
 	session_start();
+	$randCode = $_SESSION['rand_code'] = md5(uniqid());
 	if (isset($_SESSION) && !empty($_SESSION['game'])) {
 		header('location:index.php');
 		die;
@@ -27,6 +28,7 @@
  <input name="" type="password" class="login_input" id="pwd"> 
  <p class="login_bt">验证码</p> 
  <div class="yzm_boy"><input name="" type="text" class="login_input1" id="captcha">
+ <input name="" type="hidden" class="login_input1" id="rand_code" value="<?php echo $randCode;?>" >
 <img id="code" src="create_code.php" alt="看不清楚,换一张" style="cursor: pointer; vertical-align:middle;" onclick="javascript:this.src='create_code.php?zZWa4zWG&tm='+Math.random()" /></div>
 <div class="login_btn">
   <a href="index.html" class="login_btn1">登录</a>
@@ -44,6 +46,7 @@ $(function(){
 			var account = $('#account').val();
 			var pwd = $('#pwd').val();
 			var captcha = $('#captcha').val();
+			var rand_code = $('#rand_code').val();
 			if (account.length < 1) {
 				alert('账号不能为空');
 				return false;
@@ -60,7 +63,7 @@ $(function(){
 				url: 'do_ajax.php',
 				type: 'post',
 				dataType: 'json',
-				data: {account: account,pwd:pwd,captcha:captcha,type:'login'},
+				data: {account: account,pwd:pwd,captcha:captcha,rand_code:rand_code,type:'login'},
 			})
 			.done(function(res) {
 				if (res.code === 1) {
