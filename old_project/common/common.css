@@ -1,0 +1,47 @@
+﻿@charset "utf-8";
+body{font-size:12px; margin:0; padding:0;}
+.selected{background:#B7F8B1;}
+a{color:#333333;text-decoration:none;}
+a:link{color:#000; text-decoration:none;}
+a:visited{color:#000; text-decoration:none;}
+a:hover{color:#F00; text-decoration:underline;}
+a:active{color:#ff0000; text-decoration:underline;}
+.player{text-align:center}
+.size{ width:210px; height:30px; line-height:30px; border:1px solid #d4d4d4; margin:6px 0;}
+.backToTop {
+    display: none;
+    width: 18px;
+    line-height: 1.2;
+    padding: 5px 0;
+    background-color: #000;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    position: fixed;
+    _position: absolute;
+    right: 10px;
+    bottom: 100px;
+    _bottom: auto;
+    cursor: pointer;
+    opacity: .6;
+    filter: Alpha(opacity=60);
+    Z-index:99;
+}
+table{border-collapse:collapse;border-spacing:0;}
+/*
+a{display:inline-block; border-radius:3px; border:1px solid #3680b9; padding:0 10px; line-height:24px; text-decoration:none; font-size:12px; color:#e0ebf3;
+    background:#fff;/*此处可设置背景色或者背景图片，且必须在其他的background之前*/
+    background:-webkit-gradient(linear,0 0,0 100%,from(#4C92C8 ),to(#3680b9));
+    background:-moz-linear-gradient(top,#4C92C8,#3680b9);
+    background:-ms-linear-gradient(top,#4C92C8,#3680b9);
+    background:-o-linear-gradient(top,#4C92C8,#3680b9);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4C92C8', endColorstr='#3680b9', GradientType='0');
+}
+a:hover{border-color:#3c87c1; color:#fff;
+    background:-webkit-gradient(linear,0 0,0 100%,from(#61a6da),to(#438dc6));
+    background:-moz-linear-gradient(top,#61a6da,#438dc6);
+    background:-ms-linear-gradient(top,#61a6da,#438dc6);
+    background:-o-linear-gradient(top,#61a6da,#438dc6);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#61a6da', endColorstr='#438dc6', GradientType='0');
+}
+*/

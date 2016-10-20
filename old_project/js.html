@@ -1,0 +1,1464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title></title>
+</head>
+<script src="common/jquery.1.5.2.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		//全选
+		$("#CheckedAll").click(function(){
+            $("[name=items]:checkbox").attr('checked',true);
+     	});
+		//取消全选
+		$("#CheckedNo").click(function(){
+            $("[name=items]:checkbox").attr('checked',false);
+     	});
+		//反向选择
+		$("#CheckdeRev").click(function(){
+            $("[name=items]:checkbox").each(function(){ //遍历所有的对象，为对象赋予了操作，操作定义在function
+                  $(this).attr("checked",!$(this).attr("checked"));
+           });
+     	});
+		//提交的结果
+		$("#send").click(function(){
+			var str="你选中的是:\r\n"
+			$("[name=items]:checkbox:checked").each(function(){
+                str += $(this).val()+"\r\n";
+          	 });
+			 alert(str);
+		})
+		//用checkbox控制选择状态
+		 $("#CheckedBoxAll").click(function(){
+              $("[name=items]:checkbox").attr("checked",this.checked);
+			  if($(this).is(":checked")){
+			  	 $("#text_ck").html("全不选");
+			  }else{
+			  	 $("#text_ck").html("全选");
+			  }
+          });
+	})
+/*!
+ * jQuery initPage        
+ * Author:zdyue
+ 
+*/
+$.extend({
+    //obj:分页对象;  currentNum:当前页；  totalNum:总页数；  callBackEvent：回调函数
+    initPage : function(options){
+
+        if(!options.obj){ return false; };
+        var obj = $(options.obj); 
+        var currentNum = options.currentNum || 1; 
+        var totalNum = options.totalNum || 5; 
+        var callBackEvent = options.callBackEvent || function(){};
+        var strpage = "";
+
+        function ele(num, cls){
+            var str = "";
+            if(cls){
+                str = "<a href='#"+num+"' class='"+cls+"'>"+num+"</a>";
+            }else{
+                str = "<a href='#"+num+"'>"+num+"</a>";
+            }
+            return str;
+        }
+
+        //Current page is greater than 1 shows previous page
+        if (currentNum > 0) {
+            strpage = "<a href='#1'>首页</a>";
+            obj.append(strpage);
+        }
+        if (currentNum > 1) {                
+            strpage = "<a href='#"+ ( currentNum - 1 ) +"'><<</a>";
+            obj.append(strpage);
+        }
+        
+        if(totalNum <= 5){
+            for(var i=1; i<=totalNum; i++){
+                if(currentNum == i){
+                    strpage = ele(i, "now");
+                }else{
+                    strpage = ele(i);
+                }
+                obj.append(strpage);
+            }
+        }else{
+            for(var i=1; i<=5; i++){
+                if(currentNum == 1 || currentNum == 2){
+                    if(currentNum == i){
+                        strpage = ele(i, "now");
+                    }else{
+                        strpage = ele(i);
+                       
+                    }
+                   
+                }else if( (totalNum - currentNum) == 0 || (totalNum - currentNum) == 1 ){
+                    if( (totalNum - currentNum) == 0 && i == 5){
+                        strpage = ele( (totalNum - 5 + i), "now");
+                    }else if( (totalNum - currentNum) == 1 && i == 4){
+                        strpage = ele( (totalNum - 5 + i), "now");
+                    }else{
+                        strpage = ele( totalNum - 5 + i );
+                    }
+                }else{
+                    if(i == 3){
+                        strpage = ele(currentNum-3+i, "now");
+                    }else{
+                        strpage = ele(currentNum-3+i);
+                    }
+                }
+                 
+                obj.append(strpage);
+                 
+              
+            }
+        }
+        if ((totalNum - currentNum) >= 2) {
+            strpage = "<a href='#'>...</a>";
+            obj.append(strpage);
+        }
+
+        if ((totalNum - currentNum) >= 1) {
+            
+            strpage = "<a href='#"+ ( currentNum + 1 ) +"'>>></a>";
+            obj.append(strpage);
+            strpage = "<a href='#" + (totalNum) + "'>末页</a>";
+            obj.append(strpage);
+        }
+
+        callBackEvent(currentNum, totalNum);
+
+        obj.find("a").click(function(){
+            var currentNum = parseInt($(this).attr("href").substring(1));
+            obj.html("");
+            $.initPage({
+                obj : "#page",
+                currentNum : currentNum,
+                totalNum : totalNum,
+                callBackEvent :callBackEvent
+            });
+            return false;
+        });
+
+    }
+})
+
+
+
+	// 易寻团队 2013-01-01 不用写html排版标签的图片轮播js http://www.yxsss.com/ui/other
+function IMGS(id,w,h,da,c){
+  this.w=w;
+  this.h=h;
+  this.da=da;
+  this.l=da.length;
+  this.html="";
+  this.id=id;
+  this.child={img:[],div:[]};
+  this.cr=0;
+  this.xx=0;
+  this.m=10;
+  this.pr=null;
+  this.time=false;
+  if(typeof c =="undefined"){
+    this.c={bg:"#600",color:"#fff",cbg:"#eee",ccolor:"#600",bc:"#ccc",step:6000}
+  }else{
+    this.c=c;
+  }
+  this.step=this.c.step;
+  this.init();
+}
+
+IMGS.prototype={
+  init:function(){
+	document.writeln('<div id="'+this.id+'" style="position:relative;width:'+this.w+'px;height:'+this.h+'px;"></div>');
+	var Bdiv=document.createElement("div");
+	Bdiv.style.cssText="position:absolute;right:10px;bottom:1px;height:25px;z-index:100;";
+	this.$(this.id).appendChild(Bdiv);
+	var self=this;
+    for(var i=this.l-1;i>=0;i--){
+	  var img=document.createElement("img");
+	  var div=document.createElement("div");
+	  img.width=this.w;
+	  img.height=this.h;
+	  img.border="0";
+	  img.src=this.da[i].src;
+	  img.alt=this.da[i].name;
+	  div.innerHTML=(i+1);
+	  div.style.cssText="float:right;width:20px;height:18px;margin-right:5px;border:1px solid "+this.c.bc+";line-height:18px;text-align:center;cursor:default";
+	  if(i>0){
+	  div.style.cssText+="background:"+this.c.bg+";color:"+this.c.color+";";
+	  }else{
+	  div.style.cssText+="background:"+this.c.cbg+";color:"+this.c.ccolor+";";
+	  }
+	  if(typeof this.da[i].link !=""){
+	    var a=document.createElement("a");
+		a.href=this.da[i].link;
+		a.appendChild(img);
+		this.child.img[i]=a;
+		this.$(this.id).appendChild(a);
+	  }else{
+	   this.child.img[i]=img;
+	   this.$(this.id).appendChild(img);
+	  }
+	  this.child.img[i].style.cssText+=";position:absolute;left:0px;top:0px;z-index:1;display:none";
+	  this.child.div[i]=div;
+	  div.onmouseover=function(){
+	     self.Cl(parseInt(this.innerHTML)-1);
+	  }
+	  if(this.l>0)this.pr=this.child.img[0];
+	  if(this.l>1)Bdiv.appendChild(div);
+	}
+	this.Go();
+  },
+  Go:function(){
+	var self=this; 
+	for(var i=0;i<this.l;i++){
+     this.child.img[i].style.zIndex="1";
+	 this.child.div[i].style.background=this.c.bg;
+	 this.child.div[i].style.color=this.c.color;
+    }
+	if(this.pr!=null)this.pr.style.zIndex="10";
+	this.pr=this.child.img[this.cr];
+	this.m=10;
+	with(this.child.img[this.cr].style){filter='alpha(opacity=10)';opacity=0.1;display="";zIndex="20";}
+	this.None(self,this.child.img[this.cr]);
+	with(this.child.div[this.cr].style){background=this.c.cbg;color=this.c.ccolor;}
+	this.cr++;
+	if(this.cr==this.l)this.cr=0;
+	if(this.l>1)this.time=setTimeout(function(){self.Go()},this.step);
+  },
+  None:function(self,tt){
+	  with(tt.style){filter='alpha(opacity='+self.m+')';opacity=(self.m/100);}
+		self.m+=5;
+		if(self.m<101)
+		self.xx=setTimeout(function(){self.None(self,tt)},10);
+		else
+		clearInterval(self.xx);
+  },
+  Cl:function(cr){
+	 clearInterval(this.xx);
+	 clearTimeout(this.time);
+	 this.cr=cr;
+	 this.Go();
+	 
+  },
+  $:function(id){return document.getElementById(id);}
+}
+</script>
+<body>
+<form>
+      你爱好的运动是？<br/>
+      <input type="checkbox" name="items" value="足球"/>足球
+      <input type="checkbox" name="items" value="篮球"/>篮球
+      <input type="checkbox" name="items" value="羽毛球"/>羽毛球
+      <input type="checkbox" name="items" value="乒乓球"/>乒乓球<br/>
+	  
+	  
+      <input type="button" id="CheckedAll" value="全选"/>
+      <input type="button" id="CheckedNo" value="全不选"/>
+      <input type="button" id="CheckdeRev" value="反选"/>
+      <input type="button" id="send" value="提交"/>
+      <input type="checkbox" id="CheckedBoxAll"><span id="text_ck">全选</span>
+    </form>
+</body>
+
+<script language="javascript" >
+var da=[];
+
+da.push({src:"http://10186.yxsss.com/data/upload/2012/11/21/1353478150_9901_4752.jpg",name:"第一张",link:"http://www.yxsss.com/sg.php?fp=0&tag=%E7%BE%8E%E5%A5%B3"});
+da.push({src:"http://10186.yxsss.com/data/upload/2012/11/21/1353478162_8546_6161.jpg",name:"第二张",link:"http://www.yxsss.com/sg.php?fp=0&tag=%E7%BE%8E%E5%A5%B3"});
+da.push({src:"http://10186.yxsss.com/data/upload/2012/11/21/1353478182_8116_1748.jpg",name:"第四张",link:"http://www.yxsss.com/sg.php?fp=0&tag=%E7%BE%8E%E5%A5%B3"});
+da.push({src:"http://ciaos.yxsss.com/data/upload/2013/01/18/1358475420_6324_6343.jpg",name:"第五张",link:"http://ciaos.yxsss.com/yw2048.html"});
+da.push({src:"http://money.yxsss.com/data/upload/2012/11/24/1353722374_2092_5298.jpg",name:"第六张",link:"http://money.yxsss.com/yw616.html"});
+
+var c={
+	 bg:"#333",//右下数字背景颜色
+	 color:"#FFF",//右下数字颜色
+	 cbg:"#FFF",//右下当前数字背景颜色
+	 ccolor:"#333",//右下当前数字颜色
+	 bc:"#ccc",//边框颜色
+	 step:6000 //步长
+	}
+new IMGS("TopI",600,430,da,c);
+//new IMGS("id号随便写不要和页面的id重复就可以",宽度,高度,数据[,设置]);
+</script>
+
+<style>
+
+html,body{ margin:0 auto; text-align:center; }
+.main{ font:12px/24px "Microsoft YaHei"; height:1000px; }
+#page{ margin:100px auto; width:960px; text-align:center; }
+#page a{ text-decoration:none; display:inline-block; height:24px; padding:0 8px; border-radius:3px; background-color:#DEF39E; color:#8CAC2C; text-align:center; margin:0 2px; }
+#page a:hover,#page .now{ background-color:#8CAC2C; color:#fff; transition:all .5s ease 0s; }
+</style>
+    <div id="main">
+        <div id="page">
+           
+        </div>
+        <div> <a  class="back">1-20 </a></div>
+            </div>
+<script>
+    $(function () {
+        $.initPage({
+            obj: "#page",
+            currentNum: 1,
+            totalNum: 20,
+            callBackEvent: function (now, all) {
+                $(".back").html(now + "-" + all);
+            }
+        });
+    });
+   
+    </script>
+
+jQuery 幻灯, 焦点图
+	<!-- slide -->
+<div class="slide" id="slide">
+	<div class="slide-list">
+		<a href=""><img src="http://10186.yxsss.com/data/upload/2012/11/21/1353478150_9901_4752.jpg" alt="" /></a>
+		<a href=""><img src="http://money.yxsss.com/data/upload/2012/11/24/1353722374_2092_5298.jpg" alt="" /></a>
+		<a href=""><img src="http://ciaos.yxsss.com/data/upload/2013/01/18/1358475420_6324_6343.jpg" alt="" /></a>
+	</div>
+	<div class="point"><a class="now">1</a><a>2</a><a>3</a></div>
+</div>
+<style>
+/* slide */
+.slide { position:relative;height:355px; overflow:hidden; }
+.slide .slide-list { position:absolute; bottom:0; left:0; height:355px; overflow:hidden; }
+.slide .slide-list a { display:block; float:left; width:300px; height:355px; }
+.slide .point { position:absolute; bottom:0; left:0; width:300px; height:24px; text-align:right; }
+.slide .point a { display:inline-block; width:15px; height:15px; margin-right:5px; line-height:15px; background-color:#fff; opacity:.5; filter:alpha(opacity=50); color:#e23f8b; text-align:center; cursor:pointer; text-decoration:none;
+-webkit-border-radius:50%;
+   -moz-border-radius:50%;
+    -ms-border-radius:50%;
+     -o-border-radius:50%;
+        border-radius:50%;
+}
+.slide .point .now { opacity:1; filter:alpha(opacity=100); }
+</style>
+<script>
+$(function(){
+	//http://www.imsole.net/
+	
+	var num = 0;
+	var control = $("#slide .point a");
+	var show_panel = $("#slide .slide-list a");
+	var show_panel_len = $("#slide .slide-list a").length;
+	var show_panel_w = $("#slide .slide-list a").eq(0).width();
+	var timer = setInterval(iShow, 3000);
+	control.mouseover(function(){
+		clearInterval(timer);
+		var i = $(this).index();
+		num = i;
+		control.eq(num).addClass("now").siblings().removeClass("now");
+		show_panel.hide().eq(num).fadeIn(500);
+	}).mouseout(function(){
+		 setInterval(iShow, 3000);
+	});
+	
+	function iShow(){
+		num += 1;
+		if( num==show_panel_len ){
+			num = 0;
+		}
+		control.eq(num).addClass("now").siblings().removeClass("now");
+		show_panel.hide().eq(num).fadeIn(500);
+	}
+	/*
+	var num = 0;
+	var control = $("#slide .point a");
+	var show_panel = $("#slide .slide-list");
+	var show_panel_len = $("#slide .slide-list a").length;
+	var show_panel_w = $("#slide .slide-list a").eq(0).width();
+	var timer = setInterval(iShow, 3000);
+	show_panel.css("width",show_panel_len*show_panel_w+"px");
+	control.mouseover(function(){
+		clearInterval(timer);
+		var i = $(this).index();
+		num = i;
+		control.eq(num).addClass("now").siblings().removeClass("now");
+		show_panel.animate({left:-(show_panel_w*i)+"px"}, 400);
+	}).mouseout(function(){
+		 setInterval(iShow, 3000);
+	});
+	function iShow(){
+		num += 1;
+		if( num==show_panel_len ){
+			num = 0;
+		}
+		control.eq(num).addClass("now").siblings().removeClass("now");
+		show_panel.animate({left:-(show_panel_w*num)+"px"}, 400);
+	}*/
+
+});
+</script>
+<script>
+function strtopic(data) {//js图片替换数字1234567890
+    var html = "";
+    var html1 = "";
+    var obj = Array.prototype.slice.call(data.toString(), 0);
+    if (obj.length < 4) {
+        if (obj.length == 1) {
+            for (i = 0; i < obj.length; i++) {
+                var num = obj[i];
+                html = numtopic(num);
+                html1 = '<img src="/css/numberPNG/number0.png"/><img src="/css/numberPNG/number0.png"/><img src="/css/numberPNG/number0.png"/>';
+
+            }
+        } else if (obj.length = 2) {
+            for (i = 0; i < obj.length; i++) {
+                var num = obj[i];
+                html = numtopic(num);
+                html1 = '<img src="/css/numberPNG/number0.png"/><img src="/css/numberPNG/number0.png"/>';
+
+            }
+        } else if (obj.length = 3) {
+            for (i = 0; i < obj.length; i++) {
+                var num = obj[i];
+                html = numtopic(num);
+                html1 = '<img src="/css/numberPNG/number0.png"/>';
+
+
+            }
+        }
+
+    }
+    else {
+        for (i = 0; i < obj.length; i++) {
+            var num = obj[i];
+            html = numtopic(num);
+
+        }
+    }
+
+    return html1 + html;
+}
+function numtopic(num) {  
+     var html = "";       
+         html += '<img src="/css/numberPNG/number'+num+'.png"/>'; 
+     return html; 
+ } 
+ </script>
+
+ <!-- 
+作者：恺哥
+时间：2008-11-5
+用途：测试动态表头与动态表列的展现
+-->
+<script language="javascript">
+//初始化表列
+var t_column = new Array("col_head");
+for(var m=0;m<10;m++){
+  t_column.push("col"+m);
+}
+//初始化表行
+var t_row = new Array();
+for(var m=0;m<5;m++){
+  t_row.push("row"+m);
+}
+function p(o){
+  document.writeln(o);
+}
+
+p("<table width=\"95%\" border=\"1\">");
+p("<tr>");
+for(var i=0;i<t_column.length;i++){
+  p("<td>"+t_column[i]+"</td>");
+}
+p("</tr>");
+for(var j=0;j<t_row.length;j++){
+  p("<tr>");
+   p("<td>"+t_row[j]+"</td>");
+   for(var k=1;k<t_column.length;k++){
+    p("<td>value"+k+"</td>");
+   }
+  p("</tr>");
+}
+p("</table>");
+</script>
+        <script type="text/javascript">
+            function selectAll(checkbox) {
+                $('input[type=checkbox]').prop('checked', $(checkbox).prop('checked'));
+            }
+        </script>
+        <input type="checkbox" onclick="selectAll(this);" />全选<br/>
+        <input type="checkbox"  /><br/>
+        <input type="checkbox"  /><br/>
+        <input type="checkbox"  /><br/>
+        <input type="checkbox"  /><br/>
+        <input type="checkbox"  /><br/>
+        <input type="checkbox"  /><br/>
+<script src="jquery.form.js"></script>
+<script>
+//jquery Ajax提交方式
+function　checkCorpID()//检测客户编号是否可用
+{
+ if($.trim($("#content").value)=="")//txtF_CORPID是客户编号输入框
+ {
+  alert("请输入客户编号!");
+ }
+ else
+ {
+  $("#checkFlag").html("正在检测");//显示提示信息
+  $.ajax({
+  type:　"get",
+  url:　"CheckCorpID.ashx",
+  data:　"ID="+$.trim($("#content")[0].value),//提交表单，相当CheckCorpID.ashx?ID=XXX
+  success:　function(msg){$("#checkFlag").html("");alert(　　msg　);　}　　　//操作成功后的操作！msg是后台传过来的值
+  });　
+ }　
+}
+</script>
+<script>
+function submitform(){
+var option={beforeSubmit:function() {valiform();},success:function(responseText,statusText){result(responseText,statusText);}};
+var form=jQuery('#form');
+form.ajaxForm(option);
+form.submit();
+return false;
+}
+function valiform(){
+   //表单验证
+}
+function result(r,s){
+   //提交成功后的处理
+}
+</script>
+<form id="form" action="/info/save.ax">
+  <input id="content" name="content" value=""/>
+</form>
+
+一个简单的jQuery分页代码，将网页指定的文字段落分成若干个小段，实现分段功能
+<style type="text/css" rel="stylesheet">
+.page{
+	display:none;
+}
+	#pagnation a{
+		padding-right:5px;
+	}
+	.current {
+		color:blue;
+	}
+	#pagnation{
+		margin-top:20px;
+		}
+	.numlink,#prev,#next
+	{
+	background-color: #F5F5F5;
+    border: 1px solid #EBEBEB;
+    color: #0072BC;
+    font-weight: normal;
+    margin-left: 10px;
+    padding: 2px 7px;
+    text-decoration: none;
+    width: 22px;;
+	}
+	.current
+	{
+	 background-color: #DDEEFF;
+    border: 1px solid #BBDDFF;
+    color: #0072BC;
+    cursor: default;
+    margin-left: 10px;
+    padding: 2px 7px;
+    text-decoration: none;	
+	}
+	</style>
+</head>
+ 
+<body>
+<div id="content">
+<div class="page">
+这里是第一段内容
+</div>
+<div class="page">
+这里是第二段内容
+</div>
+<div class="page">
+第三段内容</div>
+<div class="page">
+第四段内容
+</div>
+<div id="pagnation">
+</div>
+</div>
+<script type="text/javascript"> 
+	var _Pages = $('.page');
+	var _Nav = $('#pagnation');
+	function createLinks(){
+		_Nav.append('<a href="#" id="prev">Prev</a>');
+		for(var i=0;i<$('.page').length;i++){
+			_Nav.append('<a href="#" class="numlink">'+(i+1)+'</a>');
+		}
+		_Nav.append('<a href="#" id="next">Next</a>');
+	}
+	function process(now,_Prev,_Next){
+		$('.page:eq('+now+')').css('display','block');
+		$('.numlink:eq('+now+')').addClass('current');
+		var total = parseInt($('.page').length - 1);
+		if(now == 0){
+			_Prev.hide();
+			_Next.show();
+		}
+		else if(now == total){
+			_Prev.show();
+			_Next.hide();
+		}
+		else {
+			_Prev.show();
+			_Next.show();
+		} 
+	}
+	function hideAll(){
+		_Pages.css('display','none');
+		$('.numlink').removeClass('current');
+	}
+	$(document).ready(function(){
+		//set the first one display none
+		$('.page:eq(0)').css('display','block');
+		createLinks();
+		$('.numlink:eq(0)').addClass('current');
+		var _Next = $('#next');
+		var _Prev = $('#prev');
+		var _Link = $('.numlink');
+		_Prev.hide();
+		var now =  parseInt($('.numlink').index($('.current')));
+		_Next.click(function(){
+			 hideAll();
+			 process(now+1,_Prev,_Next);
+			 now = parseInt($('.numlink').index($('.current')));
+		});
+		_Prev.click(function(){
+			hideAll();
+			process(now-1,_Prev,_Next);
+			now = parseInt($('.numlink').index($('.current')));
+		})
+		_Link.click(function(){
+			var that = $(this);
+			hideAll();
+			var which = that.index() - 1;
+			process(which,_Prev,_Next);
+			now = parseInt($('.numlink').index($('.current'))); 
+		})
+	})
+</script>	
+</iframe></noscript></object></layer></span></div></table>
+<form id="myForm" action="comment.php" method="post">
+Name: <input type="text" name="name" />
+Comment: <textarea name="comment"></textarea>
+<input type="submit" value="Submit Comment" />
+</form>
+<script src='json2.js'></script>
+<script type="text/javascript">
+// wait for the DOM to be loaded
+          $(document).ready(function() {
+// bind 'myForm' and provide a simple callback function
+          $('#myForm').ajaxForm(function() {
+			alert("Thank you for your comment!");
+			});
+
+
+			// 绑定表单提交事件处理器
+	$('#myForm').submit(function() {
+	// 提交表单
+	$(this).ajaxSubmit();
+	// 为了防止普通浏览器进行表单提交和产生页面导航（防止页面刷新？）返回false
+	return false;
+	});
+});
+//在数据传输流程中，json是以文本，即字符串的形式传递的，而JS操作的是JSON对象，所以，JSON对象和JSON字符串之间的相互转换是关键
+var str = '{ "name": "cxh", "sex": "man" }'; var data=eval("("+str+")");//转换为json对象
+//alert(data.name);
+//JSON字符串:
+
+    var str1 = '{ "name": "cxh", "sex": "man" }';
+
+ //   JSON对象:
+
+    var str2 = { "name": "cxh", "sex": "man" };
+//var obj = str.parseJSON(); //由JSON字符串转换为JSON对象
+ var obj = JSON.parse(str); //由JSON字符串转换为JSON对象
+//alert(obj.name);
+
+//var last=obj.toJSONString(); //将JSON对象转化为JSON字符
+var last=JSON.stringify(obj); //将JSON对象转化为JSON字符
+//alert(typeof last);//string
+//除了eval()函数是js自带的之外，其他的多个要领都来自json.js包
+//现在大多数浏览器（IE8及以上，Chrome和Firefox差不多全部）自带原生JSON对象，提供JSON.parse()方法解析JSON，提供JSON.stringify()方法生成JSON，请使用这两个方法！
+//如果担心parse()对对象抛异常，可以加一个封装函数： 
+/*JSON.pParse = function( tar ) {
+    if( typeof( tar ) === 'string' ) {
+        return JSON.parse( tar );
+    } else {
+        return tar;
+    }
+};*/
+//由于json只接受utf-8编码的字符，所以json_encode()的参数必须是utf-8编码，否则会得到空字符或者null。当中文使用GB2312编码，或者外文使用ISO-8859-1编码的时候，这一点要特别注意。
+//由于javascript不支持关联数组，所以json_encode()只将索引数组（indexed array）转为数组格式，而将关联数组（associative array）转为对象格式。
+//如果你需要将"索引数组"强制转化成"对象"，可以这样写
+
+//json_encode( (object)$arr );
+////对类的实例进行json转换
+//除了公开变量（public），其他东西（常量、私有变量、方法等等）都遗失了
+//json_decode()总是返回一个PHP对象，而不是数组
+//如果想要强制生成PHP关联数组，json_decode()需要加一个参数true：json_decode($json,true);
+//json只能用来表示对象（object）和数组（array），如果对一个字符串或数值使用json_decode()，将会返回null。
+
+//var_dump(json_decode("Hello World")); //null
+//用javascript实现常用排序 http://gaubee.github.com/Collect/Classification/javascript/Sort/Sort.html
+
+//<img src="'+this.src+'" />此处建议使用<img src="'+$(this).attr("src")+'" />
+//$("input[name='items']:checked").val(); jquery取radio单选按钮的值 
+//$("input[name='items'][checked]").val();获取一组radio被选中项的值 
+//var item = $("select[name=items] option[selected]").text();获取select被选中项的文本  
+//单选组radio： $("input[type=radio][checked]").val(); 
+//$('input[name=items]').get(1).checked = true; radio单选组的第二个元素为当前选中值  
+//$("#sel").empty()；//清空下拉框 
+
+
+function checkradio(){
+var item = $(":radio:checked");
+var len=item.length;
+if(len>0){
+  //alert("yes--选中的值为："+$(":radio:checked").val());
+}
+}
+if (top.location != self.location)top.location=self.location;
+
+
+
+
+
+
+
+
+
+
+//插入排序
+function insert_sort(array){
+		if(array && array.length>0){
+			var l = arrray.length;
+			for(var i=1;i<l;i++){
+				var t = array[i];
+				var j = i-1;
+				while(array[j]>t && j>=0){
+					array[j+1]=array[j];
+					array[j]=t;
+					--j;
+				}
+			}
+		}
+	}
+
+//合并排序
+
+function merge_sort(array,p,q){
+		if(p<q){
+			var s=(p+q)/2;
+			s = Math.floor(s);
+			merge_sort(array,p,s);
+			merge_sort(array,s+1,q);
+			merge(array,p,s,q);
+		}
+	}
+	
+	function merge(array,p,s,q){
+		if(array){
+			var l1 = s-p+1;
+			var l2 = q-s;
+			
+			var a1 = new Array();
+			var a2 = new Array();
+			
+			for(i=p,m=0;i<=s;i++){
+				a1[m++]=array[i];
+			}
+			for(i=s+1,m=0;i<=q;i++){
+				a2[m++]=array[i];
+			}
+			
+			var m=0;
+			var n=0;
+			for(var i=p;i<=q;i++){
+				if(m>=l1){
+					array[i]=a2[n++];
+				}else  if(n>=l2){
+					array[i]=a1[m++];
+				}else if(a1[m]<a2[n]){
+					array[i]=a1[m++];
+				}else{
+					array[i]=a2[n++];
+				}
+			}
+		}
+	}
+//选择排序
+function select_sort(array){
+		if(array && array.length>0){
+			var length = array.length;
+			
+			var t=0;
+			var min;
+			for(var i=0;i<length;i++){
+				min = array[i];
+				t = i;
+				for(var j=i+1;j<length;j++){
+					if(array[t]<array[j]){
+						min = array[j];
+						t = j;
+					}
+				}
+				if( i != t){
+					array[t] = array[i];
+					array[i] = min;
+				}
+			}
+		}
+	}
+
+//快速排序
+function quicksort(array , first, end){
+		if(first<end){
+			var partition = partitions(array,first,end);
+			quicksort(array,first,partition-1);
+			quicksort(array,partition+1,end);
+		}
+	}
+	
+	function partitions(array , p ,q){
+		var l = p+1;
+		var key=array[p];
+		var h = q;
+		
+		while(l<h){
+			while(array[l]<=key && l<h){
+				++l;
+			}
+			while(array[h]>key && h>l){
+				--h;
+			}
+			var o = array[l];
+			array[l] = array[h];
+			array[h] = o;
+		}
+		if(array[l]>key){
+			array[p]=array[l-1];
+			array[l-1]=key;
+			l = l -1 ;
+		}else{
+			array[p]=array[l];
+			array[l]=key;
+		}
+		return l;
+	}
+//堆排序
+function heap_sort(arr){
+		if(!arr || arr.length<2){
+			return arr; 
+		}
+		var length = arr.length;
+		for(var j=0;j<length;j++){
+			var size = length - j;
+			for(var i = parseInt(size/2)-1;i>=0;i--){
+				max_heapify(arr,i,size);
+			}
+			swap(arr,0,size-1);
+		}
+	}
+	
+	function max_heapify(arr,i,size){
+		var l = 2 * (i+1)-1;
+		var r = l + 1;
+		var max = i;
+		if(l<size && arr[l]>arr[i]){
+			max = l;
+		}
+		if(r<size && arr[r]>arr[max]){
+			max = r;
+		}
+		if(max != i){
+			swap(arr,i,max);
+			max_heapify(arr,max,size);
+		}
+	}
+	//jQuery 返回头部[顶部] 代码
+	/*var main_left = Math.round($(".main").offset().left+980)+"px";
+	var back_top_ele = "<a href='javascript:;' id='back_top'></a>";
+	var back_top_sty = {width:"15px", height:"60px", bottom:"100px", left:main_left, position:"fixed", display:"none", background:"red" };
+	$("body").append(back_top_ele);
+	$("#back_top").css(back_top_sty);
+	$(window).scroll(function(){
+		if( $(window).scrollTop() > 200 ){
+			if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) {
+				$("#back_top").css({ display:"block", position:"absolute", top:$(window).scrollTop()+450+"px"});
+			}else{
+				$("#back_top").css({ display:"block", position:"fixed"});
+			}
+		}else{
+			$("#back_top").hide();
+		}
+	});
+	$(window).resize(function(){
+		if($(window).width() <= 1000){
+			main_left = $(window).width()-20+"px";
+		}else{
+			main_left = Math.round($(".main").offset().left+980)+"px";
+		}
+		$("#back_top").css("left",main_left);
+	});
+	$("#back_top").click(function(){
+		$("html, body").animate({scrollTop:0}, 500);
+		return false;
+	});
+	*/
+/*var back_top_sty = {bottom:"120px", right:"100px",cursor:"pointer", position:"fixed", display:"", background:"red" }; 
+$("body").append("<a href='javascript:;' id='back_top' title='Top'><img src='http://www.oschina.net/img/gotop.gif' style='width:31px;height:31px'></a>");
+$("#back_top").css(back_top_sty); 
+$(window).scroll(function(){ 
+if( $(window).scrollTop() > 200 ){ 
+if ($.browser.msie && ($.browser.version == "6.0") && !$.support.style) { 
+$("#back_top").css({ display:"block", position:"absolute", top:$(window).scrollTop()+450+"px"}); 
+}else{ 
+$("#back_top").css({ display:"block", position:"fixed"}); 
+} 
+}else{ 
+$("#back_top").hide(); 
+} 
+}); 
+$("#back_top").click(function(){ 
+$("html, body").animate({scrollTop:0}, 100); 
+return false; 
+}); 
+*/</script>
+<script src='scrolltopcontrol.js'></script>
+<script>
+	scrolltotop.offset(100,120);
+	scrolltotop.init();
+$('#my-select').multiSelect();
+</script>
+<div id="topcontrol" style="position: fixed; bottom: 120px; right: 100px; cursor: pointer; display: none; " title="回到顶部"><img src="http://www.oschina.net/img/gotop.gif" style="width:31px; height:31px;"></div>
+<script>
+//给页面添加视频播放插件
+   // document.write('<iframe width=964 height=530 src="http://www.ls85.com/tv/iframe.html"  frameborder=0 border=0 marginwidth=0 marginheight=0 scrolling=false></iframe>')
+</script>
+
+<select multiple="multiple" id="my-select" name="my-select[]">
+      <option value='elem_1'>elem 1</option>
+      <option value='elem_2'>elem 2</option>
+      <option value='elem_3'>elem 3</option>
+      <option value='elem_4'>elem 4</option>
+      ...
+      <option value='elem_100'>elem 100</option>
+    </select>
+    <script src="jquery.multi-select.js" type="text/javascript"></script>
+
+<style type="text/css"> 
+#tip			{position:absolute;display:none;}
+#tip s			{position:absolute;top:40px;left:-21px;display:block;width:0px;height:0px;font-size:0px;line-height:0px;border-color:transparent #BBA transparent transparent;border-style:dashed solid dashed dashed;border-width:10px;}
+#tip s i		{position:absolute;top:-10px;left:-8px;display:block;width:0px;height:0px;font-size:0px;line-height:0px;border-color:transparent #fff transparent transparent;border-style:dashed solid dashed dashed;border-width:10px;}
+#tip .t_box		{position:relative;background-color:#CCC;filter:alpha(opacity=50);-moz-opacity:0.5;bottom:-3px;right:-3px;}
+#tip .t_box div		{position:relative;background-color:#FFF;border:1px solid #ACA899;padding:1px;top:-3px;left:-3px;}
+.tip			{width:82px;height:82px;border:1px solid #DDD;}
+</style>
+<script type="text/javascript"> 
+$(function(){
+   $('.tip').mouseover(function(){
+      var $tip=$('<div id="tip"><div class="t_box"><div><s><i></i></s><img src="'+this.src+'" /></div></div></div>');
+      $('body').append($tip);
+      $('#tip').show('fast');
+   }).mouseout(function(){
+      $('#tip').remove();
+   }).mousemove(function(e){
+      $('#tip').css({"top":(e.pageY-60)+"px","left":(e.pageX+30)+"px"})
+   })
+})
+</script>
+<p> </p>
+<a href="http://www.qiahui.com/" ><img class="tip" src="http://img04.taobaocdn.com/bao/uploaded/i4/T1dEBQXipuXXczdj2a_091642.jpg_310x310.jpg" /></a>
+<a href="http://www.qiahui.com/" ><img class="tip" src="http://img03.taobaocdn.com/bao/uploaded/i3/T1JrxRXhVjXXXPQgc2_044150.jpg_310x310.jpg" /></a>
+<a href="http://www.qiahui.com/" ><img class="tip" src="http://img03.taobaocdn.com/bao/uploaded/i3/T1tDNOXfNeXXXkeTI8_102031.jpg_310x310.jpg" /></a>
+
+
+
+jquery弹出层效果，可随滚动条滚动 
+<style type="text/css">
+	*{margin:0px; padding:0px; font-size:12px;}
+	a{color:#0000FF;}
+	a:hover{color:#0000FF;}
+</style>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+<input type="button" value="弹出" onclick="$('#popup').show();" /><br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+1 <br>
+<!-- 主要部分 -->
+<div id="popup" class="popup_box" style="display:none;">
+<style type="text/css">
+	.ulogin{width:230px; height:30px; line-height:30px; border:1px solid #D5D5D5;}
+	.savetime{width:100px; height: 20px; line-height:20px; border:1px solid #DFDFDF;}
+	.savetime option {line-height:20px;}
+	.login_btn{width:300px; text-align:left;}
+	.login_btn a{margin:0px 6px; _margin:0px 0px;}
+	.login_btn .login_a{ width: 24px; height:30px; line-height:30px; padding:6px 25px; background-color:#7CDAFF; color: #DFDFDF; overflow:hidden;}
+	.popup_title{width:100%; height:30px; line-height:30px; background-color:#DFDFDF;}
+	.popup_title dt{width:95%; float:left; text-indent:1em; font-weight:bold;}
+	.popup_title dd{width:4%; float:right;}
+
+	.popup_content{width:100%; height:30px; line-height:30px; padding:10px 0px 20px 0px; background-color:#FFF;}
+	.popup_content li{width:100%; float:left; text-indent:0.5em;  overflow:hidden;}
+	ol.popup_content li{list-style-type:lower-roman;}
+</style>
+<div id="maskLevel" style="position: absolute; top: 0px; left: 0px; text-align: center; z-index: 1000; background:#000; filter:alpha(opacity=10);  opacity: 0.1; -moz-opacity:0.1; width: 100%; height: 100%;"></div>
+<div style="position: absolute; top: 200px; left: 30%;z-index: 1001; background:#FFF; width: 410px; height: auto; border:5px solid #666666; padding-bottom:10px;">
+	<dl class="popup_title">
+		<dt>弹出标题</dt>
+		<dd><a href="javascript:;" onclick="$('#popup').hide();">X</a></dd>
+	</dl>
+	<ol class="popup_content">
+		<li><a href="http://www.5jiuai.com/?p=1182" target="_blank">js:input只能输入数字字符，并且规定输入值的大小</a></li>
+		<li><a href="http://www.5jiuai.com/?p=1122" target="_blank">php正则分析URL字符串</a></li>
+		<li><a href="http://www.5jiuai.com/?p=964" target="_blank">将赋值形式字符串转换为变量</a></li>
+		<li><a href="http://www.5jiuai.com/?p=960" target="_blank">按一维数组元素个数平均拆分数组，拆分优先满足前面的数组</a></li>
+		<li><a href="http://www.5jiuai.com/?p=955" target="_blank">建立url或者路径path的文件夹</a></li>
+		<li><a href="http://www.5jiuai.com/?p=946" target="_blank">显示默认图片，图片信息以及滚动显示图片</a></li>
+		<li><a href="http://www.5jiuai.com/?p=834" target="_blank">利用Jquery插件实现jqzoom图片放大效果</a></li>
+		<li><a href="http://www.5jiuai.com/?p=736" target="_blank">通过js获取浏览器宽高的两种方法</a></li>
+		<li><a href="http://www.5jiuai.com/?p=497" target="_blank">在win中使用mail()发邮件（sendmail配置）</a></li>
+		<li><a href="http://www.5jiuai.com/?p=338" target="_blank">php-mysql操作类(支持Ｍysql5以上版本,不需要自己写SQL语句)</a></li>
+	</ol>
+	 <script language="javascript">
+	 <!--
+		$(window).scroll(function (){
+			windowScrollUpload(this);
+		});
+		function windowScrollUpload(obj){
+			$('#popup > div').eq(0).css({
+				'top': $(obj).scrollTop()+'px'
+			});
+
+			$('#popup > div').eq(1).css({
+				'top':($(obj).scrollTop()<200 ? 200 : $(obj).scrollTop())+'px'
+			});
+		}
+	 //-->
+	 </script>
+ </div>
+</div>
+<!-- 主要部分 -->
+<script>
+// 获取 URL 中传递的参数
+$.urlParam = function(name){
+	var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	if (!results) { return 0; }
+	return results[1] || 0;
+}
+//http://www.oschina.net/search/MySQL?scope=code&lang=0&q=MySQL&p=21
+//禁用表单的回车键提交
+$("#form").keypress(function(e) {
+  if (e.which == 13) {
+    return false;
+  }
+});
+//在一些老的浏览器上启用 HTML5 的支持
+(function(){
+    if(!/*@cc_on!@*/0)
+        return;
+    var e = "abbr,article,aside,audio,bb,canvas,datagrid,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','),i=e.length;while(i--){document.createElement(e[i])}
+})()
+
+//然后在head中引入该js
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</script>
+
+
+<script>
+/**
+ * @name		jQuery Cascdejs plugin
+ * @author		zdy
+ * @version 	1.0 
+ */
+
+//首先需要初始化
+var xmlDoc;
+var TopnodeList;
+var citys;
+var countyNodes;
+var nodeindex = 0;
+var childnodeindex = 0;
+//获取xml文件
+function Init(v1,v2,v3) {
+    //打开xlmdocm文档
+    xmlDoc = loadXmlFile('Area.xml');
+    var dropElement1 = document.getElementById("Select1");
+    var dropElement2 = document.getElementById("Select2");
+    var dropElement3 = document.getElementById("Select3");
+    RemoveDropDownList(dropElement1);
+    RemoveDropDownList(dropElement2);
+    RemoveDropDownList(dropElement3);
+    if (window.ActiveXObject) {
+        TopnodeList = xmlDoc.selectSingleNode("address").childNodes;
+    }
+    else {
+        TopnodeList = xmlDoc.childNodes[0].getElementsByTagName("province");      
+     }  
+    if (TopnodeList.length > 0) {
+        //省份列表
+        var county;
+        var province;
+        var city;
+        for (var i = 0; i < TopnodeList.length; i++) {
+            //添加列表项目
+            county = TopnodeList[i];          
+            var option = document.createElement("option");
+            option.value = county.getAttribute("name");
+            option.text = county.getAttribute("name");
+            if (v1 == option.value) {
+                option.selected = true;
+                nodeindex = i;
+            }
+            dropElement1.add(option);
+        }
+        if (TopnodeList.length > 0) {
+            //城市列表
+            citys = TopnodeList[nodeindex].getElementsByTagName("city")
+            for (var i = 0; i < citys.length; i++) {
+                var id = dropElement1.options[nodeindex].value;
+                //默认为第一个省份的城市
+                province = TopnodeList[nodeindex].getElementsByTagName("city");
+                var option = document.createElement("option");
+                option.value = province[i] .getAttribute("name");
+                option.text = province[i].getAttribute("name");
+                if (v2 == option.value) {
+                    option.selected = true;
+                    childnodeindex = i;
+                }
+                dropElement2.add(option);
+            }
+            if (province .length> 0) {
+                //县列表
+                for (var i = 0; i < TopnodeList[0].childNodes.length; i++) {
+                    var id = dropElement2.options[0].value;
+                    //默认为第一个城市的第一个县列表
+                    city = province[childnodeindex].getElementsByTagName("county");;
+                    var option = document.createElement("option");
+                    option.value = city[i].getAttribute("name");
+                    option.text = city[i].getAttribute("name");
+                    if (v3 == option.value) {
+                        option.selected = true;
+                    }
+                    this.document.getElementById("Select3").add(option);
+                }
+        
+            }
+        }
+    }
+}
+
+/*
+//依据省设置城市，县
+*/
+function selectCity() {
+    var dropElement1 = document.getElementById("Select1");
+    var name = dropElement1.options[dropElement1.selectedIndex].value;     
+    countyNodes = TopnodeList[dropElement1.selectedIndex];      
+    var province = document.getElementById("Select2");
+    var city = document.getElementById("Select3");
+    RemoveDropDownList(province);
+    RemoveDropDownList(city);
+    var citynodes;
+    var countycodes;
+    if (window.ActiveXObject) {
+        citynodes = xmlDoc.selectSingleNode('//address/province [@name="' + name + '"]').childNodes;
+    } else {
+        citynodes = countyNodes.getElementsByTagName("city")
+    }
+    if (window.ActiveXObject) {
+        countycodes = citynodes[0].childNodes;
+    } else {
+        countycodes = citynodes[0].getElementsByTagName("county")
+    }
+  
+    if (citynodes.length > 0) {
+        //城市          
+        for (var i = 0; i < citynodes.length; i++) {
+            var provinceNode = citynodes[i];
+            var option = document.createElement("option");
+            option.value = provinceNode.getAttribute("name");
+            option.text = provinceNode.getAttribute("name");
+            province.add(option);
+        }
+        if (countycodes.length > 0) {
+            //填充选择省份的第一个城市的县列表
+            for (var i = 0; i < countycodes.length; i++) {
+                var dropElement2 = document.getElementById("Select2");
+                var dropElement3 = document.getElementById("Select3");
+                //取当天省份下第一个城市列表
+                
+                //alert(cityNode.childNodes.length); 
+                var option = document.createElement("option");
+                option.value = countycodes[i].getAttribute("name");
+                option.text = countycodes[i].getAttribute("name");
+                dropElement3.add(option);
+            }
+        }
+    }
+}
+/*
+//设置县,区
+*/
+function selectcounty() {
+    var dropElement1 = document.getElementById("Select1");
+    var dropElement2 = document.getElementById("Select2");
+    var name = dropElement2.options[dropElement2.selectedIndex].value;
+    var city = document.getElementById("Select3");  
+    var countys = TopnodeList[dropElement1.selectedIndex].getElementsByTagName("city")[dropElement2.selectedIndex].getElementsByTagName("county")
+    RemoveDropDownList(city);
+    for (var i = 0; i < countys.length; i++) {
+        var countyNode = countys[i];
+        var option = document.createElement("option");
+        option.value = countyNode.getAttribute("name");
+        option.text = countyNode.getAttribute("name");
+        city.add(option);
+    }
+}
+function RemoveDropDownList(obj) {
+    if (obj) {
+        var len = obj.options.length;
+        if (len > 0) {  
+            for (var i = len; i >= 0; i--) {
+                obj.remove(i);
+            }
+        }
+    }
+
+}
+/*
+//读取xml文件
+*/
+function loadXmlFile(xmlFile) {
+    var xmlDom = null;
+    if (window.ActiveXObject) {
+        xmlDom = new ActiveXObject("Microsoft.XMLDOM");
+        xmlDom.async = false;
+        xmlDom.load(xmlFile) || xmlDom.loadXML(xmlFile);//如果用的是XML字符串//如果用的是xml文件  
+    } else if (document.implementation && document.implementation.createDocument) {
+        var xmlhttp = new window.XMLHttpRequest();
+        xmlhttp.open("GET", xmlFile, false);
+        xmlhttp.send(null);
+        xmlDom = xmlhttp.responseXML;
+    } else {
+        xmlDom = null;
+    }
+    return xmlDom;
+}
+
+ 
+
+</script>
+
+<style type="text/css">
+/* basic */
+body { background:#f9f9f9; margin:0 auto; font:12px/24px tahoma, Helvetica, Arial; text-align:center; }
+body,iframe,div,p,h1,h2,h3,h4,h5,h6,fieldset,ul,dl,dt,dd,form,input,button,textarea,select,i { margin:0px; padding:0px; font-weight:normal; }
+ul { list-style:none; overflow:hidden; }
+img { border:none; }
+.main{ font:12px/24px "Microsoft YaHei"; width:960px; margin:100px auto; position:relative; text-align:left; }
+.main:after{ content:""; clear:both; display:table; }
+
+#show{ width:400px; height:400px; overflow:hidden; position:relative; left:0; }
+#show_mark{ position:absolute; top:0; left:0; width:200px; height:100px; background-color:#000; opacity:.5; filter:alpha(opacity=50); cursor:crosshair; border:1px solid #999; display:none; }
+#zoom{ position:absolute; left:410px; top:0; z-index:3; width:400px; height:400px; display:none; overflow:hidden; border:1px solid #eee; }
+#zoom img{ position:absolute; left:0; top:0; }
+</style>
+
+</head>
+
+<body>
+<div class="main">
+	<div id="show">
+		<img src="http://p1.vanclimg.com/product/0/1/8/0180997/mid/0180997-1j201208211605141213.jpg" id="show_pic" />
+	</div>
+	<div id="zoom">
+		<img src="http://p1.vanclimg.com/product/0/1/8/0180997/big/0180997-1j201208211605141213.jpg" />
+	</div>
+	
+</div>
+<div class="xy">自定义内容</div>
+<script type="text/javascript">
+
+$(function(){
+	
+	$("#show").simpleZoom({
+		zoomBox : "#zoom",
+		markSize : [200, 200],
+		zoomSize : [400, 400],
+		zoomImg : [800, 800]
+	});
+
+});
+
+/* 
+ * @name: jQuery simple zoom plus v1.0
+ * @time: 2013/1/24
+ * @author: sole
+ * @Mail:macore@163.com
+ * @url: http://www.imsole.net/
+ * @Copyright 2012 - http://www.imsole.net/
+ * @html5+css3+jQuery+响应式设计布局: http://www.imsole.net/html5/
+*/
+;(function($){
+	$.fn.simpleZoom = function(options){
+		var defs = {
+			zoomBox : "#zoomBox",			//需要放大的区域
+			markSize : [200, 100],			//放大镜宽高
+			zoomSize : [400, 400],			//需要放大的区域宽高
+			zoomImg : [800, 800]			//需要放大的区域的图片的宽高
+		};
+		var opt = $.fn.extend({}, defs, options);
+		return this.each(function(){
+			var markBox = $(this);
+			var zoomBox = $(opt.zoomBox);
+			var zoom_img = $(opt.zoomBox).find("img"); 
+			var markBoxSize = [markBox.width(), markBox.height(), markBox.offset().left, markBox.offset().top];
+			var markSize = opt.markSize;
+			var zoomSize = opt.zoomSize;
+			var zoomImg = opt.zoomImg;
+			var mark_ele = "<i id='mark'></i>";
+			var mark_css = {position:"absolute", top:0, left:0, width:markSize[0]+"px", height:markSize[1]+"px", backgroundColor:"#000", opacity:.5, filter:"alpha(opacity=50)",  display:"none", cursor:"crosshair"};
+			
+			var show_w = markBoxSize[0]-markSize[0];
+			var show_h = markBoxSize[1]-markSize[1];
+
+			//created mark element and add cascading style sheets
+			zoomBox.css({width:zoomSize[0]+"px", height:zoomSize[1]+"px"});
+			markBox.append(mark_ele);
+			$("#mark").css(mark_css);
+
+			markBox.mouseover(function(){
+				$("#mark").show();
+				zoomBox.show();
+			}).mouseout(function(){
+				$("#mark").hide();
+				zoomBox.hide();
+			}).mousemove(function(e){
+				var l = e.pageX-markBoxSize[2]-(markSize[0]/2);
+				var t = e.pageY-markBoxSize[3]-(markSize[1]/2);
+				if(l < 0){
+					l = 0;
+				}else if(l > show_w){
+					l = show_w;
+				}
+				if(t < 0){
+					t = 0;
+				}else if(t > show_h){
+					t = show_h;
+				}
+
+				$("#mark").css({left:l+"px", top:t+"px"});
+				
+				var z_x = -(l/show_w)*(zoomImg[0]-zoomSize[0]);
+				var z_y = -(t/show_h)*(zoomImg[1]-zoomSize[1]);
+				zoom_img.css({left:z_x+"px", top:z_y+"px"});
+			});
+		});
+	}
+})(jQuery);
+
+</script>

@@ -6,8 +6,8 @@
 	session_start();
 	
 	try {
-	    // $db = new PDO('mysql:host=115.28.173.19;dbname=centers', 'root', 'tes12345');
-		$db = new PDO('mysql:host=localhost;dbname=game', 'root', null);
+	    $db = new PDO('mysql:host=118.178.132.207;dbname=centers', 'root', 'ourbestgame');
+		// $db = new PDO('mysql:host=localhost;dbname=game', 'root', null);
 	} catch (PDOException $e ) {
 	    echo json_encode(['code' => 0, 'msg' => $e -> getMessage ()]);die;
 	}
