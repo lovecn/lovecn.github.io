@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>一颗爱你的心</title>
+</head>
+<style>
+body{
+		background-color:#000;
+	}
+
+	#heart { 
+		position: absolute; 
+		width: 400px; 
+		height: 400px;
+		margin-left: -200px;
+		margin-top: -200px; 
+		top:50%;
+		left:50%;
+
+		-webkit-animation:moveheart 4s infinite;
+		-moz-animation:moveheart 4s infinite;
+		-o-animation:moveheart 4s infinite;
+		-ms-animation:moveheart 4s infinite;
+		animation:moveheart 4s infinite;
+	} 
+	#heart:before, 
+	#heart:after { 
+		position: absolute; 
+		content: ""; 
+		left: 200px; 
+		top: 0; 
+		width: 200px; 
+		height: 300px; 
+		background: red; 
+		-moz-border-radius: 200px 200px 0 0; 
+		border-radius: 200px 200px 0 0; 
+		-webkit-transform: rotate(-45deg); 
+		-moz-transform: rotate(-45deg); 
+		-ms-transform: rotate(-45deg); 
+		-o-transform: rotate(-45deg); 
+		transform: rotate(-45deg); 
+		-webkit-transform-origin: 0 100%; 
+		-moz-transform-origin: 0 100%; 
+		-ms-transform-origin: 0 100%; 
+		-o-transform-origin: 0 100%; 
+		transform-origin: 0 100%; 
+	} 
+	#heart:after { 
+		left: 0; 
+		-webkit-transform: rotate(45deg); 
+		-moz-transform: rotate(45deg); 
+		-ms-transform: rotate(45deg); 
+		-o-transform: rotate(45deg); 
+		transform: rotate(45deg); 
+		-webkit-transform-origin: 100% 100%; 
+		-moz-transform-origin: 100% 100%; 
+		-ms-transform-origin: 100% 100%; 
+		-o-transform-origin: 100% 100%; 
+		transform-origin :100% 100%; 
+	} 
+
+	@-webkit-keyframes moveheart{
+		0%{-webkit-transform: rotateY(0deg); -webkit-transform: scale(1,1);}
+		20%{-webkit-transform: rotateY(60deg);}
+		40%{-webkit-transform: rotateY(120deg);}
+		60%{-webkit-transform: rotateY(180deg); -webkit-transform: scale(2,2);}
+		80%{-webkit-transform: rotateY(240deg);}
+		100%{-webkit-transform: rotateY(360deg); -webkit-transform: scale(1,1);}
+	}
+
+	-moz-@keyframes moveheart{
+		0%{-moz-transform: rotateY(0deg),scale(1,1);}
+		20%{-moz-transform: rotateY(60deg);}
+		40%{-moz-transform: rotateY(120deg);}
+		60%{-moz-transform: rotateY(180deg),scale(2,2);}
+		80%{-moz-transform: rotateY(240deg);}
+		100%{-moz-transform: rotateY(360deg),scale(1,1);}
+	}
+
+	-o-@keyframes moveheart{
+		0%{-o-transform: rotateY(0deg); -o-transform: scale(1,1);}
+		20%{-o-transform: rotateY(60deg);}
+		40%{-o-transform: rotateY(120deg);}
+		60%{-o-transform: rotateY(180deg); -o-transform: scale(2,2);}
+		80%{-o-transform: rotateY(240deg);}
+		100%{-o-transform: rotateY(360deg); -o-transform: scale(1,1);}
+	}
+
+	-ms-@keyframes moveheart{
+		0%{-ms-transform: rotateY(0deg); -ms-transform: scale(1,1);}
+		20%{-ms-transform: rotateY(60deg);}
+		40%{-ms-transform: rotateY(120deg);}
+		60%{-ms-transform: rotateY(180deg); -ms-transform: scale(2,2);}
+		80%{-ms-transform: rotateY(240deg);}
+		100%{-ms-transform: rotateY(360deg); -ms-transform: scale(1,1);}
+	}
+
+	@keyframes moveheart{
+		0%{transform: rotateY(0deg); transform: scale(1,1);}
+		20%{transform: rotateY(60deg);}
+		40%{transform: rotateY(120deg);}
+		60%{transform: rotateY(180deg); transform: scale(2,2);}
+		80%{transform: rotateY(240deg);}
+		100%{transform: rotateY(360deg); transform: scale(1,1);}
+	}
+
+</style>
+<body>
+	<div id="heart"></div>
+</body>
+</html>
