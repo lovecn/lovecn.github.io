@@ -1,6 +1,9 @@
 #encoding=utf-8
 from selenium import webdriver
-from envelopes import Envelope  # import envelopes
+#from envelopes import Envelope  # import envelopes
+import smtplib
+from email.header import Header
+from email.mime.text import MIMEText
 #Selenium+PhantomJS+Xpath抓取网页JS内容
 browser = webdriver.PhantomJS('phantomjs.exe')
 url = 'http://www.aizhan.com/siteall/tuniu.com/'
@@ -14,8 +17,16 @@ for t in table:
 browser.quit()
 
 
+#设置好客户端密码，再用客户端密码登录https://my.oschina.net/jhao104/blog/613774
 
-
+server = smtplib.SMTP('smtp.163.com', 25)
+server.login('j_hao104@163.com', 'clientPassword')
+msg = MIMEText('hello, send by Python...', 'plain', 'utf-8')
+msg['From'] = 'j_hao104@163.com <j_hao104@163.com>'
+msg['Subject'] = Header(u'text', 'utf8').encode()
+msg['To'] = u'飞轮海 <jinghao5849312@qq.com>'
+server.sendmail('j_hao104@163.com', ['946150454@qq.com'], msg.as_string())
+"""
 envelope = Envelope(  # 实例化Envelope
     from_addr=(u'from@example.com', u'From Example'),  # 必选参数，发件人信息。前面是发送邮箱，后面是发送人；只有发送邮箱也可以
     to_addr=(u'to@example.com', u'To Example'),  # 必选参数，发送多人可以直接(u'user1@example.com'， u'user2@example.com')
@@ -26,9 +37,8 @@ envelope = Envelope(  # 实例化Envelope
     bcc_addr=u'boss2@example.com',  # 可选参数，隐藏抄送人，也可以是列表
     headers=u'',  # 可选参数，邮件头部内容，字典形式
     charset=u'',  # 可选参数，邮件字符集
-)
-envelope.add_attachment('/Users/bilbo/Pictures/helicopter.jpg')  # 增加附件，注意文件是完整路径，也可以加入多个附件
+)"""
+# envelope.add_attachment('/Users/bilbo/Pictures/helicopter.jpg')  # 增加附件，注意文件是完整路径，也可以加入多个附件
 
 # Send the envelope using an ad-hoc connection...
-envelope.send('smtp.163.com', login='from@example.com',
-              password='password', tls=True)  # 发送邮件，分别是smtp服务器，登陆邮箱，登陆密码，tls设置
+#envelope.send('smtp.163.com', login='from@example.com',password='password', tls=True)  # 发送邮件，分别是smtp服务器，登陆邮箱，登陆密码，tls设置
