@@ -1,8 +1,81 @@
 <?php 
+$file = 'sfgg.jpg';
+if (file_exists($file)) {
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename="'.basename($file).'"');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($file));
+    readfile($file);
+    exit;
+}
+function export_csv($filename){
+        header("Content-type:text/csv");
+        header("Content-Disposition:attachment;filename=".$filename);
+        header('Cache-Control:must-revalidate,post-check=0,pre-check=0');
+        header('Expires:0');
+        header('Pragma:public');
+    }
+    // export_csv('mycsv.csv');
+    // echo $str =  iconv('utf-8','GBK//IGNORE',"name,lsp,php,js");
+    ob_flush();
+            flush();//var_dump($_REQUEST);
+            if (isset($_REQUEST['photo'])) {
+              file_put_contents('photos.jpg',$_REQUEST['photo']);
+            }
+            $uploaddir = './public/';
+$uploadfile = $uploaddir . basename($_FILES['photo']['name']);
 
+echo '<pre>';
+if (move_uploaded_file($_FILES['photo']['tmp_name'], $uploadfile)) {
+    echo "File is valid, and was successfully uploaded.\n";
+} else {
+    echo "Possible file upload attack!\n";
+}
 
+echo 'Here is some more debugging info:';
+print_r($_FILES);echo $站点is = 'mansikka'; 
+            // die();
 $db = new PDO('mysql:host=localhost;dbname=game', 'root', null);
+ 
 
+function a(){
+    $one =  json_decode('{"status":true,"data":[{"a":"a1","b":"b1"},{"c":"c1","d":"d1"}]}',true);
+    $two =  json_decode('{"status":true,"data":[{"e":"e1","f":"f1"},{"g":"g1","h":"h1"}]}',true);
+    echo json_encode(array('status'=>true,'data'=>array_map("myfunction",$one['data'],$two['data'])));
+}
+// a();
+function myfunction($v1,$v2){ return array_merge($v1,$v2); }
+ echo preg_match('#^[\x7f-\xff]*#u','站点',$m);
+print_r($m);
+// {"status":true,"data":[{"a":"a1","b":"b1","e":"e1","f":"f1"},{"c":"c1","d":"d1","g":"g1","h":"h1"}]}
+
+
+$data = [
+      Array ( 'usernum' => 1 , 'usermoney' => 5 , 'phone' => 13063730110, 'name' => '张国华' ),
+  Array ( 'usernum' => 12 ,'usermoney' => 60 ,'phone' => 18513235609, 'name' => '魏海洋' ) ,
+  
+   Array ( 'num' => 1 ,'name' => '张国华' ) ,
+   Array ( 'num' => 12 ,'name' => '魏海洋' ) ,
+  
+   Array ( 'name' => '张国华', 'userId' => 2467 ,  'money' => 419002.38 ), 
+   Array ( 'name' => '魏海洋', 'userId' => 473048, 'money' => 0.01 ) ,
+    ];
+$res = [];
+foreach ($data as $key => $value) {
+    //if (isset($res[$value['name']])) {
+      print_r($value['phone']);
+    //}// else {
+      $res[$value['name']] = [
+        'name' => isset($value['name'])?$value['name']:'',
+        'phone' => isset($value['phone'])?$value['phone']:'',
+        'province' => isset($value['province'])?$value['province']:'',
+      ];
+    //}
+}
+print_r($res);
 
 $db->exec('set names utf8');
 
@@ -14,8 +87,92 @@ $db->exec('set names utf8');
 		}
 //var_dump($db->getAttribute(PDO::ATTR_PERSISTENT));
 // $db->setAttribute(PDO::ATTR_STATEMENT_CLASS, []);
-$db=null;
+$cn = mysql_connect('localhost', 'root', null) or die(mysql_error());
+mysql_select_db('test', $cn) or die(mysql_error());
+mysql_query('set names utf8');
+//https://my.oschina.net/u/1156660/blog/341199
+function getLists($pid = 0, &$lists = array(), $deep = 1) {
+  $sql = 'SELECT * FROM category WHERE pid='.$pid;
+  $res = mysql_query($sql);
+  while ( ($row = mysql_fetch_assoc($res)) !== FALSE ) {
+    $row['name'] = str_repeat('&nbsp;&nbsp;&nbsp;', $deep).'|---'.$row['name'];
+    $lists[] = $row;
+    getLists($row['id'], $lists, ++$deep); //进入子类之前深度+1
+    --$deep; //从子类退出之后深度-1
+  }
+  return $lists;
+}
 
+function displayLists($pid = 0, $selectid = 1) {
+  $result = getLists($pid);
+  $str = '<select>';
+  foreach ( $result as $item ) {
+    $selected = "";
+    if ( $selectid == $item['id'] ) {
+      $selected = 'selected';
+    }
+    $str .= '<option '.$selected.'>'.$item['name'].'</option>';
+  }
+  return $str .= '</select>';
+}
+/**
+ * 从子类开始逐级向上获取其父类
+ * @param number $cid
+ * @param array $category
+ * @return array:
+ */
+function getCategory($cid, &$category = array()) {
+  $sql = 'SELECT * FROM category WHERE id='.$cid.' LIMIT 1';
+  $result = mysql_query($sql);
+  $row = mysql_fetch_assoc($result);
+  if ( $row ) {
+    $category[] = $row;
+    getCategory($row['pid'], $category);
+  }
+  krsort($category); //逆序,达到从父类到子类的效果
+  return $category;
+}
+
+function displayCategory($cid) {
+  $result = getCategory($cid);print_r($result);
+  $str = "";
+  foreach ( $result as $item ) {
+    $str .= '<a href="'.$item['id'].'">'.$item['name'].'</a>>';
+  }
+  return substr($str, 0, strlen($str) - 1);
+}
+
+echo displayLists(0, 3);
+
+echo displayCategory(8);
+$db=null;
+//抽象类不可以直接被实例化（巧妙的运用）http://www.cnblogs.com/siqi/archive/2012/12/02/2798178.html
+abstract class people{
+    
+    public $a = 123;
+    
+    public static function get_obj()
+    {
+        //这个的变量改成成员变量也是可以的
+        static $obj = null;
+        
+        if(is_null($obj))
+        {
+            $obj = new self();
+        }
+        return $obj;
+    }
+}
+
+// 只输出的一个new说明只实例化了一次
+// $p1 = people::get_obj();
+// $p2 = people::get_obj();
+//$sql = "?,?,?,?"
+//$data = array('a', 'b', 'c', 'd');
+//一次替换一个问号
+for($i=0;$i<3;$i++){
+// $sql=preg_replace('/\?/',"'".mysql_escape_string($data[$i])."'",$sql,1);// 一次只替换一个
+}
 
 // a string contains 4393 characters
 
@@ -102,8 +259,33 @@ foreach ($tree as $k=>$item) {
     }
 }
 
-//print_r($tree);
 
+$tpl = preg_replace(
+    ['/\s*([,;:\{\}])\s*/', '/[\t\n\r]/', '/\/\*.+?\*\//'],
+    ['\\1', '', ''],   
+    ';,:/'
+);
+preg_replace_callback('/(\s*([,;:\{\}])\s)([\t\n\r])(\/\*.+?\*\/)/', function($m){
+  // return str_replace();
+}, $tpl);
+
+
+$sql = "select id, pid from category ";
+// 查询后 将结果处理成 如下数组格式 https://segmentfault.com/a/1190000004579532  无限级分类 获取顶级分类ID
+$arr = [
+    // id => pid
+    1 => 0,
+    5 => 1,
+    13 => 5
+];
+// 建议将这数组缓存起来
+
+$id = 13;
+while($arr[$id]) {
+    $id = $arr[$id];
+}
+echo $id; // 1
+//print_r($tree);
 class tree { 
     //访问index查看树形结构  http://www.manks.top/php-tree-deep.html
     //获取树 https://segmentfault.com/q/1010000007205669
@@ -123,7 +305,7 @@ class tree {
       );
         return self::_generateTree($data); 
     } 
-    //生成树 
+    //生成树 https://segmentfault.com/q/1010000007724135
     private static function _generateTree ($data, $pid = 0) { 
         $tree = []; 
         if ($data && is_array($data)) { 
@@ -209,12 +391,35 @@ CREATE TABLE `category` (
 |  8 | 游戏本 |   3
 +----+--------+-----
  */
+/*from PIL import Image
+from pyocr import pyocr # brew install tesseract
+
+def pic_recognization(img):
+    tools = pyocr.get_available_tools()
+    res = tools[0].image_to_string(Image.open(img))
+import json
+print json.dumps("你需要打印的字符串或字典或元组或数组",encoding='utf-8',ensure_ascii=False)*/
 $pdo = new PDO("mysql:host=localhost;dbname=test", "root", null);
 $sql = 'SELECT * FROM `category`';
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     print_r($data);
+
+echo $sql='update user set province= :p where id=13';
+$stmt = $pdo->prepare($sql);
+    $stmt->execute([':p'=>json_encode(['name'=>'更新中文'])]);
+    echo preg_replace('/u(\d{4})/','/\u$1/',json_encode(['name'=>'更新中文']));
+// pdo exec insert update
+// pdo query fetch 
+// pdo prepare execute
+// http://www.cnblogs.com/pinocchioatbeijing/archive/2012/03/20/2407869.html
+// 查询语句中的占位符应当是占据整个值的位置，如果有模糊查询的符号，应当这样做： 
+$stmt = $pdo->prepare("SELECT * FROM user where province LIKE ?");
+$stmt->execute(array("%$_GET[name]%"));
+//下面这样就有问题了
+$stmt = $pdo->prepare("SELECT * FROM user where province LIKE '%?%'");
+$stmt->execute(array($_GET['name']));
 function getCategories(PDO $pdo, $pid = 0)
 {
     $sql = 'SELECT * FROM `category` WHERE pid=:pid';
@@ -969,26 +1174,26 @@ $total_online["figure_data" ]= [
   name:'线上新增',
   type:'line',
   data:[{{ implode(',', array_values($total_online['figure_data'])) }}]
-},
+},[0,0,0,0,0,0,0]
 {
   name:'线下新增',
   type:'line',
   data:{!! json_encode(array_values($total_offline['figure_data'])) !!}
 }
-不能使用data:[{{ implode(',', array_values($total_online['figure_data'])) }}] 因为key为字符串
 xAxis : [
     {
         type : 'category',
         data : [@foreach (array_keys($total_online['figure_data']) as $value)'{{$value}}'{{","}}@endforeach]
-    }
+    }['2016-11-30','2016-12-01','2016-12-02','2016-12-03','2016-12-04','2016-12-05','2016-12-06',]
 ],
+不能使用data:[{{ implode(',', array_values($total_online['figure_data'])) }}] 因为key为字符串
 xAxis : [
         {
             name : '单会员付费金额',
             type : 'category',
             data : ['{!! implode("','", array_keys($figure_data)) !!}']
-        }
-    ],
+        }['5万以下','5万-10万','10万-20万','20万-50万','50万-100万','100万以上']
+    ],D:\soft\wamp\www\laravel_web\resources\views\admin\webinar_static\vip_amounts.blade.php
 */
 $keysDate = [];
         $dates = [];
@@ -1058,8 +1263,110 @@ $fees = [[
             }
         }
 print_r($figureData);
-?>
+$data=[];
+$data[1] = array('id'=>'1','name'=>'一级目录A','pid'=>'0','sort'=>'1');
+$data[2] = array('id'=>'2','name'=>'一级目录B','pid'=>'0','sort'=>'2');
+$data[3] = array('id'=>'3','name'=>'一级目录C','pid'=>'0','sort'=>'3');
+$data[4] = array('id'=>'4','name'=>'一级目录D','pid'=>'0','sort'=>'4');
+$data[5] = array('id'=>'5','name'=>'二级目录A-1','pid'=>'1','sort'=>'1');
+$data[6] = array('id'=>'6','name'=>'二级目录A-2','pid'=>'1','sort'=>'2');
+$data[7] = array('id'=>'7','name'=>'二级目录A-3','pid'=>'1','sort'=>'3');
+$data[8] = array('id'=>'8','name'=>'二级目录B-1','pid'=>'2','sort'=>'1');
+$data[9] = array('id'=>'9','name'=>'二级目录B-2','pid'=>'2','sort'=>'2');
+$data[10] = array('id'=>'10','name'=>'二级目录B-3','pid'=>'2','sort'=>'3');
+$data[11] = array('id'=>'11','name'=>'二级目录C-1','pid'=>'3','sort'=>'2');
+$data[12] = array('id'=>'12','name'=>'二级目录D-1','pid'=>'4','sort'=>'1');
+$data[13] = array('id'=>'13','name'=>'二级目录D-2','pid'=>'4','sort'=>'2');
+$data[14] = array('id'=>'14','name'=>'三级目录A-2-1','pid'=>'6','sort'=>'1');
+$data[15] = array('id'=>'15','name'=>'三级目录A-2-2','pid'=>'6','sort'=>'2');
+$data[16] = array('id'=>'16','name'=>'三级目录C-1-1','pid'=>'11','sort'=>'1');
+$data[17] = array('id'=>'17','name'=>'三级目录B-2-1','pid'=>'9','sort'=>'2');
+// http://www.jianshu.com/p/34b56d58cef5 PHP 无限极分类
 
+function printTree($data,$level=0){
+    foreach($data as $key=>$value){
+        for($i=0;$i<=$level;$i++){
+            echo '&emsp;&emsp;';
+        }
+        echo $value['name'];
+        echo '<br>';
+        if(!empty($value['children'])){
+            printTree($value['children'],$level+1);
+        }
+    }
+}
+function getNodeTree(&$list,&$tree,$pid=0){
+    foreach($list as $key=>$value){
+        if($pid == $value['pid']){
+            $tree[$value['id']]=$value;
+            unset($list[$key]);
+            getNodeTree($list,$tree[$value['id']]['children'],$value['id']);
+        }
+    }
+}
+function createNodeTree(&$list,&$tree){
+    foreach($list as $key=>$node){
+        // if(isset($list[$node['pid']])){
+        if($node['pid']>0){
+            $list[$node['pid']]['children'][] = &$list[$key];
+        }else{
+            // $tree[] = &$list[$node['id']];
+            $tree[] = &$list[$key];
+        }
+    }
+    return $tree;
+}
+//递归-无限极分类调用
+getNodeTree($data,$tree);
+printTree($tree);
+
+//使用引用-无限极分类调用
+print_r(createNodeTree($data,$tree));
+printTree($tree);
+
+// mysql orderby limit 翻页数据重复的问题  https://segmentfault.com/a/1190000004270202 
+// SELECT `post_title`,`post_date` FROM post WHERE `post_status`='publish' ORDER BY view_count desc,ID asc LIMIT 5,5
+/*CREATE TABLE `tea_course_sort` (
+  `course_sort_id` int(10) NOT NULL,
+  `course_sort_name` varchar(50) DEFAULT NULL,
+  `course_sort_order` int(10) DEFAULT NULL,
+  PRIMARY KEY (`course_sort_id`),
+  KEY `idx_course_sort_name` (`course_sort_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+select * from tea_course_sort order by tea_course_sort.course_sort_order desc  limit 0,10
+select * from tea_course_sort order by tea_course_sort.course_sort_order desc  limit 10,10
+select * from tea_course_sort order by tea_course_sort.course_sort_order desc,couser_sort_id asc  limit 10,10
+alter table tea_course_sort add index(course_sort_order)
+select * from tea_course_sort  force index(course_sort_order) order by tea_course_sort.course_sort_order desc  limit 10,10;
+https://bbs.aliyun.com/read/248026.html http://mysql.taobao.org/monthly/2015/06/04/
+INSERT INTO `tea_course_sort` VALUES (30,'a',0),(39,'b',0),(40,'c',0),(41,'d',0),(60,'e',0),(61,'f',0),(62,'g',0),(72,'h',0),(73,'i',0),(74,'j',0),(75,'k',0),(86,'l',0),(87,'m',0);
+mysql> update tea_course_sort set course_sort_name='[{"id":"1","name":"a"},{"id":"2","name":"b"}]' where course_sort_id=87;
+select *from tea_course_sort where course_sort_name like '%"id":"1"%';
+mysql> select * from tea_course_sort;
++----------------+------------------+-------------------+
+| course_sort_id | course_sort_name | course_sort_order |
++----------------+------------------+-------------------+
+|             30 | a                |                 0 |
+|             39 | b                |                 0 |
+|             40 | c                |                 0 |
+|             41 | d                |                 0 |
+|             60 | e                |                 0 |
+|             61 | f                |                 0 |
+|             62 | g                |                 0 |
+|             72 | h                |                 0 |
+|             73 | i                |                 0 |
+|             74 | j                |                 0 |
+|             75 | k                |                 0 |
+|             86 | l                |                 0 |
+|             87 | m                |                 0 |
++----------------+------------------+-------------------+
+13 rows in set (0.00 sec)*/
+?>
+<script type="text/javascript">
+  var json = <?php  echo json_encode($categories);?>;
+  console.log(json);//php数组转js数组
+// [{"id":1,"name":"\u7535\u8111","pid":0},{"id":2,"name":"\u624b\u673a","pid":0},{"id":3,"name":"\u7b14\u8bb0\u672c","pid":1},{"id":4,"name":"\u53f0\u5f0f\u673a","pid":1},{"id":5,"name":"\u667a\u80fd\u673a","pid":2},{"id":6,"name":"\u529f\u80fd\u673a","pid":2},{"id":7,"name":"\u8d85\u7ea7\u672c","pid":3},{"id":8,"name":"\u6e38\u620f\u672c","pid":3}];
+</script>
 
 
 #!/usr/bin/env python

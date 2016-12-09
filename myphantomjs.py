@@ -8,6 +8,9 @@ from email.mime.text import MIMEText
 import time
 from bs4 import BeautifulSoup
 from splinter import Browser
+from threading import Thread
+from Queue import Queue
+from time import sleep
 #Selenium+PhantomJS+Xpath抓取网页JS内容
 #browser = webdriver.PhantomJS('phantomjs.exe')
 url = 'http://www.aizhan.com/siteall/tuniu.com/'
@@ -18,6 +21,32 @@ url = 'http://www.aizhan.com/siteall/tuniu.com/'
 #for t in table:
     #print t.text
 
+# q是任务队列http://python.jobbole.com/84622/
+#NUM是并发线程总数
+#JOBS是有多少任务
+q = Queue()
+NUM = 2
+JOBS = 10
+#具体的处理函数，负责处理单个任务
+def do_somthing_using(arguments):
+    print arguments
+#这个是工作进程，负责不断从队列取数据并处理
+def working():
+    while True:
+        arguments = q.get()
+        do_somthing_using(arguments)
+        sleep(1)
+        q.task_done()
+#fork NUM个线程等待队列
+for i in range(NUM):
+    t = Thread(target=working)
+    t.setDaemon(True)
+    t.start()
+#把JOBS排入队列
+for i in range(JOBS):
+    q.put(i)
+#等待所有JOBS完成
+q.join()
 #browser.quit()
 #https://segmentfault.com/q/1010000007687981 
 #driver = Browser(driver_name='chrome')
@@ -54,7 +83,7 @@ www.crifan.com/unicodeencodeerror_gbk_codec_can_not_encode_character_in_position
 
 对应代码为：
 
-gbkTypeStr = unicodeTypeStr.encode(“GBK“, ‘ignore’);
+gbkTypeStr = unicodeTypeStr.encode('gbk', 'ignore');
 方案2：
 或者，将其转换为GBK编码的超集GB18030 （即，GBK是GB18030的子集）：
 
