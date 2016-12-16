@@ -157,6 +157,6 @@ envelope = Envelope(  # 实例化Envelope
     charset=u'',  # 可选参数，邮件字符集
 )"""
 # envelope.add_attachment('/Users/bilbo/Pictures/helicopter.jpg')  # 增加附件，注意文件是完整路径，也可以加入多个附件
-#测试代码回滚https://www.w3ctrain.com/2016/06/26/learn-git-in-30-minutes/
+
 # Send the envelope using an ad-hoc connection...
 #envelope.send('smtp.163.com', login='from@example.com',password='password', tls=True)  # 发送邮件，分别是smtp服务器，登陆邮箱，登陆密码，tls设置
