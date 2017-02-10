@@ -63,7 +63,7 @@ class ximalaya:
                         id = link[link.rfind('/') + 1:]  # 获取专辑下所有的id
                         playurl = self.url.replace('www.', 'm.').replace('album', 'sound')  # 替换为移动端访问地址
                         playurl = playurl.replace(playurl[playurl.rfind('/') + 1:], id)  # 替换原始url中最后一段id
-                        print playurl
+                        print playurl#http://m.ximalaya.com/tracks/30067882.json
                         try:
                             page = html.fromstring(urllib2.urlopen(playurl, timeout=30).read())
                         except Exception, msg:

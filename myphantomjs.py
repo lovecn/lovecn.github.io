@@ -130,6 +130,7 @@ BF也过时了，用pyquery吧。
 
 http://www.jianshu.com/p/e1f8b690b951
 """
+
 print(driver.find_element_by_id('comment-box').text.encode('GBK', 'ignore'))
 bsObj = BeautifulSoup(driver.page_source)
 source = driver.page_source.encode('GBK', 'ignore')
@@ -160,3 +161,4 @@ envelope = Envelope(  # 实例化Envelope
 #测试代码回滚https://www.w3ctrain.com/2016/06/26/learn-git-in-30-minutes/
 # Send the envelope using an ad-hoc connection...
 #envelope.send('smtp.163.com', login='from@example.com',password='password', tls=True)  # 发送邮件，分别是smtp服务器，登陆邮箱，登陆密码，tls设置
+# http://hlsvod01.t.vhall.com/api/hls_record?record_id=59549&webinarID=117385303&StartTime=2017-02-09+15%3A50%3A13&StopTime=2017-02-09+15%3A50%3A46
