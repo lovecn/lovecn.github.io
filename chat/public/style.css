@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#message {
+    padding: 20px;
+    font: 20px Arial, Helvetica;
+    width: 95%;
+    list-style-type: none;
+    margin: 10px auto;
+    /*box-shadow: -3px 3px 5px #888;*/
+    box-shadow:
+    2px 0 3px #888,
+    0 2px 3px #888,
+    0 2px 3px #888,
+    2px 0 3px #888;
+    min-height: 300px;
+    border-radius: 5px;
+}
+
+#messages li {
+    padding: 10px 10px;
+}
+
+#messages li:nth-child(odd) {
+    background: #eee;
+}
+
+form {
+    background: #000000;
+    padding: 5px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#input {
+    border: 0;
+    padding: 5px 7px;
+    width: 90%;
+}
+
+form button {
+    width: 10%;
+    background: rgb(130, 224, 255);
+    border: none;
+    padding: 5px;
+}
