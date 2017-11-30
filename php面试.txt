@@ -1,0 +1,2643 @@
+- 1 -
+1. 什么事面向对象？主要特征是什么？
+面向对象是程序的一种设计方式，它利于提高
+程序的重用性，使程序结构更加清晰。主要特征：
+封装、继承、多态。
+2. SESSION 与 COOKIE 的区别是什么，请从协
+议，产生的原因与作用说明?
+1、http 无状态协议，不能区分用户是否是从
+同一个网站上来的，同一个用户请求不同的页面不
+能看做是同一个用户。
+2、SESSION 存储在服务器端，COOKIE 保存
+在客户端。Session 比较安全，cookie 用某些手段可
+以修改，不安全。Session 依赖于 cookie 进行传递。
+禁用 cookie 后，session 不能正常使用。Session 的
+缺点：保存在服务器端，每次读取都从服务器进行
+读取，对服务器有资源消耗。Session 保存在服务器
+端的文件或数据库中，默认保存在文件中，文件路
+径由 php 配置文件的 session.save_path 指定。Session 文件是公有的。
+3. HTTP 状态中 302、403、 500 代码含义？
+一二三四五原则: 一. 消息系列 二 成功系列
+三. 重定向系列 四. 请求错误系列 五. 服
+务器端错误系列
+302:临时转移成功，请求的内容已转移到新位
+置 403:禁止访问 500:服务器内部错误 401 代表未
+授权。
+4. Linux 下建立压缩包，解压缩包的命令
+Tar.gz: 打包: tar czf file.tar.gz file.txt
+解压: tar xzf file.tar.gz Bz2: 打包: bzip2 [-k] 文件
+解压: bunzip2 [-k] 文件
+Gzip（只对文件，不保留原文件）
+打包: gzip file1.txt
+解压: gunzip file1.txt.gz Zip: -r 对目录
+打包: zip file1.zip file1.txt
+解压: unzip file1.zip
+5. 请写出数据类型(int char varchar datetime text)
+的意思；请问 varchar 和 char 有什么区别？
+Int 整数 char 定长字符 Varchar 变长字符
+Datetime 日期时间型 Text 文本型 Varchar 与
+char 的区别 char 是固定长度的字符类型，分配多
+少空间，就占用多长空间。 Varchar 是可变长度的
+字符类型，内容有多大就占用多大的空间，能有效
+节省空间。 由于 varchar 类型是可变的，所以在数
+据长度改变的时，服务器要进行额外的操作，所以
+效率比 char 类型低。
+6. MyISAM 和 InnoDB 的基本区别？索引结构
+如何实现？
+MyISAM 类型不支持事务，表锁，易产生碎
+片，要经常优化，读写速度较快，而 InnoDB 类型
+支持事务，行锁，有崩溃恢复能力。读写速度比
+MyISAM 慢。
+创建索引：alert table tablename add index (`字
+段名`)
+7. 不使用 cookie 向客户端发送一个 cookie. 理解：session_start（）开启时，生成一个常
+量 SID，当 COOKIE 开启时，这个常量为空，当
+COOKIE 关闭时，这个常量中存储了 PHPSESSID
+的值。通过在 URL 后加一个 SID 参数来传递
+SESSIONID 的值，从而使客户端页面可以使用
+SESSION 里面的值。 当客户端开启 COOKIE 和服
+务器端开启 SESSION 时。 浏览器第一次请求，服
+务器会向浏览器端发送一个 COOKIE 里面存储
+SESSIONID. 当浏览器第二次请求时，会把已存在
+8. isset() 和 empty() 区别
+Isset 判断变量是否存在，可以传入多个变量，
+若其中一个变量不存在则返回假，empty 判断变量
+是否为空为假，只可传一个变量，如果为空为假则
+返回真。
+9. 如何在页面之间传递变量(至少两种方式) ?
+GET,POST,COOKIE,SESSION，隐藏表单
+1. 写出匹配 URL 的正则表达式. ‘/^(https?|ftps?):\/\/(www)\.([^\.\/]+)\.(com|cn|org)(\/[\ w-\.\/\?\%\&\=]*)?/i’ 2. 请写出常见的排序算法，并用 PHP 实现冒泡排
+序，将数组$a = array()按照从小到大的方式进行排
+序。
+常见的排序算法: 冒泡排序法、快速排序法、简单
+选择排序法、堆排序法、直接插入排序法、希尔排
+序法、合并排序法。
+冒泡排序法的基本思想是：对待排序记录关键字从
+后往前（逆序）进行多遍扫描，当发现相邻两个关
+键字的次序与排序要求的规则不符时，就将这两个
+记录进行交换。这样，关键字较小的记录将逐渐从
+后面向前面移动，就象气泡在水中向上浮一样，所
+以该算法也称为气泡排序法。
+// 冒泡排序法
+Function mysort($arr){
+For($i=0; $i<count($arr); $i++){
+For($j=0; $j<count($arr)-1-$i; $j++){
+If($arr[$j] > $arr[$j+1]){
+$tmp=$arr[$j];
+$arr[$j]=$arr[$j+1];
+$arr[$j+1]=$tmp;
+}
+}
+}
+Return $arr;
+}
+$arr=array(3,2,1);
+print_r(mysort($arr));
+3. 请说明 PHP 中传值与传引用的区别。什么时候
+传值什么时候传引用？
+按值传递：函数范围内对值的任何改变在函数
+外部都会被忽略
+按引用传递：函数范围内对值的任何改变在函
+数外部也能反映出这些修改
+优缺点：按值传递时，php 必须复制值。特别
+是对于大型的字符串和对象来说，这将会是一个代
+价很大的操作。按引用传递则不需要复制值，对于
+性能提高很有好处。
+在 PHP 中 error_reporting 这个函数有什么作用？
+设置 PHP 的报错级别并返回当前级别。
+请用正则表达式（Regular Expression）写一个函
+数验证电子邮件的格式是否正确。
+if(isset($_POST['action']) && $_POST['action']==’
+submitted’){
+$email=$_POST['email'];
+if(!preg_match“( /^[0-9a-zA-Z-]+@[0-9a-zA-Z-]
++(\.[0-9a-zA-Z-]+){1,3}$/”,$email)){
+echo “电子邮件检测失败”;
+}else{
+echo “电子邮件检测成功”;
+}
+}
+- 2 -
+使用 PHP 描述快速排序算法，对象可以是一个数
+组?
+原理:快速排序使用分治策略来把待排序数据序列
+分为两个子序列，具体步骤为：
+（1）从数列中挑出一个元素，称该元素为“基准”。
+（2）扫描一遍数列，将所有比“基准”小的元素
+排在基准前面，所有比“基准”大的元素排在基准
+后面。
+（3）通过递归，将各子序列划分为更小的序列，
+直到把小于基准值元素的子数列和大于基准值元
+素的子数列排序。
+//快速排序（数组排序）
+function QuickSort($arr){
+$num = count($arr);
+$l=$r=0;
+for($i=1;$i<$num;$i++){
+if($arr[$i] < $arr[0]){
+$left[] = $arr[$i];
+$l++;
+}else{
+$right[] = $arr[$i];
+$r++;
+}
+}
+if($l > 1){
+$left = QuickSort($left);
+}
+$new_arr = $left;
+$new_arr[] = $arr[0];
+if($r > 1){
+$right = QuickSort($right);
+}
+for($i=0;$i<$r;$i++){
+$new_arr[] = $right[$i];
+}
+return $new_arr;
+}
+使用 PHP 描述顺序查找和二分查找（也叫做折半
+查找）算法，顺序查找必须考虑效率，对象可以是
+一个有序数组
+//二分查找（数组里查找某个元素）
+function bin_sch($array, $low, $high, $k){
+if ($low <= $high){
+$mid = intval(($low+$high)/2);
+if ($array[$mid] == $k){
+return $mid;
+}elseif ($k < $array[$mid]){
+return bin_sch($array, $low, $mid-1, $k);
+}else{
+return bin_sch($array, $mid+1, $high, $k);
+}
+}
+return -1;
+}
+//顺序查找（数组里查找某个元素）
+function seq_sch($array, $n, $k){
+$array[$n] = $k;
+for($i=0; $i<$n; $i++){
+if($array[$i]==$k){
+break;
+}
+}
+if ($i<$n){
+return $i;
+}else{
+return -1;
+}
+}
+写一个二维数组排序算法函数，能够具有通用性，
+可以调用 php 内置函数(array_multisort())
+//二维数组排序， $arr 是数据，$keys 是排序的健
+值，$order 是排序规则，1是升序，0是降序
+function array_sort($arr, $keys, $order=0) {
+if (!is_array($arr)) {
+return false;
+}
+$keysvalue = array();
+foreach($arr as $key => $val) {
+$keysvalue[$key] = $val[$keys];
+}
+if($order == 0){
+asort($keysvalue);
+}else {
+arsort($keysvalue);
+}
+reset($keysvalue);
+foreach($keysvalue as $key => $vals) {
+$keysort[$key] = $key;
+}
+$new_array = array();
+foreach($keysort as $key => $val) {
+$new_array[$key] = $arr[$val];
+}
+return $new_array;
+}
+请以空格作为间隔，拆分字符串’Apple Orange
+Banana Strawberry’,组成数组$fruit，
+* 数组中所有元素都用小写字母，并按照字母先后
+次序排序
+class sort {
+private $str;
+public function __construct($str) {
+$this->str=strtolower($str);
+}
+private function explodes() {
+if(empty($this->str)) return array();
+$arr=explode(" ",$this->str);
+return is_array($arr)?$arr:array($arr);
+}
+public function sort() {
+$explode=$this->explodes();
+sort($explode);
+return $explode;
+}
+}
+$str='Apple Orange Banana Strawberry';
+$sortob=new sort($str);
+var_dump($sortob->sort());
+对于用户输入一串字符串$string,要求$string 中
+只能包含大于0的数字和英文逗号，请用正则 表达
+式验证，对于不符合要求的$string 返回出错信息
+class regx {
+public static function check($str) {
+if(preg_match("/^([1-9,])+$/",$str)) {
+return true;
+}
+return false;
+}
+}
+$str="12345,6";
+if(regx::check($str)) {
+- 3 -
+echo "suc";
+} else {
+echo "fail";
+}
+请写一段程序，在服务器创建一个文件 fruit.dat, 将试题3中得到的数组写入到改文件中，然后写一
+段程序从文件中读取并还原数组@author
+zhuwenqiong
+class sort {
+private $str;
+public function __construct($str) {
+$this->str=strtolower($str);
+}
+private function explodes(){
+if(empty($this->str)) return array();
+$arr=explode(" ",$this->str);
+return is_array($arr)?$arr:array($arr);
+}
+public function sort() {
+$explode=$this->explodes();
+sort($explode);
+return $explode;
+}
+}
+class file {
+private $sort=null;
+private $filepath;
+public function __construct($arrobj,$path) {
+$this->sort=$arrobj;
+$this->filepath=$path;
+}
+private function
+getresource($filename,$mode) {
+return
+fopen($this->filepath.$filename,$mode);
+}
+private function closeresource($resource) {
+fclose($resource);
+}
+public function savefile($filename) {
+$arr=$this->sort->sort();
+$fopen=$this->getresource($filename,"a+");
+if(!$fopen){
+echo "文件打开失败！";
+exit;
+}
+var_dump($arr);
+foreach($arr as $key=>$value) {
+fwrite($fopen,$value."\n");
+}
+$this->closeresource($fopen);
+}
+public function readfile($filename) {
+$this->savefile($filename);
+$fopen=$this->getresource($filename,"r");
+if(!$fopen){
+echo "文件打开失败！";exit;
+}
+$arr=array();
+while(!feof($fopen)) {
+$get=fgets($fopen);
+if(!empty($get))
+$arr[]=str_replace("\n","",$get);
+}
+$this->closeresource($fopen);
+return $arr;
+}
+}
+$file=new file(new sort('Apple Orange Banana
+Strawberry'),"E:\\");
+$arr=$file->readfile("fruit.dat");
+var_dump($arr);
+单例模式，创建 mysqli 数据库链接的单例对象
+class Db {
+private static $instance;
+public $handle;
+Private function
+__construct($host,$username,$password,$dbna
+me) {
+$this->handle=NULL;
+$this->getcon($host,$username,$password, $dbname);
+}
+public static function getBb() {
+self::$instance=new Db();
+return self::$instance;
+}
+private function
+getcon($host,$username,$password,$dbname) {
+if($this->handle!=NULL){
+return true;
+}
+$this->handle=mysqli_connect($host,$user
+name,$password,$dbname);
+}
+}windows 平台, Apache Http Server 启动失败, 排错
+思路是什么?
+检查 apache 使用的80端口是否被占用，如果
+被占用，先停止占用80端口的服务，然后启动
+apache 服务器
+PHP session 扩展默认将 session 数据储存在哪里?
+D
+A) SQLite Database B) MySQL Database C) Shared Memory
+D) File System
+E) Session Server 如果你想要自动加载类，下面哪种函数声明是正确
+的 C
+A) function autoload($class_name)
+B) function __autoload($class_name, $file)
+C) function __autoload($class_name)
+D) function _autoload($class_name)
+E) function autoload($class_name, $file)
+PHP 程序使用 utf-8编码, 以下程序输出结果是什
+么? B
+<?php
+$str = ’hello 你好世界’; echo strlen($str);
+?>A) 9 B) 13(gbk) C) 18 D) 17(utf8)
+你所知道的 php 数组相关的函数？
+array()----创建数组
+array_combine()----通过合并两个数组来创建一个
+新数组
+- 4 -
+range()----创建并返回一个包含指定范围的元素的
+数组
+compact()----建立一个数组
+array_chunk()----将一个数组分割成多个
+array_merge()----把两个或多个数组合并成一个数
+组
+array_slice()----在数组中根据条件取出一段值
+array_diff()----返回两个数组的差集数组
+array_intersect()----计算数组的交集
+array_search()----在数组中搜索给定的值
+array_splice()----移除数组的一部分且替代它
+array_key_exists()----判断某个数组中是否存在指定
+的 key
+shuffle()----把数组中的元素按随机顺序重新排列
+array_flip()----交换数组中的键和值
+array_reverse()----将原数组中的元素顺序翻转，创
+建新的数组并返回
+array_unique()----移除数组中重复的值
+php 读取文件内容的几种方法和函数？
+打开文件，然后读取。Fopen() fread()
+打开读取一次完成 file_get_contents()
+以下程序，变量 str 什么值的情况下输入111?
+if( ! $str ) { echo 111; }
+在$str 值为：0，’0′，false,null,”" 你所知道的 PHP 的一些技术（smarty 等）？
+Smarty,jquery,ajax,memcache,div+css,js,mysqli,pdo,s vn,thinkphp,brophp,yii
+你所熟悉的 PHP 论坛系统 有哪些？
+Discuz 你所熟悉的 PHP 商城系统 有哪些？
+Ecshop
+你所熟悉的 PHP 开发框架 有哪些？
+Brophp,thinkphp
+说说你对缓存技术的了解？
+1、缓存技术是将动态内容缓存到文件中，在一定
+时间内访问动态页面直接调用缓存文件，而不必重
+新访问数据库。
+2、使用 memcache 可以做缓存。
+你所知道的设计模式有哪些？
+工厂模式、策略模式、单元素模式、观察者模式、
+命令链模式
+说说你对代码管理的了解？ 常使用那些代码版本
+控制软件？
+通常一个项目是由一个团队去开发，每个人将自己
+写好的代码提交到版本服务器，由项目负责人按照
+版本进行管理，方便版本的控制，提高开发效率，
+保证需要时可以回到旧版本。
+常用的版本控制器：SVN
+说说你对 SVN 的了解？优缺点？
+SVN 是一种版本控制器，程序员开发的代码递交到
+版本服务器进行集中管理。
+SVN 的优点：代码进行集中管理，版本控制容易，
+操作比较简单，权限控制方便。
+缺点：不能随意修改服务器项目文件夹。
+怎么找到 PHP.ini 的路径？
+一般都在 php 的安装目录下，或者 window 系统的
+windows 目录下。
+PHP 加速模式/扩展？ PHP 调试模式/工具？
+Zend Optimizer 加速扩展
+调试工具：xdebug
+你常用到的 mysql 命令？
+Show databases Show tables
+Insert into 表名() values()
+Update 表名 set 字段=值 where ... Delete from 表名 where ... Select * from 表名 where 条件 order by ... Desc/asc limit ... Group by ... Having ... 进入 mysql 管理命令行的命令？
+Mysql -uroot -p 回车 密码
+show databases; 这个命令的作用？
+显示当前 mysql 服务器中有哪些数据库
+show create database mysql; 这个命令的作用？
+显示创建数据库的 sql 语句
+show create table user; 这个命令的作用？
+显示创建表的 sql 语句
+desc user; 这个命令的作用？
+查询 user 表的结构
+explain select * from user; 这个命令的作用？
+获取 select 相关信息
+show processlist; 这个命令的作用？
+显示哪些线程正在运行
+SHOW VARIABLES; 这个命令的作用？
+显示系统变量和值
+SHOW VARIABLES like ’%conn%’; 这个命令的
+作用？
+显示系统变量名包含 conn 的值
+LEFT JOIN 写一个 SQL 语句？
+SELECT A.id,A.class FROM A LEFT JOIN B ON
+A.cid=B.id
+in, not ni, exist, not exist 的作用和区别？
+in 在什么中
+Not in 不在什么中
+Exists 存在
+Not exists 不存在
+怎么找到数据库的配置文件路径？
+在数据库安装目录下，my.ini
+简述 Linux 下安装 PHP 的过程？
+安装软件之前先安装编译工具 gcc、gcc-c++
+拷贝源码包，解包解压缩
+Cd /lamp/php 进入 php 目录
+./configure –prefix=/usr/local/php
+–with-config-file-path=/usr/local/php/etc 指定安装目
+录和配置文件目录
+Make 编译
+Make install 安装
+简述 Linux 下安装 Mysql 的过程？
+Groupadd mysql 添加一个用户组 mysql
+Useradd -g mysql mysql 添加一个 mysql 用户指定
+分组为 mysql
+Cd /lamp/mysql 进入 mysql 目录
+- 5 -
+./configure –prefix=/usr/local/mysql/ –with-extra-charsets=all
+Make Make all
+简述 Linux 下安装 apache 的过程？
+Cd /lamp/httpd 进去 apache 软件目录
+./configure –prefix=/usr/local/apache2/ –sysconfdir=/etc/httpd/ –with-included-apr Make Make all
+HTML/CSS/DIV/Javascritp：
+1. 设计一个页面(4个 div 第一个 div 宽960px 居
+中;第2-4个 div 3等分960px;) <style>Body{ Text-align:center; Margin:0; Padding:0; }
+#box{ Width:960px; Margin:0 auto; }
+.small{ Width:320px; Float:left; } </style>
+<div id=’box’>
+<div class=’small’></div>
+<div class=’small’></div>
+<div class=’small’></div>
+</div> 用 javascript 取得一个 input 的值？取得一个 input
+的属性？
+document.getElementById(‘name’).value;
+document.getElementById(‘name’).type;
+用 Jquery 取得一个 input 的值？取得一个 input 的
+属性？
+$(“input[name='aa']“).val();
+$(“input[name='aa']“).attr(‘type’);
+请您写一段 ajax 提交的 js 代码，或者写出 ajax 提
+交的过程逻辑。
+var xmlhttp;
+if(window.XMLHttpRquest){ xmlhttp=new XMLHttpRequest();
+}else if(window.ActiveXObject){ xmlhttp=new
+ActiveXObject(‘Microsoft.XMLHTTP’);
+}xmlhttp.open(‘GET’,’1.php?aa=name’,true); xmlhttp.onreadystatechange=function(){
+if(xmlhttp.readyState==4){
+if(xmlhttp.status==200){ var text=xmlhttp.responseText;
+}
+}
+}xmlhttp.send(null);
+简述 Cookie 的设置及获取过程
+设置 COOKIE 的值：
+Setcookie(名称，值，保存时间，有效域);
+获取值：$_COOKIE['名称'];
+面向对象中接口和抽象类的区别及应用场景?
+1、有抽象方法的类叫做抽象类，抽象类中不一定
+只有抽象方法，抽象方法必须使用 abstract 关键字
+定义。
+2、接口中全部是抽象方法,方法不用使用 abstract
+定义。
+3、当多个同类的类要设计一个上层，通常设计为
+抽象类，当多个异构的类要设计一个上层，通常设
+计为接口。
+用面向对象来实现 A 对象继承 B 和 C 对象
+Interface B{ ... }
+Interface C{ ... }
+Class A implements B,C{ ... }
+写出 Smarty 模板引擎中你最常用的关键词
+Assign Display Foreach
+Section Loop Item
+$smarty Now Const get
+如下 user 表结构
+名称 类型 说明
+Uid Int unsigned 主键
+Name Varchar(20)
+Age Tinyint unsigned
+需求：
+l 增加一个字段性别 sex，写出修改语句
+Alert table user add sex enum(’0′,’1′);
+查询出年龄介于20岁到30岁之间的用户
+Select * from user where age>20 and age<30
+如果是一个 Web 频繁访问的查询，上题的查询如
+何优化？
+可对 where 后面的字段 age 建立索引，也可
+对语句建立存储过程。
+echo(),print(),print_r()的区别？
+Echo，print 是 PHP 语句, print_r 是函数, Print()只能打印出简单类型变量的值(如
+int,string)，有返回值。
+print_r()可以打印出复杂类型变量的值(如数组, 对象) echo 输出一个或者多个字符串，无返回值
+什么是模板技术、能够使 HTML 和 PHP 分离开使
+用的模板？
+模板技术就是使程序的逻辑代码和界面分开的技
+术。
+能够使 HTML 和 PHP 分开的模板有：Smarty、
+Template、PHPlib Template、FastTemplate 对于大流量的网站,您采用什么样的方法来解决访
+问量问题?
+优化程序，优化数据库，如果程序和数据库已经最
+优化，使用以下解决方法：
+1、确定当前服务器设备是否满足流量需求。
+2、使用 Memcache 缓存技术，把动态内容缓存到
+文件中，动态网页直接调用这些文件，而不必再访
+问数据库。
+3、禁止外部盗链，图片和文件外部盗链会给服务
+器带来大量的负载压力，可以通过 refer 来禁止外部
+盗链，或者使用 apache 来配置禁止盗链。
+4、控制大文件的下载，大文件的下载对于非 SCSI
+硬盘来说会占用大量的资源，导致服务器的响应能
+力下降。
+5、使用不同的主机分流主要流量，使服务器均衡
+负载。
+6、使用流量统计软件统计分析网站流量，可以知
+道哪些地方耗费了大量的流量，哪些页面需要再进
+行优化。
+mysql_fetch_row() 和 mysql_fetch_array 之间有
+什么区别?
+Mysql_fetch_row()是从结果集中取出一行作为枚
+举数组，mysql_fetch_array()是从结果集中取出一
+行作为索引数组或关联数组或两种方式都有。
+- 6 -
+实现中文字串截取无乱码的方法
+Mb_substr();
+用 PHP 写出显示客户端 IP 与服务器 IP 的代码
+获取客户端 IP：$_SERVER(“REMOTE_ADDR”);
+获取服务器端 IP：$_SERVER["SERVER_ADDR"];
+有一个网页地址, 比如 PHP 开发资源网主页: http://www.phpres.com/index.html,如何得到它
+的内容?
+获取网页内容：
+$url=”http://www.phpres.com/index.html“;
+$str=file_get_contents($url);
+或 $ch=curl_init();
+curl_setopt($ch,CURLOPT_URL,’’);
+curl_setopt($ch,CURLOPT_HEADER,0);
+curl_exec($ch);
+curl_close($ch);
+请写一个函数验证电子邮件的格式是否正确
+function checkemail($email){
+echo
+preg_match(‘/^[0-9a-zA-Z-]+@[0-9a-zA-Z-]+\.[0-9
+a-zA-Z]+$/’,$email)?’email 格式正确‘:’email 格式
+不正确‘;
+}
+简述如何得到当前执行脚本路径，包括所得到参数
+用
+$_SERVER['SCRIPT_FILENAME'].$_SERVER[' REQUEST_URI'];取得当前页面的完整路径和参
+数。
+取得参数：$_SERVER['QUERY_STRING'];
+JS 表单弹出对话框函数是?获得输入焦点函数是?
+Alert（）； focus();
+写一个函数，算出两个文件的相对路径
+如 $a = ’/a/b/c/d/e.php’;
+$b = ’/a/b/12/34/c.php’;
+计算出 $b 相对于 $a 的相对路径应该是
+http://www.cnblogs.com/c/d 将()添上
+$a=”http://www.cnblogs.com/a/b/c/d/e.php”;
+$b=”http://www.cnblogs.com/a/b/12/34/c.php”
+;
+$ainfo=parse_url($a);
+$binfo=parse_url($b);
+$apath=ltrim($ainfo['path'],'/');
+$bpath=ltrim($binfo['path'],'/');
+$arr=explode('/',$apath);
+$brr=explode('/',$bpath);
+$flag=false;
+for($i=0;$i<count($arr);$i++){
+if($arr[$i]!==$brr[$i]){
+$ab[$i]='..';
+if(!$flag){
+for($j=$i;$j<count($brr);$j++){
+$bb[]=$brr[$j];
+}
+$flag=true;
+}
+}
+}
+$cha=array_merge($ab,$bb);
+$cha=implode('/',$cha);
+print_r($cha);
+写一个函数，能够遍历一个文件夹下的所有文件和
+子文件夹。
+function my_scandir($dir){
+$files = array();
+if ( $handle = opendir($dir) ){ while ( ($file = readdir($handle)) !== false )
+{
+if ( $file != ".." && $file != "." ) {
+if ( is_dir($dir . "/" . $file) ) {
+$files[$file] = scandir($dir . "/" . $file);
+}else {
+$files[] = $file;
+}
+}
+}
+closedir($handle); return $files;
+}
+}
+数据库索引有几类，分别是什么？什么时候该用索
+引？
+普通索引、主键索引、唯一索引
+并非所有的数据库都以相同的方式使用索引，作为
+通用规则，只有当经常查询列中的数据时才需要在
+表上创建索引。
+写几个魔术方法并说明作用？
+__call()当调用不存在的方法时会自动调用的方法
+__autoload()在实例化一个尚未被定义的类是会自
+动调用次方法来加载类文件
+__set()当给未定义的变量赋值时会自动调用的方
+法
+__get()当获取未定义变量的值时会自动调用的方
+法
+__construct()构造方法，实例化类时自动调用的方
+法
+__destroy()销毁对象时自动调用的方法
+__unset()当对一个未定义变量调用 unset()时自动
+调用的方法
+__isset()当对一个未定义变量调用 isset()方法时自
+动调用的方法
+__clone()克隆一个对象
+__tostring()当输出一个对象时自动调用的方法
+$_REQUEST、$_POST、$_GET、$_COOKIE、
+$_SESSION、$_FILES 的意思是什么？
+它们都是 PHP 预定义变量
+$_REQUEST 用来获取 post 或 get 方式提交的值
+$_POST 用来获取 post 方式提交的值
+$_GET 用来获取 get 方式提交的值
+$_COOKIE 用来获取 cookie 存储的值
+$_SESSION 用来获取 session 存储的值
+$_FILES 用来获取上传文件表单的值
+数组中下标最好是什么类型的，为什么？
+数组的下标最好是数字类型的，数字类型的处理速
+度快。
+++i 和 i++哪一个效率高，为什么？
+++i 效率比 i++的效率更高，因为++i 少了一个返回
+i 的过程。
+magic_quotes_gpc()、magic_quotes_runtime()
+的意思是什么？
+Magic_quotes_gpc()是 php 配置文件中的，如果设
+置为 on 则会自动 POST,GET,COOKIE 中的字符串
+进行转义，在‘之前加\
+Magic_quotes_runtime()是 php 中的函数，如果参
+- 7 -
+数为 true 则会数据库中取出来的单引号、双引号、
+反斜线自动加上反斜杠进行转义。
+框架中什么是单一入口和多入口，单一入口的优缺
+点？
+1、多入口就是通过访问不同的文件来完成用户请
+求。
+单一入口指 web 程序所有的请求都指向一个脚本
+文件的。
+2、单一入口更容易控制权限，方便对 http 请求可
+以进行安全性检查。
+缺点：URL 看起来不那么美观，特别是对搜索引擎
+来说不友好。
+你对 Memcach 的理解，优点有哪些？
+Memcache 是一种缓存技术，在一定的时间内将动
+态网页经过解析之后保存到文件，下次访问时动态
+网页就直接调用这个文件，而不必在重新访问数据
+库。使用 memcache 做缓存的好处是：提高网站的
+访问速度，减轻高并发时服务器的压力。
+Memcache 的优点：稳定、配置简单、多机分布式
+存储、速度快。
+对关系型数据库而言，索引是相当重要的概念，请
+回答有关索引几个问题:
+a) 索引的目的是什么?
+1、快速访问数据表中的特定信息，提高检索速度
+2、创建唯一性索引，保证数据库表中每一行数据
+的唯一性
+3、加速表和表之间的连接
+4、使用分组和排序子句进行数据检索时，可以显
+著减少查询中分组和排序的时间
+b) 索引对数据库系统的负面影响是什么?
+负面影响：创建索引和维护索引需要耗费时间，这
+个时间随着数据量的增加而增加；索引需要占用物
+理空间，不光是表需要占用数据空间，每个索引也
+需要占用物理空间；当对表进行增、删、改的时候
+索引也要动态维护，这样就降低了数据的维护速
+度。
+c) 为数据表建立索引的原则有哪些?
+1、在最频繁使用的、用以缩小查询范围的字段上
+建立索引
+2、在平频繁使用的、需要排序的字段上建立索引
+d) 什么情况下不宜建立索引?
+1、对于查询中很少涉及的列或者重复值比较多的
+列，不宜建立索引
+2、对于一些特殊的数据类型，不宜建立索引，比
+如文本字段(text)，值范围较少的知道等。
+web 应用中,数据库的读取频率远高于写入频率, 如何优化 MySQL 而应对此种情景?
+使用 memcache 缓存技术，将动态数据缓存到文
+件，访问动态页面时直接调用缓存文件，而不必重
+新访问数据库，这样就减少了查询数据库的次数。
+如果网站的访问量很大，可以把数据库读写服务器
+分开，使用多台服务器去处理数据库查询，使用较
+少的服务器去处理数据库的写入和修改。
+include 与 require 的区别?
+1.include()在执行文件时每次都要进行读取和评估
+require()文件只处理一次(实际上文件内容
+替换了 require()语句)
+2.require()通常放在 PHP 脚本程序的最前面
+include()的使用和 require()一样,一般放在
+流程控制的处理区段中,PHP 脚本文件读到
+include()语句时,才将它包含的文件读进来,这种方
+式,可以把程序执行时的流程简单化
+3,require()和 include()语句是语言结构,不是
+真正的函数,可以像 PHP 的其他语言结构一样
+4,include_once()和 require_once()语句也是
+在脚本执行期间包括并运行指定文件,与
+include()require()唯一的区别是如果文件中的代码
+已经被包括了,则不会再次包括. 5,require()包含文件失败,停止执行,给出错误
+(致命的)
+include()常用于动态包含. 通常是自动加载的文件,即使加载出错, 整个程序还是继续执行
+一个页面声明,另一个页面调用
+包函文件失败,继续向下执行,返回一条
+警告
+PHP 字符串中单引号与双引号的区别?
+单引号不能解释变量，而双引号可以解释变量。
+单引号不能转义字符，在双引号中可以转义字符。
+php 中,模板引擎的目的是什么? 你用过哪些模板
+引擎?
+使用模板引擎的目的是使程序的逻辑代码和
+html 界面代码分离开，是程序的结构更清晰。
+使用过的模板引擎：Smarty、ThinkPHP 的
+ThinkTemplate
+指出以下代码片段中的 SQL 注入漏洞以及解决方
+法(magic_quotes_gpc = off)
+mysql_query(“select id,title from content where
+catid=’{$_GET[catid]}’ and title
+like ’%$_GET[keywords]%’”, $link);
+注入漏洞主要存在用户提交的数据上，这里的注入
+漏洞主要是$_GET[catid]和$_GET[keyword]
+解决注入漏洞：
+$_GET[catid]=intval($_GET[catid]);
+$sql=”select id,title from content where
+catid=’{$_GET[catid]}’ and title
+like ’%$_GET[keywords]%”;
+$sql=addslashes($sql);
+Mysql_query($sql);
+分别指出 php.ini 中 magic_quotes_gpc, magic_quotes_runtime 两项参数的作用. Magic_quotes_gpc 的作用是在 POST、GET、
+COOKIE 数据上使用 addslashes()自动转义。
+Magic_quotes_runtime 参数的作用是设置状态，当
+状态为0时则关闭自动转义，设置为1则自动转义，
+将数据库中取出来的单引号、双引号、反斜线这些
+字符加上反斜杠转义。
+写出以下 php 代码的运行结果: <?php
+function foo($i) {
+$i++;
+echo $i ;
+}
+function bar(&$i) {
+}
+$i = 10 ;
+echo $i++ , ++$i; 输出：10,12
+foo($i); 输出：13
+bar($i); 输出：无输出
+如何快速下载一个远程 http 服务器上的图片文件
+到本地?
+$file=”";
+$fp=fopen($file,’rb’);
+$img=fread($fp,10000);
+$dir=”./”;
+$local=fopen($dir.’/’.basename($file),’w');
+Fwrite($local,$img);
+- 8 -
+什么是时间戳? 如何取得当前时间戳?
+时间戳是从1970年1月1日 00:00:00到指定日期的
+秒数。
+获取当前时间戳：time()
+了解 XSS 攻击吗? 如何防止 ?
+XSS 是跨站脚本攻击，首先是利用跨站脚本漏洞以
+一个特权模式去执行攻击者构造的脚本，然后利用
+不安全的 Activex 控件执行恶意的行为。
+使用 htmlspecialchars()函数对提交的内容进行过
+滤，使字符串里面的特殊符号实体化。
+SQL 注入漏洞产生的原因 ? 如何防止?
+SQL 注入产生的原因：程序开发过程中不注意规范
+书写 sql 语句和对特殊字符进行过滤，导致客户端
+可以通过全局变量 POST 和 GET 提交一些 sql 语
+句正常执行。
+防止 SQL 注入：
+1、开启配置文件中的 magic_quotes_gpc 和
+magic_quotes_runtime 设置
+2、执行 sql 语句时使用 addslashes 进行 sql 语句
+转换
+3、Sql 语句书写尽量不要省略小引号和单引号
+4、过滤掉 sql 语句中的一些关键字：update、insert、
+delete、select、* 5、提高数据库表和字段的命名技巧，对一些重要
+的字段根据程序的特点命名，取不易被猜到的。
+6、Php 配置文件中设置 register_globals 为 off，
+关闭全局变量注册
+7、控制错误信息，不要再浏览器上输出错误信息，
+将错误信息写到日志文件中。
+一个字节占多少 bit ? 一个 IPv4地址占几个字节? 一个 IPv6地址呢? 一个字节占8bit，一个 IPV4占用4字节，一个 IPV6
+占用16字节。
+142.M ADSL 宽带连接, 理想情况下, 最大下载速
+度是多少 KB/s ?
+256KB/s
+143.请写出一个正则表达式,用于匹配一个 HTML
+文件中<img />标记中的图片地址
+$url=”<img src=’11.jpg’/>”;
+/<img[\s]*src=['|\"](.*)['|\"][\s]*\/>/
+145.Fatal error: Call to undefined method
+ge_user() in /website/index.php on line 39
+调用了未定义的方法 ge_user()，检查程序中
+有没有定义此方法
+146.Fatal error: Class ’client’ not found in
+/website/index.php on line 173
+类 client 没有找到，检查文件中有没有 client
+类，或者有没有包含 client 类文件
+Warning: Cannot modify header information - headers already sent by (output started at
+/website/index.php:1) in /website/index.php
+on line 3
+提示文件前面有输出，检查是否有输出，或者
+编码
+148.Warning:session_start():
+open(/website/tmp/sess_47e067121facf03378
+5f9a1cb16d243b, O_RDWR) failed: No such
+file or directory (2) in /website/index.php on
+line 10
+没有找到文件或目录，检查文件是否存在
+149.Parse error: syntax error, unexpected
+T_STRING in /website/index.php on line 18
+18行语法错误，检查语法
+150.Warning:fopen(welcome.txt)
+[function.fopen]: failed to open stream: No
+such file or directory in /website/index.php on
+line 2
+没有找到 welcome.txt 文件，检查文件是否存
+在
+1、抓取远程图片到本地,你会用什么函数?
+fsockopen, A
+3、用 PHP 打印出前一天的时间，打印格式是2007
+年5月10日22:21:21
+Echo date(‘Y-m-d H:i:s’,strtotime(‘-1
+day’));
+4、javascript 能否定义二维数组，如果不能你如
+何解决？
+javascript 不支持二维数组定义，可以用 arr[0] = new array()来解决
+5、假设 a.html 和 b.html 在同一个文件夹下面，
+用 javascript 实现当打开 a.html 五秒钟后，自动
+跳转到 b.html。
+<script>
+function go2b(){
+window.location = “b.html”;
+window.close();
+}
+setTimeout( “go2b()”,5000 ); //5秒钟后自动执
+行 go2b() </script>
+//正在浏览当前页面用户的 IP 地址:127.0.0.1
+echo $_SERVER["REMOTE_ADDR"].”<br />”;
+//查询（query）的字符串（URL 中第一个问号 ?
+之后的内容）:id=1&bi=2
+echo $_SERVER["QUERY_STRING"].”<br />”;
+//当前运行脚本所在的文档根目
+录:d:inetpubwwwroot
+echo $_SERVER["DOCUMENT_ROOT"].”<br
+/>”;
+7、在 HTTP 1.0中，状态码 401 的含义是未授权
+____；如果返回“找不到文件”的提示，则可用
+header 函数，其语句为 header(“HTTP/1.0 404
+Not Found”);
+401表示未授权;header(“HTTP/1.0 404 Not
+Found”);
+9、把 John 新增到 users 阵列？
+$users[] =‘john’; array_push($users‘, john’);
+在PHP中error_reporting这个函数有什么作用？
+error_reporting() 设置 PHP 的报错级别并返回当
+前级别。
+13、如何修改 SESSION 的生存时间(1分). 方法1:将 php.ini 中的 session.gc_maxlifetime 设置
+为9999重启 apache
+方法2:$savePath = “./session_save_dir/”;
+$lifeTime = 小时 * 秒;
+session_save_path($savePath);
+session_set_cookie_params($lifeTime);
+- 9 -
+session_start();
+方法3:
+setcookie() and
+session_set_cookie_params($lifeTime);
+14、有一个网页地址, 比如 PHP 开发资源网主页:
+http://www.phpres.com/index.html,如何得到它
+的内容?($1分)
+方法1(对于 PHP5及更高版本):
+$readcontents =
+fopen(“http://www.phpres.com/index.html”, “rb”);
+$contents =
+stream_get_contents($readcontents);
+fclose($readcontents);
+echo $contents;
+方法2:
+echo
+file_get_contents(“http://www.phpres.com/index. html”);
+16、写一个函数，尽可能高效的，从一个标准 url
+里取出文件的扩展名
+例如:
+http://www.sina.com.cn/abc/de/fg.php?id=1
+需要取出 php 或 .php
+答案1:
+function getExt($url){
+$arr = parse_url($url);
+$file = basename($arr['path']);
+$ext = explode(“.”,$file);
+return $ext[1];
+}
+答案2:
+function getExt($url) {
+$url = basename($url);
+$pos1 = strpos($url,”.”);
+$pos2 = strpos($url,”?”);
+if(strstr($url,”?”)){
+Return substr($url,$pos1 + 1,$pos2 –
+$pos1 – 1);
+} else {
+return substr($url,$pos1);
+}
+}
+17、使用五种以上方式获取一个文件的扩展名
+要求：dir/upload.image.jpg，找出 .jpg 或
+者 jpg ，
+必须使用 PHP 自带的处理函数进行处理，方法不
+能明显重复，可以封装成函数
+get_ext1($file_name), get_ext2($file_name)
+function get_ext1($file_name){
+return strrchr($file_name, ‘.’);
+}
+function get_ext2($file_name){
+return substr($file_name,strrpos($file_name, ‘.’));
+}
+function get_ext3($file_name){
+return array_pop(explode(‘.’, $file_name));
+}
+function get_ext4($file_name){
+$p = pathinfo($file_name);
+return $p['extension'];
+}
+function get_ext5($file_name){
+return strrev(substr(strrev($file_name), 0, strpos(strrev($file_name), ‘.’)));
+}
+18、<?php
+$str1 = null;
+$str2 = false;
+echo $str1==$str2 ? ‘相等’ : ‘不相等’;
+$str3 = ”;
+$str4 = 0;
+echo $str3==$str4 ? ‘相等’ : ‘不相等’;
+$str5 = 0;
+$str6 = ’0′;
+echo $str5===$str6 ? ‘相等’ : ‘不相等’;
+?>
+相等 相等 不相等
+19、MySQL数据库中的字段类型varchar和char
+的主要区别是什么？那种字段的查找效率要高，为
+什么?
+Varchar 是变长，节省存储空间，char 是固定长度。
+查找效率要 varchar 型快，因为 varchar 是非定长，
+必须先查找长度，然后进行数据的提取，比 char
+定长类型多了一个步骤，所以效率低一些
+20、请使用 JavaScript 写出三种产生一个 Image
+标签的方法（提示：从方法、对象、HTML 角度考
+虑）
+(1)var img = new Image();
+(2)var img = document.createElement(“image”)
+(3)img.innerHTML = “<img src=”xxx.jpg” />” 请描述出两点以上XHTML和HTML最显著的区别
+(1)XHTML 必须强制指定文档类型 DocType，
+HTML 不需要
+(2)XHTML 所有标签必须闭合，HTML 比较随意
+写出三种以上 MySQL 数据库存储引擎的名称（提
+示：不区分大小写）
+MyISAM、InnoDB、BDB（Berkeley DB）、Merge、
+Memory（Heap）、Example、Federated、Archive、
+CSV、Blackhole、MaxDB 等等十几个引擎
+24、求两个日期的差数，例如2007-2-5 ~
+2007-3-6 的日期差数
+方法一：
+<?php
+class Dtime{
+function get_days($date1, $date2){
+$time1 = strtotime($date1);
+$time2 = strtotime($date2);
+return ($time2-$time1)/86400;
+}
+}
+$Dtime = new Dtime;
+echo $Dtime->get_days(’2007-2-5′, ’
+2007-3-6′);
+?>方法二：
+<?php
+$temp = explode(‘-’, ’2007-2-5′);
+$time1 = mktime(0, 0, 0, $temp[1], $temp[2], $temp[0]);
+$temp = explode(‘-’, ’2007-3-6′);
+$time2 = mktime(0, 0, 0, $temp[1], $temp[2], $temp[0]);
+echo ($time2-$time1)/86400;
+方法三：echo
+abs(strtotime(“2007-2-1″)-strtotime(“2007-3-1 ″))/60/60/24 计算时间差
+- 10 -
+25、请写一个函数，实现以下功能：
+字符串“open_door” 转换成
+“OpenDoor”、”make_by_id” 转换
+成 ”MakeById”。
+方法：
+function str_explode($str){
+$str_arr=explode“( _”,$str);$str_implode=implode
+(” “,$str_arr); $str_implode=implode
+(“”,explode(” “,ucwords($str_implode)));
+return $str_implode;
+}
+$strexplode=str_explode(“make_by_id”);print_r(
+$strexplode);
+方法二：$str=”make_by_id!”;
+$expStr=explode(“_”,$str);
+for($i=0;$i<count($expStr);$i++){
+echo ucwords($expStr[$i]);
+}
+方法三：echo
+str_replace(‘ ‘,”,ucwords(str_replace(‘_’,’
+‘,’open_door’)));
+26、一个表中的 Id 有多个记录，把所有这个 id 的
+记录查出来，并显示共有多少条记录数，用 SQL
+语句及视图、存储过程分别实现。
+DELIMITER //
+create procedure proc_countNum(in columnId
+int,out rowsNo int)
+begin
+select count(*) into rowsNo from member where
+member_id=columnId;
+end
+call proc_countNum(1,@no);
+select @no;
+方法：视图：
+create view v_countNum as select
+member_id,count(*) as countNum from member
+group by
+member_id
+select countNum from v_countNum where
+member_id=1
+27、js 中网页前进和后退的代码
+前进: history.forward();=history.go(1);
+后退: history.back();=history.go(-1);
+28、echo count(“abc”); 输出什么？
+答案:1
+count — 计算数组中的单元数目或对象中的属性
+个数
+int count ( mixed$var [, int $mode ] ), 如果 var
+不是数组类型或者实现了 Countable 接口的对
+象，将返回1，有一个例外，如果 var 是 NULL 则
+结果是 0。
+对于对象，如果安装了 SPL，可以通过实现
+Countable 接口来调用 count()。该接口只有一个
+方法 count()，此方法返回 count() 函数的返回值。
+29、有一个一维数组，里面存储整形数据，请写一
+个函数，将他们按从大到小的顺序排列。要求执行
+效率高。并说明如何改善执行效率。（该函数必须
+自己实现，不能使用 php 函数）
+<?php
+function BubbleSort(&$arr){
+$cnt=count($arr);
+$flag=1;
+for($i=0;$i<$cnt;$i++){
+if($flag==0){
+return;
+}
+$flag=0;
+for($j=0;$j<$cnt-$i-1;$j++){
+if($arr[$j]>$arr[$j+1]){
+$tmp=$arr[$j];
+$arr[$j]=$arr[$j+1];
+$arr[$j+1]=$tmp;
+$flag=1;
+}
+}
+}
+}
+$test=array(1,3,6,8,2,7);
+BubbleSort($test);
+var_dump($test);
+30、请举例说明在你的开发过程中用什么方法来
+加快页面的加载速度
+要用到服务器资源时才打开，及时关闭服务器
+资源，数据库添加索引，页面可生成静态，图片等
+大文件单独服务器。使用代码优化工具。
+31、.以下的代码会产生什么？为什么？
+$num =10;
+function multiply(){
+$num =$num *10;
+}
+multiply();
+echo $num;
+由于函式 multiply() 没有指定 $num 为全域变量
+（例如 global $num 或者 $_GLOBALS['num']），
+所以 $num 的值是 10。
+33. HTTP 协议中 GET、POST 和 HEAD 的区别？
+HEAD： 只请求页面的首部。
+GET： 请求指定的页面信息，并返回实体主体。
+POST：请求服务器接受所指定的文档作为对所标
+识的 URI 的新的从属实体。
+（1）HTTP 定义了与服务器交互的不同方法，最
+基本的方法是 GET 和 POST。事实上 GET 适用
+于多数请求，而保留 POST 仅用于更新站点。
+（2）在 FORM 提交的时候，如果不指定 Method，
+则默认为 GET 请 求，Form 中提交的数据将会附
+加在 url 之后，以?分开与 url 分开。字母数字字符
+原样发送，但空格转换为“+“号，其它符号转换
+为%XX,其中 XX 为 该符号以16进制表示的 ASCII
+（或 ISO Latin-1）值。GET 请求请提交的数据放
+置在 HTTP 请求协议头中，而 POST 提交的数据则
+放在实体数据中；
+GET 方式提交的数据最多只能有1024字节，而
+POST 则没有此限制。
+（3）GET 这个是浏览器用语向服务器请求最常
+用的方法。POST 这个方法也是用来传送数据的，
+但是与 GET 不同的是，使用 POST 的时候，数据
+不是附在 URI 后面传递的，而是要做为独立的行来
+传递，此时还必须要发送一个 Content_length 标
+题，以标明数据长度，随后一个空白行，然后就是
+实际传送的数据。网页的表单通常是用 POST 来传
+送的。
+1.能够使 html 和 php 分离开使用的模板？
+Smarty、template、PHPlibTemplate、FastTemplate
+2.使用那些工具进行版本控制？
+Clear case
+CVS
+SVN
+PVCS
+Perforce
+- 11 -
+CCC
+StarTeam
+RCS
+3.写出 Zend 框架的目录结构，简单说明目录作
+用？
+application/ – 存放应用程序的目录，包括 MVC
+系统、配置文件、服务以及引导程序
+（Bootstrap.php）
+configs/ –配置文件目录。
+application/modules – 多模块目录结果例
+如 admin(后台前程),default(前台),shop（商城）各
+个模块下都有自己的 controllers，modules，Views
+controllers/models/views/ – 控制器/模型/视
+图 目录。
+application/cache –存放缓存等数据
+application/helpers/ – 这个是存放“行动助手” （action helper）的目录。这些助手类默认的命名
+空间是“Controller_Helper_”，如果是多模块那么命
+令空间将是“<Module>_Controller_Helper”。
+Bootstrap.php – 这个是应用程序入口文件。这个
+类的主要工作是引导应用程序，注册并初始化组件
+（component）。注意：不要在这个文件调用前置
+控制器（front controller）的 dispatch() 方法。
+library/ – 存放类库的目录。第三方的类库和自己写
+的类库放在这里进行自动 加载 但要注意要用自
+己独立的命名空间（建子目录）。
+public/ – 存放公开文件的目录，也即网站的根目
+录，存放可以被用户访问的文件，例如 js、css 和
+图片等等。index.php 是应用程序的单入口，其主
+要工作是建立 php 环境，引用 Bootstrap.php 来初
+始化，并调用前置控制器的 dispatch()方法来分发
+请求。
+谈谈对 mvc 的认识？
+由模型(model),视图(view),控制器(controller)
+完成的应用程序
+由模型发出要实现的功能到控制器,控制器接
+收组织功能传递给视图;
+MVC 是一个设计模式，它强制性的使应用程序的
+输入、处理和输出分开。使用 MVC 应用程序被分
+成三个核心部件：模型、视图、控制器。它们各自
+处理自己的任务。
+视图是用户看到并与之交互的界面。
+模型表示企业数据和业务规则。
+控制器接受用户的输入并调用模型和视图去完成
+用户的需求。
+MVC 的优点：低耦合性、高重用性和可适用性、
+较低的生命周期成本、快速的部署、可维护性、可
+扩展性，有利于软件工程化管理
+MVC 的缺点：没有明确的定义，完全理解 MVC 并
+不容易。不适合小型规模的应用程序。
+5. PHP 如何抛出和接收错误？
+使用 try...catch，异常的代码放在 try 代码块
+内，如果没有触发异常，则代码继续执行，如果异
+常被触发，就会抛出一个异常。Catch 代码块捕获
+异常，并创建一个包含异常信息的对象。
+$e->getMessage()，输出异常的错误信息。
+6.下面的类是否正确，如果正确请补全方法输入类
+属性$_a;错误请修改并输出属性$_a <?php
+Class A{
+protected$a=1;
+publicfunction test(){
+echo$this->a;
+}
+}
+答：
+$a=new A;
+$a->test();
+7.请取出数组中的最大值？
+$a=array(1,9,3,5,6,8);
+$a=array(1,2,3,4,5,9);
+答:
+$b=max($a);
+echo $b;
+or
+$a=array(1,9,3,5,6,8);
+rsort($a);
+Echo array_shift($a);
+10.请问同时满足这样条件的数：被10除于9，被9
+除于8，被8除于7，在100—1000之间，有几个这
+样的数？（并写出算法）
+A 不存在，B 1个 C2个 D 3个
+分析过程：
+P 除以10余9:P+1就被10整除
+P 除以9余8:P+1就被9整除
+P 除以8余7:P+1就被8整除
+所以 P=8，9，10的功倍数-1
+8=2*2*2,9=3*3,10=2*5
+则 P+1一定是2*2*2*3*3*5的倍数（只能约掉一
+个2 ）
+又100<=P<=1000
+101<=P+1<=1001
+所以 P+1=360,720
+所以 P=359,719
+11.请写出一个简单的静态数组？
+Class A{
+Static $a=array('11'=>'1111');
+}
+Print_r(A::$a);
+12.写一个简单的 jquery 显示隐藏代码？
+$("#aa").hide();
+$("#aa").show();
+15.字符串转数组,数组转字符串,字符串截取,字符
+串替换,字符串查找的函数分别是什么?
+Implode()、explode()、str_spilt()、substr()、
+str_replace()、strpos、strrpos、strstr
+18.从表 login 中选出 name 字段包含 admin 的前
+10条结果所有信息的 sql 语句
+Select *from login where name like
+'%admin%' limit 0,10;
+解释:左连接,右连接,内连接,索引。
+1、內连接仅选出两张表中互相匹配的记录．因
+此，这会导致有时我们需要的记录没有包含进来。
+内部连接是两个表中都必须有连接字段的对应值
+的记录，数据才能检索出来。
+2、左连接和右连接都是外部连接，也就是区别
+于内部连接，它对不满足连接条件的行并不是象内
+部连接一样将数据完全过滤掉，而是保留一部分数
+据，行数不会减少。
+3、左连接是只要左边表中有记录，数据就能检
+索出来，而右边有的记录必要在左边表中有的记录
+才能被检索出来
+4、右连接是只要右边表中有记录，数据就能检
+索出来 ；
+5、全连接则会回返回两个表中的所有记录
+- 12 -
+20.简述论坛中无限分类的实现原理。
+1、数据库分类表的设计：id 字段、父 id 字段、
+类名称字段、path 字段
+2、Path 字段存当前分类的路径，格式：0,父类
+id,本身 id
+3、查询分类：select * from 分类表 order by
+path asc;
+4、这样就查出来每个分类及其对应的子类。
+PHP 的网站主要攻击方式有哪些？
+1、命令注入(Command Injection)
+2、eval 注入(Eval Injection)
+3、客户端脚本攻击(Script Insertion)
+4、跨网站脚本攻击(Cross Site Scripting, XSS)
+5、SQL 注入攻击(SQL injection)
+6、跨网站请求伪造攻击(Cross Site Request
+Forgeries, CSRF)
+7、Session 会话劫持(Session Hijacking)
+8、Session 固定攻击(Session Fixation)
+9、HTTP 响应拆分攻击(HTTP Response
+Splitting)
+10、文件上传漏洞(File Upload Attack)
+11、目录穿越漏洞(Directory Traversal)
+12、远程文件包含攻击(Remote Inclusion)
+13、动态函数注入攻击(Dynamic Variable
+Evaluation)
+14、URL 攻击(URL attack)
+15、表单提交欺骗攻击(Spoofed Form
+Submissions)
+16、HTTP 请求欺骗攻击(Spoofed HTTP
+Requests)
+几个重要的 php.ini 选项
+Register Globals
+php>=4.2.0，php.ini 的 register_globals 选项的默
+认值预设为 Off，当 register_globals 的设定为 On
+时，程序可以接收来自服务器的各种环境变量，包
+括表单提交的变量，而且由于 PHP 不必事先初始
+化变量的值，从而导致很大的安全隐患。
+safe_mode
+安全模式，PHP 用来限制文档的存取、限制环境变
+量的存取，控制外部程序的执行。启用安全模式必
+须设置 php.ini 中的 safe_mode = On
+1、限制文件存取
+safe_mode_include_dir = “/path1:/path2:/path3″ 不同的文件夹用冒号隔开
+2、限制环境变量的存取
+safe_mode_allowed_env_vars = string
+指定 PHP 程序可以改变的环境变量的前缀，
+如:safe_mode_allowed_env_vars = PHP_ ,当这
+个选项的值为空时，那么 php 可以改变任何环境变
+量
+safe_mode_protected_env_vars = string
+用来指定 php 程序不可改变的环境变量的前缀
+3、限制外部程序的执行
+safe_mode_exec_dir = string
+此选项指定的文件夹路径影响 system、exec、
+popen、passthru，不影响 shell_exec 和“` `”。
+disable_functions = string
+不同的函数名称用逗号隔开，此选项不受安全模式
+影响
+magic quotes
+用来让 php 程序的输入信息自动转义，所有的单引
+号(“’”)，双引号(“””)，反斜杠(“\”)和空字符(NULL)，
+都自动被加上反斜杠进行转义
+magic_quotes_gpc = On 用来设置 magic quotes
+为 On，它会影响 HTTP 请求的数据(GET、POST、
+Cookies)
+程序员也可以使用 addslashes 来转义提交的
+HTTP 请求数据，或者用 stripslashes 来删除转义
+如何提高 php 应用的性能
+1、 如果能将类的方法定义成 static，就尽量
+定义成 static，它的速度会提升将近4倍。
+2、$row[’id’] 的速度是$row[id]的7倍。
+3、echo 比 print 快，并且使用 echo 的多重
+参数(译注：指用逗号而不是句点)代替字符串连接，
+比如 echo$str1,$str2。
+4、在执行 for 循环之前确定最大循环数，不
+要每循环一次都计算最大值，最好运用 foreach 代
+替。
+5、注销那些不用的变量尤其是大数组，以便
+释放内存。
+6、尽量避免使用__get，__set，__autoload。
+7、require_once()代价昂贵。
+8、include 文件时尽量使用绝对路径，因为它
+避免了 PHP 去 include_path 里查找文件的速度，
+解析操作系统路径所需的时间会更少。
+9、如果你想知道脚本开始执行(译注：即服务
+器端收到客户端请求)的时刻，使用
+$_SERVER[‘REQUEST_TIME’]要好于 time()。
+10、函数代替正则表达式完成相同功能。
+11、str_replace 函数比 preg_replace 函数快，
+但 strtr 函数的效率是 str_replace 函数的四倍。
+12、如果一个字符串替换函数，可接受数组
+或字符作为参数，并且参数长度不太长，那么可以
+考虑额外写一段替换代码，使得每次传递参数是一
+个字符，而不是只写一行代码接受数组作为查询和
+替换的参数。
+13、使用选择分支语句(译注：即 switch case)
+好于使用多个 if，else if 语句。
+14、用@屏蔽错误消息的做法非常低效，极
+其低效。
+15、打开 apache 的 mod_deflate 模块，可以
+提高网页的浏览速度。
+16、数据库连接当使用完毕时应关掉，不要
+用长连接。
+17、错误消息代价昂贵。
+18、在方法中递增局部变量，速度是最快的。
+几乎与在函数中调用局部变量的速度相当。
+19、递增一个全局变量要比递增一个局部变
+量慢2倍。
+20、递增一个对象属性(如：$this->prop++)
+要比递增一个局部变量慢3倍。
+21、递增一个未预定义的局部变量要比递增
+一个预定义的局部变量慢9至10倍。
+22、仅定义一个局部变量而没在函数中调用
+它，同样会减慢速度(其程度相当于递增一个局部变
+量)。PHP 大概会检查看是否存在全局变量。
+23、方法调用看来与类中定义的方法的数量
+无关，因为我(在测试方法之前和之后都)添加了10
+个方法，但性能上没有变化。
+24、派生类中的方法运行起来要快于在基类
+中定义的同样的方法。
+25、调用带有一个参数的空函数，其花费的
+时间相当于执行7至8次的局部变量递增操作。类似
+的方法调用所花费的时间接近于15次的局部变量
+递增操作。
+26、Apache 解析一个 PHP 脚本的时间要比
+解析一个静态 HTML 页面慢2至10倍。尽量多用静
+态 HTML 页面，少用脚本。
+27、除非脚本可以缓存，否则每次调用时都
+会重新编译一次。引入一套 PHP 缓存机制通常可
+以提升25%至100%的性能，以免除编译开销。
+28、尽量做缓存，可使用 memcached。
+memcached 是一款高性能的内存对象缓存系统，
+可用来加速动态 Web 应用程序，减轻数据库负载。
+- 13 -
+对运算码 (OP code)的缓存很有用，使得脚本不必
+为每个请求做重新编译。
+29、当操作字符串并需要检验其长度是否满
+足某种要求时，你想当然地会使用 strlen()函数。此
+函数执行起来相当快，因为它不做任何计算，只返
+回在 zval 结构(C 的内置数据结构，用于存储 PHP
+变量)中存储的已知字符串长度。但是，由于 strlen()
+是函数，多多少少会有些慢，因为函数调用会经过
+诸多步骤，如字母小写化(译注：指函数名小写化，
+PHP 不区分函数名大小写)、哈希查找，会跟随被
+调用的函数一起执行。在某些情况下，你可以使用
+isset() 技巧加速执行你的代码。
+(举例如下)
+if (strlen($foo) < 5) { echo “Foo is too short”$$ }
+(与下面的技巧做比较)
+if (!isset($foo{5})) { echo “Foo is too short”$$ }
+调用 isset()恰巧比 strlen()快，因为与后者不同的
+是，isset()作为一种语言结构，意味着它的执行不
+需要函数查找和字母小写化。也就是说，实际上在
+检验字符串长度的顶层代码中你没有花太多开销。
+34、当执行变量$i 的递增或递减时，$i++会
+比++$i 慢一些。这种差异是 PHP 特有的，并不适
+用于其他语言，所以请不要修改你的 C 或 Java 代
+码并指望它们能立即变快，没用的。++$i 更快是因
+为它只需要3条指令(opcodes)，$i++则需要4条指
+令。后置递增实际上会产生一个临时变量，这个临
+时变量随后被递增。而前置递增直接在原值上递
+增。这是最优化处理的一种，正如 Zend 的 PHP 优
+化器所作的那样。牢记这个优化处理不失为一个好
+主意，因为并不是所有的指令优化器都会做同样的
+优化处理，并且存在大量没有装配指令优化器的互
+联网服务提供商(ISPs)和服务器。
+35、并不是事必面向对象(OOP)，面向对象往
+往开销很大，每个方法和对象调用都会消耗很多内
+存。
+36、并非要用类实现所有的数据结构，数组
+也很有用。
+37、不要把方法细分得过多，仔细想想你真
+正打算重用的是哪些代码?
+38、当你需要时，你总能把代码分解成方法。
+39、尽量采用大量的 PHP 内置函数。
+40、如果在代码中存在大量耗时的函数，你
+可以考虑用 C 扩展的方式实现它们。
+41、评估检验(profile)你的代码。检验器会告
+诉你，代码的哪些部分消耗了多少时间。Xdebug
+调试器包含了检验程序，评估检验总体上可以显示
+出代码的瓶颈。
+42、mod_zip 可作为 Apache 模块，用来即时
+压缩你的数据，并可让数据传输量降低80%。
+43、在可以用 file_get_contents 替代 file、
+fopen、feof、fgets 等系列方法的情况下，尽量用
+file_get_contents，因为他的效率高得多!但是要注
+意 file_get_contents 在打开一个 URL 文件时候的
+PHP 版本问题;
+44、尽量的少进行文件操作，虽然 PHP 的文
+件操作效率也不低的;
+45、优化 Select SQL 语句，在可能的情况下
+尽量少的进行 Insert、Update 操作;
+46、尽可能的使用 PHP 内部函数(但是我却为
+了找个 PHP 里面不存在的函数，浪费了本可以写
+出一个自定义函数的时间，经验问题啊!);
+47、循环内部不要声明变量，尤其是大变量：
+对象(这好像不只是 PHP 里面要注意的问题吧?);
+48、多维数组尽量不要循环嵌套赋值;
+49、在可以用 PHP 内部字符串操作函数的情
+况下，不要用正则表达式;
+50、foreach 效率更高，尽量用 foreach 代替
+while 和 for 循环;
+51、用单引号替代双引号引用字符串;
+52、“用 i+=1代替 i=i+1。符合 c/c++的习惯，
+效率还高”;
+53、对 global 变量，应该用完就 unset()掉。
+如何用 php 的环境变量得到一个网页地址的内
+容？ip 地址又要怎样得到？
+Gethostbyname()
+echo $_SERVER ["PHP_SELF"];
+echo $_SERVER ["SERVER_ADDR"];
+2. 求两个日期的差数，例如2007-2-5 ~ 2007-3-6
+的日期差数
+$begin=strtotime(“2007-2-5″);
+$end=strtotime(“2007-3-6″);
+echo ($end-$begin)/(24*3600);
+2. 给一个变量赋值为0123，但是输出该变量的值
+总是为其他数字，请问这是什么问题？
+PHP 解释器会把以0开始的数字当做是八进制的，
+所以它的值会变成八进制的。
+3. PHP 里面如何定义一个常量(constant)?
+通过 define()指令，例如：define(”MYCONSTANT”, 100)
+4. 如何对一个变量进行值传递？
+可以像 C++那样， 在变量的前面加上&, 例如：$a = &$b
+5. 在 PHP 里面可以对 string “10″ 和整型 11进
+行比较吗？
+可以，PHP 内部实现会把所有东西转换成整
+型，所以数字10和11可以进行比较
+6. 在什么情况下需要用 endif 来结束条件语句？
+当 if 语句后面跟的是冒号”:”而不是大括号{时，需
+要用 endif 来结束条件语句
+1.表单中 get 与 post 提交方法的区别?
+1. get 是把参数数据队列加到提交表单的 ACTIO
+N 属性所指的 URL 中，值和表单内各个字段一一
+对应，在 URL 中可以看到。post 是通过 HTTP pos
+t 机制，将表单内各个字段与其内容放置在 HTML
+HEADER 内一起传送到 ACTION 属性所指的 URL
+地址。用户看不到这个过程。
+2. 对于 get 方式，服务器端用 Request.QuerySt ring 获取变量的值，对于 post 方式，服务器端用 R
+equest.Form 获取提交的数据。
+3. get 传送的数据量较小，不能大于2KB。pos
+t 传送的数据量较大，一般被默认为不受限制。但
+理论上，IIS4中最大量为80KB，IIS5中为100KB。
+get 安全性非常低，post 安全性较高。
+3. 数据库中的事务是什么?
+事务（transaction）是作为一个单元的一组有
+序的数据库操作。如果组中的所有操作都成功，则
+认为事务成功，即使只有一个操作失败，事务也不
+成功。如果所有操作 完成，事务则提交，其修改
+将作用于所有其他数据库进程。如果一个操作失
+败，则事务将回滚，该事务所有操作的影响都将取
+消。
+7、优化 MYSQL 数据库的方法。(4分，多写多得)
+1、选取最适用的字段属性,尽可能减少定义字段长
+度,尽量把字段设置 NOT NULL,例如’省份,性别’,最
+好设置为 ENUM
+2、使用连接（JOIN）来代替子查询:
+3、使用联合(UNION)来代替手动创建的临时表
+4、事务处理:
+5、锁定表,优化事务处理:
+6、使用外键,优化锁定表
+- 14 -
+7、建立索引:
+a.格式:
+(普通索引)-> 创建:CREATE INDEX <索引名> ON
+tablename (索引字段)
+修改:ALTER TABLE tablename ADD INDEX
+[索引名] (索引字段)
+创表指定索引:CREATE TABLE
+tablename([...],INDEX[索引名](索引字段))
+(唯一索引)-> 创建:CREATE UNIQUE <索引名> ON
+tablename (索引字段)
+修改:ALTER TABLE tablename ADD
+UNIQUE [索引名] (索引字段)
+创表指定索引:CREATE TABLE
+tablename([...],UNIQUE[索引名](索引字段))
+(主键)-> 它是唯一索引,一般在创建表是建立,格式为:
+CREATA TABLE tablename ([...],PRIMARY
+KEY[索引字段])
+8、优化查询语句
+PHP 的意思(送1分)
+PHP Hypertext Preprocessor 是一个基于服
+务端来创建动态网站的脚本语言，您可以用 PHP
+和 HTML 生成网站主页
+9、MYSQL 取得当前时间的函数是?，格式化日期
+的函数是(2分)
+now(),date_format()
+10、实现中文字串截取无乱码的方法。(3分)
+function GBsubstr($string, $start, $length) {
+if(strlen($string)>$length){
+$str=null;
+$len=$start+$length;
+for($i=$start;$i<$len;$i++){
+if(ord(substr($string,$i,1))>0xa0){
+$str.=substr($string,$i,2);
+$i++;
+}else{
+$str.=substr($string,$i,1);
+}
+}
+return $str.’…’;
+}else{
+return $string;
+}
+}
+对于大流量的网站,您采用什么样的方法来解决访
+问量问题?(4分)
+确认服务器硬件是否足够支持当前的流量,数
+据库读写分离,优化数据表,程序功能规则,禁止外部
+的盗链,控制大文件的下载,使用不同主机分流主要
+流量
+12、在 PHP 中，heredoc 是一种特殊的字符串，
+它的结束标志必须?(1分)
+heredoc 的语法是用”<<<"加上自己定义成对的标
+签，在标签范围內的文字视为一个字符串
+例子:
+$str = << my name is Jiang Qihui!
+SHOW;
+13、谈谈 asp,php,jsp 的优缺点(1分)
+ASP 全名 Active Server Pages，是一个 WEB
+服务器端的开发环境， 利用它可以产生和运
+行动态的、交互的、高性能的 WEB 服务应用程序。
+ASP 采用脚本语言 VB Script（Java script
+）作为自己的开发语言。
+PHP 是一种跨平台的服务器端的嵌入式脚本
+语言. 它大量地借用 C,Java 和 Perl 语言的语法
+, 并耦合 PHP 自己的特性,使 WEB 开发者能够快
+速地写出动态生成页面.它支持目前绝大多数数
+据库。还有一点，PHP 是完全免费的，不用花钱，
+你可以从 PHP 官方站点(http://www.php.ne
+t)自由下载。而且你可以不受限制地获得源码，甚
+至可以从中加进你自己需要的特色。
+JSP 是 Sun 公司推出的新一代站点开发语
+言，他完全解决了目前 ASP,PHP 的一个通病－－
+脚本级执行（据说 PHP4 也已经在 Zend 的支持
+下，实现编译运行）.Sun 公司借助自己在 Jav
+a 上的不凡造诣，将 Java 从 Java 应用程序 和
+Java Applet 之外，又有新的硕果，就是 Js
+p－－Java Server Page。Jsp 可以在 Serverlet 和
+JavaBean 的支持下，完成功能强大的站点
+程序。
+三者都提供在 HTML 代码中混合某种程序
+代码、由语言引擎解释执行程序代码的能力。
+但 JSP 代码被编译成 Servlet 并由 Java 虚拟机
+解释执行，这种编译操作仅在对 JSP 页面的
+第一次请求时发生。在 ASP 、PHP、JSP 环境下，
+HTML 代码主要负责描述信息的显示样式
+，而程序代码则用来描述处理逻辑。普通的 HTML
+页面只依赖于 Web 服务器，而 ASP 、PH
+P、JSP 页面需要附加的语言引擎分析和执行程序
+代码。程序代码的执行结果被重新嵌入到
+HTML 代码中，然后一起发送给浏览器。 ASP 、
+PHP、 JSP 三者都是面向 Web 服务器的技术
+，客户端浏览器不需要任何附加的软件支持。
+写出发贴数最多的十个人名字的 SQL，利用下表：
+members(id,username,posts,pass,email)(2分)
+SELECT * FROM `members` ORDER BY
+posts DESC limit 0,10;
+简述如何得到当前执行脚本路径，包括所得到参
+数。(2分)
+echo $_SERVER[‘REQUEST_URI’];
+21、JS 表单弹出对话框函数是?获得输入焦点函数
+是? (2分)
+弹出对话框: alert(),prompt(),confirm()
+获得输入焦点 focus()
+22、JS 的转向函数是?怎么引入一个外部 JS 文
+件?(2分)
+window.location.href, <script type="text/javascript" src="hello.js"></script>
+23、foo()和@foo()之间有什么区别?(1分)
+@foo()控制错误输出
+24、如何声明一个名为”myclass”的没有方法和属
+性的类? (1分)
+class myclass{ }
+25、如何实例化一个名为”myclass”的对象?
+new myclass()
+26、你如何访问和设置一个类的属性? (2分)
+$object = new myclass();
+$newstr = $object->test;
+$object->test = "info";
+28、GD 库是做什么用的? (1 分)
+gd 库提供了一系列用来处理图片的 API，使用 GD
+- 15 -
+库可以处理图片，或者生成图片。
+在网站上 GD 库通常用来生成缩略图或者用来对图
+片加水印或者对网站数据生成报表。
+29、指出一些在 PHP 输入一段 HTML 代码的办法。
+(1 分)
+echo "aaa";
+30、下面哪个函数可以打开一个文件，以对文件进
+行读和写操作?[ c ]
+(a) fget() (b) file_open() (c) fopen() (d) open_file()
+32、下面的程序会输入是否?(1 分)
+$num = 10;
+function multiply(){
+$num = $num * 10;
+}
+multiply();
+echo $num;
+?> 输出:10
+33、使用 php 写一段简单查询，查出所有姓名为“张
+三”的内容并打印出来 (2 分)
+表名 User
+Name Tel Content Date
+张三 13333663366 大专毕业 2006-10-11
+张三 13612312331 本科毕业 2006-10-15
+张四 021-55665566 中专毕业 2006-10-15
+请根据上面的题目完成代码：
+$mysql_db=mysql_connect("local","root","pass");
+@mysql_select_db("DB",$mysql_db);
+$result = mysql_query("SELECT * FROM `user` WHERE name='张三'"); while($rs = mysql_fetch_array($result)){
+echo $rs["tel"].$rs["content"].$rs["date"];
+}
+PDO 写法: Try{
+$dsn = "mysql:host=localhost;dbname=user";
+$pdo = new PDO($dsn,'root','123456');
+$pdo->setAttribute(PDO::ATTR_ERRMODE,P
+DO::ERRMODE_EXCEPTION);
+$pdo->query('set names utf8');
+$sql = "SELECT * FROM user WHERE name=' 张三'";
+$result = $pdo->query($sql);
+Foreach($result as $v){
+Echo $v['tel'].$v['content'].$v['date'];
+}
+}catch(PDOException $e){
+Echo $e->getCode().':'.$e->getMessage();
+}
+Mysqli 写法: $mysqli = new mysqli('localhost','root','123456','user');
+If(mysqli_connect_errno()){
+Die(' 连 接 数 据 库 失
+败,'.mysqli_connect_error());
+}
+$mysqli->set_charset('utf8');
+$result = $mysqli->query("SELECT * FROM
+user WHERE name='张三'");
+If($result && $result->affected_row()){
+While($row = $result->fetch_object()){
+Echo $row->tel.$row->content.$row->date;
+}
+}
+如何使用下面的类,并解释下面什么意思?(3)
+class test{
+function Get_test($num){
+$num=md5(md5($num)."En");
+return $num;
+}
+}
+答:$testnum = "123";
+$object = new test();
+$encrypt = $object->Get_test($testnum);
+echo $encrypt;
+类 test 里面包含 Get_test 方法,实例化类调用方法
+多字符串加密
+写出以下程序的输出结果 (1 分) <?php
+$b=201;
+$c=40;
+$a=$b>$c?4:5;
+echo $a;
+?> 答:4
+39、检测一个变量是否有设置的函数是否?是否为
+空的函数是?(2 分)
+isset($str),empty($str);
+40、取得查询结果集总数的函数是?(1 分)
+答:mysql_num_rows($result);
+41、$arr = array('james', 'tom', 'symfony'); 请
+打印出第一个元素的值 (1 分)
+答:echo array_shift($arr);
+42、请将 41 题的数组的值用','号分隔并合并成字
+串输出(1 分)
+答:implode(‘,’,$arr);
+43、$a = 'abcdef'; 请取出$a 的值并打印出第一个
+字母(1 分)
+答:echo $a{0} 或 echo substr($a,0,1)
+44、PHP 可以和 sql server/oracle 等数据库连接
+吗?(1 分)
+答:当然可以
+45、请写出 PHP5 权限控制修饰符(3 分)
+答:public(公共),private(私用),protected(继承)
+46、请写出 php5 的构造函数和析构函数(2 分)
+答:__construct , __destruct
+47、完成以下:
+(一)创建新闻发布系统，表名为 message 有如下
+字段 (3 分)
+id 文章 id
+title 文章标题
+content 文章内容
+category_id 文章分类 id
+hits 点击量
+答:CREATE TABLE 'message'(
+'id' int(10) NOT NULL auto_increment,
+'title' varchar(200) default NULL,
+'content' text,
+'category_id' int(10) NOT NULL,
+'hits' int(20), PRIMARY KEY('id');
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+(二)同样上述新闻发布系统：表 comment 记录用
+- 16 -
+户回复内容，字段如下 (4 分)
+comment_id 回复 id
+id 文章 id，关联 message 表中的 id
+comment_content 回复内容
+现通过查询数据库需要得到以下格式的文章
+标题列表,并按照回复数量排序，回复最高的排在最
+前面
+文章 id 文章标题 点击量 回复数量
+用一个 SQL 语句完成上述查询，如果文章没
+有回复则回复数量显示为 0
+答 :SELECT message.id id,message.title
+title,IF(message.`hits` IS NULL,0,message.`hits`)
+hits,
+IF(comment.`id` is NULL,0,count(*)) number
+FROM message LEFT JOIN
+comment ON message.id=comment.id GROUP
+BY message.`id`;
+(三)上述内容管理系统，表 category 保存分类
+信息，字段如下 (3 分)
+category_id int(4) not null auto_increment;
+categroy_name varchar(40) not null;
+用户输入文章时，通过选择下拉菜单选定文章
+分类
+写出如何实现这个下拉菜单
+答:function categoryList(){
+$result=mysql_query("select
+category_id,categroy_name from category")
+or die("Invalid query: " . mysql_error());
+print(" ... ");
+}
+3. 写一个函数，算出两个文件的相对路径
+如 $a = '/a/b/c/d/e.php';
+$b = '/a/b/12/34/c.php';
+计算出 $b 相对于 $a 的相对路径应该是
+http://www.cnblogs.com/c/d 将()添上
+function getRelativePath($a, $b) {
+$returnPath = array(dirname($b));
+$arrA = explode('/', $a);
+$arrB = explode('/', $returnPath[0]);
+for ($n = 1, $len = count($arrB); $n < $len;
+$n++){
+if ($arrA[$n] != $arrB[$n]) {
+break;
+}
+}
+if ($len - $n > 0) {
+$returnPath =
+array_merge($returnPath, array_fill(1, $len - $n,
+'..'));
+}
+$returnPath = array_merge($returnPath, array_slice($arrA, $n));
+return implode('/', $returnPath);
+}
+echo getRelativePath($a, $b);
+填空题:
+1.在 PHP 中，当前脚本的名称(不包括路径和查询
+字符串)记录在预定义变量
+__$_SERVER['PHP_SELF']__中;而链接到当前页
+面的 URL 记录在预定义变量
+__$_SERVER['HTTP_REFERER']__ 中
+2.执行程序段将输出__0__。
+4.数组函数 arsort 的作用是__对数组进行逆向排
+序并保持索引关系__;语句 error_reporting(2047)
+的作用是__报告所有错误和警告__。
+6.写出一个正则表达式，过虑网页上的所有
+JS/VBS 脚本(即把 scrīpt 标记及其内容都去
+掉):preg_replace("/^<script>.*[^/]*</script>/si", "", $script);
+7.以 Apache 模块的方式安装 PHP，在文件
+http.conf 中首先要用语句_LoadModule
+Module_php5___动态装载 PHP 模块，然后再用语
+句__AddType application/x-httpd_php
+php,php3,php5__使得 Apache 把所有扩展名为
+php 的文件都作为 PHP 脚本处理。
+10.一个函数的参数不能是对变量的引用，除非在
+php.ini 中把__allow_call_time_pass_reference __ 设为 on. 11.SQL 中 LEFT JOIN 的含义是__自然左外链接
+__。
+88.编写一个在线留言本，实现用户的在线留言功
+能，留言信息存储到数据库？
+假设现在有数据库：test 表：mess 字段：id，
+name，message 1、html 页面，填写留言：
+<form method="post" action="post.php"> 留言者：<input type="text" name="name" /> 留言内容：<input type="text" name="message"
+/>
+<input type="submit" value="提交" />
+</form>
+2、post.php 页面，处理留言：
+$name = $_POST['name'];
+$message = $_POST['message'];
+Try{
+$dsn = ''mysql:host=localhost;dbname=test;
+$pdo = new PDO($dsn,'root','112233');
+$pdo->setAttribute(PDO::ATTR_ERRMODE,P
+DO::ERRMODE_EXCEPTION);
+$pdo->query('set names utf8');
+$sql = "insert into test(name,message) values('$name','$message')";
+$result = $pdo->exec($sql);
+If($result){
+Echo ‘留言成功’；
+}else{
+Echo '留言失败';
+}
+}catch(PDOException $e){
+Echo $e->getCode().' : '.$e->getMessage();
+}
+95.实现不使用第 3 个变量，交换$a、$b 的值，$a、
+$b 的初始值自己定。
+$a=4; $b=5;
+$a=$a+$b; $b=$a-$b; $a=$a-$b;
+54.线性表和顺序表的区别？
+1、线性表包括顺序表和链表。
+2、顺序表中的元素的地址是连续的，链表里
+面节点的地址不是连续的，是通过指针连起来的。
+55.如何实现多个线程安全的写入一个文件数据。
+采用锁机制，当一个用户在对此文件进行读写
+入操作时，将此文件锁定，操作完毕后解除锁定，
+在该用户进行读写入操作过程中，其他用户不能操
+作此文件，需要排队等待。
+57.什么是满二叉树？什么事完全二叉树？
+满二叉树：除了叶子节点外的所有节点都有两个子
+节点。
+完全二叉树：每个节点最多有两个子节点，缺右不
+缺左，而且最多只能缺少一个叶子节点。
+- 17 -
+61.在数据库 test 中的一个表 student，字段是
+name，class，score。分别代表姓名、所在班级，
+分数。
+1) 学出每个班级中的学生，按照成绩降序排序;
+select * from student order by score desc;
+2) 查出每个班的及格人数和不及格人数，格式
+为：class、及格人数、不及格人数；
+Select A.class,A.及格人数,B.不及格人
+数 from (select class, count(*) as ’及格人数
+‘ from student where score>=60 group by class)
+as A,(select class,count(*) as ’不及格人数
+‘ from student where score<60 group by class) as
+B where A.class=B.class;
+3) 用 PHP 写入连接数据库
+(“localhost”,”msuser”,”mspass”)、执行以上 SQL、
+显示结果、判断错误、关闭数据库的过程；
+$conn=mysql_connect(‘localhost’,'root’,’12345′);
+Mysql_select_db(‘test’);
+$sql=”";
+$result=Mysql_query($sql);
+Mysql_close();
+62.ftp://pub.foo.bar.com:2121/incoming/rls.
+sfv 请给出这个 URL 各部分的意义
+1、ftp:// ;使用的协议是：ftp
+2、Pub.foo.bar.com 是域名
+3、2121 是使用的端口
+4、Incoming/rls.sfv 是当前访问的文件。
+63.请列出 4 个常用的 HTML 标签名
+<table></table>
+<a></a>
+<form></form>
+<div></div>
+64.下列不属于 Javascript 语法关键/保留字的
+是 B
+A. var
+B. $
+C. function
+D. while
+65.下列不属于 Javascrip DOM 操作事件的是 C
+A. onclick
+B. onkeydown
+C. onbodyload
+D. onmouseover
+66.请写出 5 个常用的 unix 操作命令。
+1、Ls -l
+2、tar -zxvf
+3、Touch
+4、Cat
+5、Mkdir
+6、rm
+67.请写出以下 5 个 UNIX 系统配置文件/服务的作
+用。
+/etc/passwd
+/etc/hosts
+/etc/fstab
+Crontab
+sshd
+1、/etc/passwd ：用户信息文件，其中包含用户
+名、用户是否有密码、用户 ID 及用户所属组
+2、/etc/hosts：主机名数据库，包 IP 地址、主机
+名或域名、别名等信息，在此文件中添加记录可绕
+过 DNS
+3、/etc/fstab 保存了系统所有分区信息的配
+置文件。
+4、Crontab 计划任务命令
+5、Sshd 远程连接管理命令
+68.请写出 5 个常用的 SQL 操作关键字。
+Select ,update, delete, insert into,
+create ,group by ,order by
+69.请列出 5 个常用的 PHP 操作 MySQL 的函数
+1、Mysql_connect()
+2、Mysql_select_db()
+3、Mysql_query()
+4、Mysql_fetch_row()
+5、Mysql_close()
+71.有两张数据表，表 user(id, name)记录了用户的
+ID 和昵称，表 article(id, title, content, time)记录了
+用户发表的文章标题、内容和时间，写一个 SQL
+语句打印出每个用户的昵称及其发表的文章总数。
+Select user.name,A.id,A.总
+数 from user,(select id,count(*) as ’总数
+‘ from article group by id) as A where user.id=A.id;
+72.下列 PHP 函数中不能直接在页面输出字符串的
+函数是 B
+A. echo
+B. sprintf
+C. printf
+73.在 PHP 中，‘+’操作符的功能不包括 A
+A. 字符串连接
+B. 数组数据合并
+C. 变量数据相加
+74.下面哪个选项没有将 john 添加到 users 数组
+中？C
+(A) $users[] = ’john’;
+(B) array_push($users, ’john’);
+(C) $users ||= ’john’;
+(D) array_unshift($users, ’john’);
+74.请列出 3 种 PHP 数组循环操作的语法，并注明
+每种循环的优缺点
+1、Foreach() 可以遍历关联数组和索引数组，操
+作简单。
+2、For() 只能遍历下标连续的索引数组。
+3、Each list while 以关联和索引两种方式遍
+历数组，操作复杂。
+75.请列出 3 个 PHP 中的预定义全局变量
+1、$_SESSION
+2、$_COOKIE
+3、$_SERVER
+4、$_GET
+5、$_POST
+76.从 PHP4.2.0 开始 PHP 默认配置将
+register_globals 配置设定为 off,请指出这个设
+定的作用和对 PHP 相关程序的影响。
+Register_globals=off;的时候，关闭了全局变量
+注册，访问 POST 方式提交值时用$_POST[];来访
+问，访问 GET 方式提交的值时用$_GET[];方式访
+问。
+77.写一个函数实现字符串翻转
+1、Strrev()
+2、自己写：
+Function str($a){
+- 18 -
+$len=strlen($a);
+$b=”";
+For($i=$len-1;$i>=0;$i–){
+$b.=$a[$i];
+}
+Return $b;
+}
+78.请写出下列 PHP 代码的执行结果
+$var1 = 5;
+$var2 = 10;
+function foo(&$my_var){
+global $var1;
+$var1 += 2;
+$var2 = 4;
+$my_var += 3;
+return $var2;
+}
+$my_var = 5;
+echo foo($my_var) . ”\n”; 4
+echo $my_var . ”\n”; 8
+echo $var1 . ”\n”; 7
+echo $var2 . ”\n”; 10
+$bar = ’foo’;
+$my_var = 10;
+echo $bar($my_var) . ”\n”; 4
+79.不断在文件 hello.txt 头部写入一行
+“Hello World”字符串，要求代码完整
+$fp=fopen(‘hello.txt’,'w’);
+$str=’hello!’.”\n”;
+fwrite($fp1,$str);
+80.输出用户的 IP 地址，并且判断用户的 IP 地址
+是否在 192.168.1.100 — 192.168.1.150 之间
+Echo $ip=getenv(‘REMOTE_ADDR’);
+$ip=Str_replace(‘.’,”",$ip);
+If($ip<1921681150 && $ip>1921681100){
+Echo ’ip 在 192.168.1.100—–192.168.1.150 之间
+‘;
+}Else{
+Echo ’ip 不在 192.168.1.100—–192.168.1.150 之
+间‘;
+}
+81.请将 2 维数组按照 name 的长度进行重新排序，
+按照顺序将 id 赋值。
+<?php
+$Tarray = array(
+array(‘id’ => 0, ‘name’ => ‘123’)
+,
+array(‘id’ => 0, ‘name’ => ‘1234 ’),
+array(‘id’ => 0, ‘name’ => ‘1235 ’),
+array(‘id’ => 0, ‘name’ => ‘12356 ’),
+array(‘id’ => 0, ‘name’ => ‘123ab
+c’)
+)
+function sortbylen($arr){
+for($i=0;$i<count($arr)-1;$i++){
+for($j=count($arr)-1;$j>$i;$j--){
+if(strlen($arr[$j]['name'])>s
+trlen($arr[$j-1]['name'])){
+$tmp=$arr[$j]['name'];
+$arr[$j]['name']=$ar
+r[$j-1]['name'];
+$arr[$j-1]['name']=$
+tmp;
+}
+}
+$arr[$j-1]['id']=$i;
+}
+return $arr;}
+85.Linux 的目录进行遍历，编写 shell 脚本
+#!/bin/bash
+tree
+86.什么是数据库索引，主键索引，唯一索引的区
+别，索引的缺点是什么？
+索引用来快速地寻找那些具有特定值的记录。
+主键索引和唯一索引的区别：主键是一种唯一性索
+引，但它必须指定为“PRIMARY KEY”,每个表只
+能有一个主键。唯一索引索引列的所有值都只能出
+现一次，即必须唯一。
+索引的缺点：
+1、创建索引和维护索引要耗费时间，这种时间随
+着数据量的增加而增加。
+2、索引需要占用物理空间，除了数据表占数据空
+间之外，每一个索引还要占一定的物理空间，如果
+要建立聚簇索引，需要的空间就会更大。
+3、当对表中 的数据进行增加、删除、修改的时
+候，索引也要动态的维护，这样就降低了数据的维
+护速度。
+87.数据库设计时，常遇到的性能瓶颈有哪些，常
+有的解决方案？
+瓶颈主要有：
+1、磁盘搜索 优化方法是：将数据分布在多个磁
+盘上
+2、磁盘读/写 优化方法是：从多个磁盘并行读写。
+3、CPU 周期 优化方法：扩充内存
+4、内存带宽
+90.浏览器 IE 和非 IE 浏览器的划分，区别是什么？
+IE 浏览器指的是使用 IE 内核的浏览器，对一些
+W3C 标准的网页代码的支持不是很好。
+非 IE 浏览器指的是没有使用 IE 内核的浏览器，对
+W3C 标准的网页代码有很好的支持。
+91.设定网站的用户数量在千万级，但是活跃用户
+的数量只有 1%，如何通过优化数据库提高活跃用
+户的访问速度？
+我们可以根据用户的活跃程度，把活跃的用户提取
+出来放到另外一张表里面，每次活跃的用户登陆的
+时候就直接到活跃用户表中进行查询，这样就提高
+了数据库的查询速度。
+22.描述一下大流量高并发量网站的解决方案
+1、确认服务器硬件是否足够支持当前的流量。
+2、使用 memcache 缓存技术，将动态数据缓存
+到内存中，动态网页直接调用这些文件，而不必在
+访问数据库。
+3、禁止外部的盗链。外部网站的图片或者文件
+盗链往往会带来大量的负载压力，因此应该严格限
+制外部对自身图片或者文件盗链，目前可以简单的
+通过 refer 来控制盗链，apache 自己就可以通过配
+置来禁止盗链。
+5、控制大文件的下载。
+大文件的下载会占用很大的流量，对于非 SCSI
+硬盘来说会消耗，使得网站响应能力下降。
+- 19 -
+6、使用不同的主机分流主要流量
+7、使用流量统计软件。
+在网站上安装一个流量统计软件，可以即时知道
+哪些地方耗费了大量流量，哪些页面需要再进行优
+化。
+8、分库分表。
+9、Sphinx 全文索引引擎。
+如何设计或配置 Mysql，才能达到高效使用的目的。
+1、数据库设计方面，设计结构良好的数据库，
+允许部分数据冗余。
+选取最适用的字段属性，尽可能把字段设置为
+NOTNULL，这样在查询的时候，数据库不用去比较
+NULL 值。
+2、系统架构设计方面，表散列，把海量数据散
+列到几个不同的表里面，集群，数据库查询和写入
+分开。
+写高效 sql 语句，以提高效率。
+使用连接(join)来代替子查询
+使用联合(union)来代替手动创建的临时表
+所得皆必须，只从数据库取必须的数据。
+必要的时候用不同的存储引擎，比如 Innodb 可以
+减少死锁，HEAP 可以提高一个数量级的查询速度。
+使用事务
+使用外键
+使用索引
+24.如何进行防 SQL 注入？
+1、过滤掉一些常见的数据库操作关键字：
+select,insert,update,delete,and,*等
+或者通过系统函数：addslashes(需要被过滤的内
+容)来进行过滤。
+2、在 PHP 配置文件中
+Register_globals=off;设置为关闭状态 //作用
+将注册全局变量关闭。
+比如：接收 POST 表单的值使用$_POST['user'],如
+果将 register_globals=on;直接使用$user 可以接
+收表单的值。
+3、SQL 语句书写的时候尽量不要省略小引号
+(tab 键上面那个)和单引号
+4、提高数据库命名技巧，对于一些重要的字段
+根据程序的特点命名，取不易被猜到的
+5、对于常用的方法加以封装，避免直接暴漏 SQL
+语句
+6、开启 PHP 安全模式
+Safe_mode=on;
+7、打开 magic_quotes_gpc 来防止 SQL 注入
+Magic_quotes_gpc=off;默认是关闭的，它打开
+后将自动把用户提交的 sql 语句的查询进行转换，
+把'转为\'，这对防止 sql 注入有重大作用。
+因此开启：magic_quotes_gpc=on;
+8、控制错误信息
+关闭错误提示信息，将错误信息写到系统日志。
+9、使用 mysqli 或 pdo 预处理。
+25,.用PHP写出一个安全的用户登录系统需要注意
+哪些方面。
+1、密码要使用 MD5(密码+字符串)进行加密。
+2、登录表单的名称不要跟数据库字段一样，以免
+暴漏表字段。
+3、用户表的表名、字段名、密码尽量用不容易被
+猜到的。
+4、要使用验证码验证登陆，以防止暴力破解。
+5、验证提交的数据是不是来自本网站。
+6、登录后台处理代码数据库部分使用预处理，做
+好过滤，防止 sql 注入。
+26.使用过哪些 PHP 框架。试描述其优劣点。
+1、BroPHP 框架：
+优点：轻量级学习型框架，配置简单，操作简单，
+容易上手，提供了比较全面的文档。
+缺点：
+2、ThinkPHP 框架：
+优点：功能比较全面，配置相对比较简单，操作相
+对比较简单，有很多使用示例程序。
+缺点：提供的操作方法太多，新手不知如何选择，
+文档不够全面。
+28.输出为
+Mozilla/4.0(compatible;MSIE5.01;Window NT
+5.0)时，可能的输出语句是：B
+A．$_SERVER['HTTP_USER_AGENT_TYPE'];
+B. $_SERVER['HTTP_USER_AGENT'];
+C. $_SERVER['USER_AGENT'];
+D. $_SERVER['AGENT'];
+29.下面功能 PHP 无法实现的是：D
+A. 服务器端脚本运行
+B. 命令行脚本运行
+C. 客户端图形界面（GUI）程序
+D. 浏览器端执行 DOM 操作
+30.下面说法不正确的是：C
+A. PHP 有四种标量类型：布尔型(boolean),整
+型(integer),浮点型(float),字符串(string)
+B. 浮点型(float)与双精度型(double)是同一
+种类型
+C. 符合类型包括:数组(array),对象(object), 资源(resource)
+D. 伪类型：混合型(mixed),数字型(number), 回调(callback)
+31.执行下面的代码后，A
+<?php echo 和 print 不是系统函数（看手
+册）
+echo function_exists('print');
+imagecreatetruecolor
+?>
+得到的输出是：
+A. 空
+B. true
+C. false
+D. FALSE
+32.下面不是 PHP 语法的组成部分的函数是：C
+A. array
+B. eval
+C. each
+D. list
+33.执行下面的代码的结果是什么？A
+<?php
+$bool = TRUE;
+echo gettype($bool);
+echo is_string($bool);
+?>
+A. boolean
+B. boolean0
+C. booleanFALSE
+D. booleanfalse
+34.写出下面代码执行的结果：12 10 18
+<?php
+$a = 12;
+$b = 012;
+$c = 0x12;
+echo$a,"\n",$b,"\n",$c;
+?>
+- 20 -
+35.下面代码的执行结果是什么？C
+<?php
+echo 1+2+"3+4+5";
+?>
+A. 0
+B. 3
+C. 6
+D. "33+4+5";
+36.下面代码加入下面那个函数后返回 TRUE:B
+return ? == 'A';
+A. ord(65)
+B. chr(65)
+C. 65+''
+D. ''+65
+37.下面代码的输出正确的是：C
+<?php
+$a =array(1=>5,5=>8,22,2=>'8',81);
+echo $a[7];
+echo $a[6];
+echo $a[3];
+?>
+A. 空 2281 B.空 8122C.8122 空 D.空空空
+38.下面代码的输出结果：D
+<?php
+$a[bar]='hello';
+echo $a[bar];
+echo $a['bar'];
+?>
+A. hello B. 空空 C.报错 D.hellohello
+39.写出下面代码的结果：C
+左右相当于乘 2，右移相当于除 2
+<?php 二进制位移后
+echo 1>>0; 0001 0001
+echo 2>>1; 0010 0001
+echo 3<<2; 0011 1100
+?>
+A. 012 B. 106 C. 1112 D.123
+40.下面代码的执行结果：D
+<?php 中间的 i 少个$
+for($i=0;i<10;$i++){
+print $i;
+}
+?>
+A. 0123456789 B. 012345678910 C. 无输出
+D. 死循环
+41.下面对于 echo, print 的描述正确的是：C
+A. echo, print 都可以打印多个参数
+B. print 可以打印多个参数,echo 不可以
+C. echo 可以打印多个参数,print 不可以
+D. echo, print 都不可以打印多个参数
+42.对于正面的代码
+<?php
+$fruits =
+array('strawberry'=>'red','banana'=>'yellow
+');
+?>
+能够正确得到结果'yellow'的代码是：ACD
+A. echo "A banana is{$fruits['banana']}";
+B. echo "A banana is$fruits['banana']";
+C. echo "A banana is{$fruits[banana]}";
+D. echo "A banana is$fruits[banana]";
+43.下面代码执行完成后的结果是什么？1 2
+<?php
+function change(){
+static $i = 0;
+$i++;
+return $i;
+}
+print change(); //1
+print change(); //2
+?>
+44.下面的 include 语句不正确的是？A
+A. include "mms://www.abc.com/a.php";
+B. include"http://www.abc.com/a.php";
+C. include"https://www.abc.com/a.php";
+D. include"ftp://www.abc.com/home/a.php";
+45.<?php
+$foo = 'test';
+$bar = <<<EOT
+$foo bar
+EOT;
+echo$bar;
+?>
+上面的语句输出结果 (a): C
+a. $foo bar;
+b. 'EOT' $foo bar EOT;
+c. test bar;
+d. 'EOT' test bar EOT;
+46.$a=3;$b=4;
+if($a||$b=5){ ||或和|的区别
+echo 'todo';
+}
+$b 的值是(a): A
+a. 4;
+b. 5;
+c. 3;
+d. False 二、 什么是 SQL 注入
+如果你打算永远不使用某些数据的话，那么把它们
+存储于一个数据库是毫无意义的；因为数据库的设
+计目的是为了方便地存取和操作数据库中的数据。
+但是，如果只是简单地这样做则有可能会导致潜在
+的灾难。这种情况并不主要是因为你自己可能偶然
+删除数据库中的一切；而是因为，当你试图完成某
+项”无辜”的任务时，你有可能被某些人所”劫
+持”-使用他自己的破坏性数据来取代你自己的数
+据。我们称这种取代为”注入”。
+其实，每当你要求用户输入构造一个数据库查询，
+你是在允许该用户参与构建一个存取数据库服务
+器的命令。一位友好的用户可能对实现这样的操作
+感觉很满意；然而，一位恶意的用户将会试图发现
+一种方法来扭曲该命令，从而导致该被的扭曲命令
+删除数据，甚至做出更为危险的事情。作为一个程
+序员，你的任务是寻找一种方法来避免这样的恶意
+攻击。
+三、 SQL 注入工作原理
+构造一个数据库查询是一个非常直接的过程。典型
+地，它会遵循如下思路来实现。仅为说明问题，我
+们将假定你有一个葡萄酒数据库表格”wines”，
+其中有一个字段为”variety”（即葡萄酒类型）：
+1. 提供一个表单-允许用户提交某些要搜索的内
+容。让我们假定用户选择搜索类型为”lagrein”
+的葡萄酒。
+- 21 -
+2. 检索该用户的搜索术语，并且保存它-通过把它
+赋给一个如下所示的变量来实现：
+$variety = $_POST['variety'];
+因此，变量$variety 的值现在为：
+lagrein
+3. 然后，使用该变量在 WHERE 子句中构造一个数
+据库查询：
+$query = “SELECT * FROM wines WHERE
+variety=’$variety’”;
+所以，变量$query 的值现在如下所示：
+SELECT * FROM wines WHERE variety=’lagrein’
+4. 把该查询提交给 MySQL 服务器。
+5. MySQL 返回 wines 表格中的所有记录-其中，字
+段 variety 的值为”lagrein”。
+到目前为止，这应该是一个你所熟悉的而且是非常
+轻松的过程。遗憾的是，有时我们所熟悉并感到舒
+适的过程却容易导致我们产生自满情绪。现在，让
+我们再重新分析一下刚才构建的查询。
+1. 你创建的这个查询的固定部分以一个单引号结
+束，你将使用它来描述变量值的开始：
+$query = ” SELECT * FROM wines WHERE variety
+= ‘”;
+2. 使用原有的固定不变的部分与包含用户提交的
+变量的值：
+$query .= $variety;
+3. 然后，你使用另一个单引号来连接此结果-描述
+该变量值的结束：
+$ query .= “‘”;
+于是，$query 的值如下所示：
+SELECT * FROM wines WHERE variety = ‘lagrein’
+这个构造的成功依赖用户的输入。在本文示例中，
+你正在使用单个单词(也可能是一组单词)来指明
+一种葡萄酒类型。因此，该查询的构建是无任何问
+题的，并且结果也会是你所期望的-一个葡萄酒类
+型为”lagrein”的葡萄酒列表。现在，让我们想
+象，既然你的用户不是输入一个简单的类型
+为”lagrein”的葡萄酒类型，而是输入了下列内
+容(注意包括其中的两个标点符号)：
+lagrein’ or 1=1;
+现在，你继续使用前面固定的部分来构造你的查询
+(在此，我们仅显示$query 变量的结果值)：
+SELECT * FROM wines WHERE variety = ‘
+然后，你使用包含用户输入内容的变量的值与之进
+行连接(在此，以粗体显示)：
+SELECT * FROM wines WHERE variety = ‘lagrein’
+or 1=1;
+最后，添加上下面的下引号：
+SELECT * FROM wines WHERE variety = ‘lagrein’
+or 1=1;’
+于是，这个查询结果与你的期望会相当不同。事实
+上，现在你的查询包含的不是一条而是两条指令，
+因为用户输入的最后的分号已经结束了第一条指
+令(进行记录选择)从而开始了一条新的指令。在本
+例中，第二条指令，除了一个简单的单引号之外别
+无意义；但是，第一条指令也不是你所想实现的。
+当用户把一个单引号放到他的输入内容的中间时，
+他结束了期望的变量的值，并且引入了另一个条
+件。因此，不再是检索那些 variety 为”lagrein”
+的记录，而是在检索那些满足两个标准中任何一个
+（第一个是你的，而第二个是他的-variety
+为”lagrein”或 1 等于 1）的记录。既然 1 总是 1，
+因此，你会检索到所有的记录！
+你可能反对：我不会使用双引号来代替单引号来描
+述用户提交的变量吗？不错，这至少可以减慢恶意
+用户的攻击。(在以前的文章中，我们提醒过你：
+应该禁止所有对用户的错误通知信息。如果在此生
+成一条错误消息，那么，它有可能恰恰帮助了攻击
+者-提供一个关于他的攻击为什么失败的具体的解
+释。)
+在实践中，使你的用户能够看到所有的记录而不只
+是其中的一部分乍看起来似乎不太费事，但实际
+上，这的确费事不少；看到所有的记录能够很容易
+地向他提供有关于该表格的内部结构，从而也就向
+他提供了使其以后实现更为恶毒目的的一个重要
+参考。如果你的数据库中不是包含显然无害的酒之
+类信息而是包含例如一个含有雇员年收入的列表，
+那么，刚才描述情形会是特别真实的。
+而从理论角度分析，这种攻击也的确是一件很可怕
+的事情。由于把意外的内容注入到你的查询中，所
+以，此用户能够实现把你的数据库存取转化为用于
+实现他自己的目的。因此现在，你的数据库已经对
+他打开-正如对你敞开一样。
+四、 PHP 和 MySQL 注入
+如我们前面所描述的，PHP，从本身设计来说，并
+没有做什么特别的事情-除了按照你的指示操作之
+外。因此，如果为恶意用户所用，它也只是按照要
+求”允许”特别设计的攻击-例如我们前面所描述
+的那样。
+我们将假定，你不会故意地或甚至是偶然地构造一
+个具有破坏性效果的数据库查询-于是，我们假定
+问题出在来自你的用户的输入方面。现在，让我们
+来更为细致地分析一下用户可能向你的脚本提供
+信息的各种途径。
+1、首先自我介绍
+一般人像我一样回答这个问题都过于平常，只说姓
+名、年龄、爱好、工作经验，这些在简历上都有。
+其实，企业最希望知道的是求职者能否胜任工作，
+包括：最强的技能、最深入研究的知识领域、个性
+中最积极的部分、做过的最成功的事，主要的成就
+等，这些都可以和学习无关，也可以和学习有关，
+但要突出积极的个性和做事的能力，说得合情合理
+企业才会相信。企业很重视一个人的礼貌，所以我
+们在求职中要尊重考官，在回答每个问题之后都说
+一句“谢谢”，企业喜欢有礼貌的求职者。
+2、个性上最大的优点是什么？
+沉着冷静、条理清楚、立场坚定、顽强向上、乐于
+助人和关心他人、适应能力和幽默感、乐观和友爱。
+我在学校经过两年的学习及项目实战，加上实习工
+作，使我适合这份工作。
+3、说说自己最大的缺点？
+这个问题企业问的概率很大，通常不希望听到
+直接回答的缺点是什么等，绝对不要自作聪明地回
+答“我最大的缺点是过于追求完美”，企业喜欢求
+职者从自己的优点说起，中间加一些小缺点，最后
+再把问题转回到优点上，突出优点的部分，企业喜
+欢聪明的求职者。
+4、对薪资的要求？
+我对工资没有硬性要求，我相信贵公司在处理我的
+问题上会友善合理。我注重的是找对工作机会，所
+以只要条件公平，我则不会计较太多。
+5、在五年的时间内，职业规划？
+考官总是喜欢有进取心的应聘者，此时如果说“不
+知道”，或许就会使你丧失一个好机会。最普通的
+回答应该是“我准备在技术领域有所作为”或
+“我希望能按照公司的管理思路发展”。
+6、你还有什么问题要问吗？
+企业的这个问题看上去可有可无，其实很关
+键，企业不喜欢说“没问题”的人，因为其很注重
+员工的个性和创新能力。通常我们也可以这样回
+答：贵公司对新入公司的员工有没有什么培训项
+目，我可以参加吗？或者说贵公司的晋升机制是什
+- 22 -
+么样的？企业将很欢迎，因为体现出你对学习的热
+情和对公司的忠诚度以及你的上进心。
+7、当做了一段时间发现自己不适合这个工作，那
+我们的回答是：
+①如果你确实热爱这个职业，那你就 要不断学习，
+虚心向领导和同事学习业务知识和处事经验，了解
+这个职业的精神内涵和职业要求，力争减少差距；
+②你觉得这个职业可有可无，那还是趁早换个职
+业，去发现适合你的，你热爱的职业，那样你的发
+展前途也会大点，对单位和个人都有好处。
+8、谈谈对跳槽的看法？
+①正常的“跳槽”能促进人才合理流动，应该支
+持。②频繁的跳槽对单位和个人双方都不利，应该
+反对。
+9、你对于我们公司了解多少？
+这个问题还是比较多的企业会问的，那我们就该回
+答：在去公司面试前上网查一下该公司主营业务。
+如回答：贵公司有意改变策略，加强与国外大厂的
+OEM 合作，自有品牌的部分则透过海外经销商。
+10 、你能为我们公司带来什么呢？
+企业喜欢求职者就申请的职位表明自己的能力，比
+如申请营销之类的职位，可以说：“我可以开发大
+量的新客户，同时，对老客户做更全面周到的服务，
+开发老客户的新需求和消费。”等等。
+11、喜欢这份工作的哪一点？
+如交通方便，工作性质及内容颇能符合自己的兴趣
+等等都是不错的答案，不过如果这时自己能仔细思
+考出这份工作的与众不同之处，相信在面试上会大
+大加分。
+12、为什么要离职?
+此时最好的回答方式是将问题归咎在自己身上，例
+如觉得工作没有学习发展的空间，自己想在面试工
+作的相关产业中多加学习，或是前一份工作与自己
+的生涯规划不合等等，回答的答案最好是积极正面
+的。②我希望能获得一份更好的工作，如果机会来
+临，我会抓住。
+13、对工作的期望与目标何在？
+我的目标是能成为一个超级销售员，将公司的产品
+广泛的推销出去，达到最好的业绩成效；为了达到
+这个目标，我一定会努力学习，而我相信以我认真
+负责的态度，一定可以达到这个目标。”
+14、就你申请的这个职位，你认为你还欠缺什么？
+对于这个职位和我的能力来说，我相信自己是可以
+胜任的，只是缺乏经验，这个问题我想我可以进入
+公司以后以最短的时间来解决，我的学习能力很
+强，我相信可以很快融入公司的企业文化，进入工
+作状态。”
+15、你为什么愿意到我们公司来工作？
+我希望能够进入一家与我共同成长的公司。”、
+“你们公司一直都稳定发展，在近几年来在市场上
+很有竞争力。”、“我认为贵公司能够给我提供一
+个与众不同的发展道路。”
+16、你工作经验欠缺，如何能胜任这项工作？
+作为应届毕业生，在工作经验方面的确会有所欠
+缺，因此在读书期间我一直利用各种机会在这个行
+业里做兼职。我也发现，实际工作远比书本知识丰
+富、复杂。但我有较强的责任心、适应能力和学习
+能力，而且比较勤奋，所以在兼职中均能圆满完成
+各项工作，从中获取的经验也令我受益非浅。请贵
+公司放心，学校所学及兼职的工作经验使我一定能
+胜任这个职位。
+17、在这次面试中没有被录用，你怎么打算？
+①要敢于面对，面对这次失败不气馁，接受已经失
+去了这次机会就不会回头这个现实，从心理意志和
+精神上体现出对这次失败的抵抗力。要有自信，相
+信自己经历了这次之后经过努力一定能行，能够超
+越自我。②善于反思，对于这次面试经验要认真总
+结，思考剖析，正确对待自己，实事求是地评价自
+己。
+18、一分钟精彩的自我介绍
+一个自信的性格，一个放松的状态，以及一种
+让人亲近的感觉，这就是我,来自 XXXX,.我毕业于
+XXXX。我是一个非常乐观的女孩，最大的特质就是
+执着，只要是我所选择的事情，我所选择的道路，
+我都会非常坚定的走下去。我喜欢挑战自我，喜欢
+在强手之中找到自己的位置，如果胜利我会嫣然一
+笑，如果失败我会得到更大的动力，争取更大的成
+功。
+Hello everyone.My name is ...I come from
+zhejiang.I'm very happy to come here tostudy
+with you.
+This classf eels just like a big family to me.
+I'm interested in sport,pop music.I also enjoy
+playing game sonnet . I would love to play with
+you sometime.I hope I can be come your friend
+soon and make our dreams come true to gether. HTTP 状态中 302、403、 500 代码含义？
+302:临时转移成功，请求的内容已转移到新位置
+403:禁止访问 500:服务器内部错误 401 代表未授
+权。
+提示类型200、404、502是什么意思。
+200是请求成功，404是文件未找到，502是网关错
+误。
+如果这样的状态码记不住,知道一二三四五原则即
+可。
+一二三四五原则: 一. 消息系列 二. 成功系列
+三. 重定向系列 四. 请求错误系列 五. 服
+务器端错误系列
