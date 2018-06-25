@@ -42,8 +42,13 @@
 ## 聚变文化 （ 2012年3月 ~ 2014年6月 ）
 
 ### 恋爱交友网站
-该项目是一个恋爱交友平台，采用 lamp(apache php mysql memcached)基于开源框架 doophp 开发,使用 memcached 缓存, smarty 模板等
+该项目是一个类似百合的恋爱交友平台，采用 lamp(apache php mysql memcached)基于开源框架 doophp 开发,使用 memcached 缓存, smarty 模板等
 本人主要负责网站前后端开发及维护,涉及会员邀请注册，支付，后台会员管理及对应微信公众号开发等。
+
+## 好望角咨询 （ 2010年8月 ~ 2012年1月 ）
+
+### 市场
+负责公司会议营销市场课程推广工作
 
 ---
 
