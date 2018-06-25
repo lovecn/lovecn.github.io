@@ -37,10 +37,11 @@
 公司 SaaS 直播平台 https://e.vhall.com 后端开发，采用技术有 laravel，mysql，PHP7.0， redis，nginx，主要负责用户信息，活动列表及数据展示，问卷，表单，支付打赏，提现等。
 
 ### 教育直播平台
-公司独立在线教育直播平台 https://class.vhall.com 后端开发主程，采用技术有 laravel，mysql，PHP7.0， redis，nginx，前后端分离，前端 vue，后端提供 api 接口，管理后台使用框架模板 blade bootstarp HTML css javascript。
+公司独立在线教育直播平台 https://class.vhall.com 后端开发主程，采用技术有 laravel，mysql，PHP7.0， redis，nginx，队列，前后端分离，前端 vue，后端提供 api 接口，管理后台使用框架模板 blade bootstarp HTML css javascript,主要用于查看数据及配置。
 
 主要负责管理后台，直播数据中心，账户中心，课程管理，资料管理，在线答题，支付，APP 及 API 接入,文档 http://www.vhall.com/class/doc/1126.html 等几乎所有业务。
 
+直播的配置来自流媒体部门，他们提供接口获取，直播的数据展示来源于大数据部门，前端上报数据，大数据处理，提供接口前端获取。
 
 ## 聚变文化 （ 2012年3月 ~ 2014年6月 ）
 
@@ -55,8 +56,9 @@
 
 ---
 
-# 开源
+# 分享
 [支付宝转账 composer 包](https://github.com/lovecn/alipaybatchphp)
+[关于编码](http://lovecn.github.io/unicode.html)
 
 # 技能清单
 
