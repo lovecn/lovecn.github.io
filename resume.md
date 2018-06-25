@@ -37,7 +37,7 @@
 公司 SaaS 直播平台 https://e.vhall.com 后端开发，采用技术有 laravel，mysql，PHP7.0， redis，nginx，主要负责用户信息，活动列表及数据展示，问卷，表单，支付打赏，提现等。
 
 ### 教育直播平台
-公司独立在线教育直播平台 https://class.vhall.com 后端开发主程，采用技术有 laravel，mysql，PHP7.0， redis，nginx，队列，前后端分离，前端 vue，后端提供 api 接口，管理后台使用框架模板 blade bootstarp HTML css javascript,主要用于查看数据及配置。
+公司独立在线教育直播平台 https://class.vhall.com 后端开发主程，采用技术有 laravel，mysql，PHP7.0， redis，nginx，队列，前后端分离，前端 vue，后端提供 api 接口返回 json ，管理后台使用框架模板 blade bootstarp HTML css javascript ajax ,主要用于查看数据及配置。
 
 主要负责管理后台，直播数据中心，账户中心，课程管理，资料管理，在线答题，支付，APP 及 API 接入,文档 http://www.vhall.com/class/doc/1126.html 等几乎所有业务。
 
