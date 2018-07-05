@@ -65,7 +65,7 @@
 
 
 - Web 开发：javascript/PHP
-- PHP 框架：Laravel/Codeigniter/ThinkPHP
+- PHP 框架：Laravel/Codeigniter/ThinkPHP/Slim
 - 前端：Jquery/Bootstrap/HTML5
 - 爬虫：Python/selenium/request
 - 数据库相关：MySQL/Redis
@@ -77,6 +77,7 @@
 - github
 - php
 - laravel
+- composer
 - mysql
 - web
 - linux
